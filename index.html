@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.googleapis.com https://*.firebaseapp.com https://apis.google.com https://*.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://*.firebaseapp.com; frame-src 'self' https://*.firebaseapp.com https://*.google.com;">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <title>Weblozy Proposal OS</title>
+    <!-- 🛡️ Weblozy Enterprise Inspector Defense Engine (Disabled for debugging)
+    <script>
+      (function() {
+        // 1. Disable context menu (right click)
+        document.addEventListener('contextmenu', function(e) {
+          e.preventDefault();
+        });
+
+        // 2. Disable developer shortcuts (F12, Inspect, Console, View Source)
+        document.addEventListener('keydown', function(e) {
+          // F12 key
+          if (e.keyCode === 123 || e.key === 'F12' || e.code === 'F12') {
+            e.preventDefault();
+            return false;
+          }
+
+          const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+          const metaOrCtrl = isMac ? e.metaKey : e.ctrlKey;
+          
+          // Physical e.code / keyCode mapping to bypass Mac Option-key accent translation
+          const isKeyI = e.code === 'KeyI' || e.keyCode === 73;
+          const isKeyJ = e.code === 'KeyJ' || e.keyCode === 74;
+          const isKeyC = e.code === 'KeyC' || e.keyCode === 67;
+          const isKeyU = e.code === 'KeyU' || e.keyCode === 85;
+
+          // Cmd+Opt+I / Ctrl+Shift+I (Inspect)
+          // Cmd+Opt+J / Ctrl+Shift+J (Console)
+          // Cmd+Opt+C / Ctrl+Shift+C (Select Element)
+          if (metaOrCtrl && e.altKey && (isKeyI || isKeyJ || isKeyC)) {
+            e.preventDefault();
+            return false;
+          }
+          if (e.ctrlKey && e.shiftKey && (isKeyI || isKeyJ || isKeyC)) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Cmd+Opt+U / Ctrl+U (View Source)
+          if (metaOrCtrl && isKeyU) {
+            e.preventDefault();
+            return false;
+          }
+          if (e.ctrlKey && isKeyU) {
+            e.preventDefault();
+            return false;
+          }
+        });
+
+        // 3. Anti-Debugger Loop (Only in Production to avoid freezing local dev)
+        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+          setInterval(function() {
+            try {
+              (function debuggerFreeze(i) {
+                if (('' + i / i).length !== 1 || i % 20 === 0) {
+                  (function() {}).constructor('debugger')();
+                } else {
+                  debugger;
+                }
+                debuggerFreeze(++i);
+              })(0);
+            } catch (err) {}
+          }, 1000);
+        }
+      })();
+    </script>
+    -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

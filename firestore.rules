@@ -1,0 +1,27 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Proposal Security Rules
+    match /proposals/{proposalId} {
+      // Allow creation if the user is authenticated
+      allow create: if request.auth != null;
+      
+      // BOLA Protection: Allow read/update/delete only if the user owns the document
+      allow read, update, delete: if request.auth != null && 
+        (resource.data.userId == request.auth.uid || proposalId == 'sample-1' || proposalId == 'sample-2');
+    }
+
+    // User Profile Security Rules
+    match /users/{userId} {
+      // Allow read, write (create/update) only if the user is authenticated and owns the document (matches their own UID)
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Default deny for everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

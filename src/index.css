@@ -1,0 +1,667 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 220 29% 6%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 29% 6%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 29% 6%;
+
+    --primary: 83 55% 54%; /* Lemon Green #99CB48 */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 76 56% 71%; /* Light Green #C8DF8D */
+    --secondary-foreground: 220 29% 6%;
+
+    --accent: 27 92% 55%; /* Orange #F58323 */
+    --accent-foreground: 0 0% 100%;
+
+    --yellow: 47 100% 55%; /* Yellow #FFCD16 */
+    --sky-blue: 198 79% 49%; /* Sky Blue #1AA6E1 */
+    --light-blue: 197 81% 72%; /* Light Blue #7FD2F2 */
+    --dark-blue: 209 78% 39%; /* Dark Blue #1668B2 */
+    --lavender: 243 31% 80%; /* Lavender #BCBADF */
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 8% 46%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 83 55% 54%;
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 220 29% 6%;
+    --foreground: 0 0% 98%;
+
+    --card: 220 29% 6%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 220 29% 6%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 83 55% 54%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 76 56% 71%;
+    --secondary-foreground: 0 0% 98%;
+
+    --accent: 27 92% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 220 14% 15%;
+    --muted-foreground: 220 8% 65%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 14% 15%;
+    --input: 220 14% 15%;
+    --ring: 83 55% 54%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Outfit', sans-serif !important;
+  }
+}
+
+/* Premium Shadows */
+.shadow-premium {
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dark .glass {
+  background: rgba(11, 14, 20, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* A4 Page Styles for PDF - Premium Document System */
+.a4-page {
+  width: 210mm;
+  height: 297mm;
+  min-height: 297mm;
+  max-height: 297mm;
+  padding: 12mm 15mm 14mm 15mm;
+  margin: 0 auto;
+  background: white;
+  color: #0B0E14;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+/* Global Document Logic */
+.a4-page * {
+  min-height: 0;
+  flex-shrink: 1;
+  word-wrap: break-word;
+}
+
+/* Typography - Professional & Readable */
+.a4-page h2 { 
+  font-weight: 900 !important; 
+  letter-spacing: -0.03em !important; 
+  line-height: 1.2 !important; 
+  margin-bottom: 0.5rem !important; 
+}
+.a4-page h3 { 
+  font-weight: 800 !important; 
+  letter-spacing: -0.01em !important; 
+  margin-bottom: 0.25rem !important; 
+}
+.a4-page p { 
+  font-size: 11px !important; 
+  line-height: 1.6 !important;
+  color: #475569 !important; 
+}
+
+/* Font size scaling for A4 */
+.a4-page .text-8xl { font-size: 48px !important; line-height: 0.9 !important; }
+.a4-page .text-7xl { font-size: 40px !important; line-height: 0.9 !important; }
+.a4-page .text-6xl { font-size: 32px !important; line-height: 1 !important; }
+.a4-page .text-5xl { font-size: 28px !important; line-height: 1.1 !important; }
+.a4-page .text-4xl { font-size: 24px !important; line-height: 1.1 !important; }
+.a4-page .text-3xl { font-size: 20px !important; }
+.a4-page .text-2xl { font-size: 16px !important; }
+.a4-page .text-xl { font-size: 14px !important; }
+
+/* 
+  Let Tailwind's native spacing handle internal padding/margins.
+  We only override the content-fit container to ensure a natural flow.
+  flex-start ensures elements stack naturally from top to bottom without huge gaps.
+*/
+.content-fit {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1.5rem; /* Natural spacing between sections */
+  min-height: 0;
+  overflow: hidden;
+}
+
+
+/* Ensure images and grids don't break page */
+.a4-page img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.a4-page .grid {
+  min-height: 0;
+}
+
+/* Force text to wrap and not overflow */
+.a4-page p, .a4-page span, .a4-page div {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.cover-gradient {
+  background: linear-gradient(135deg, #0B0E14 0%, #1A1F2B 100%);
+  color: white;
+}
+
+.watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  font-size: 150px;
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.02);
+  pointer-events: none;
+  white-space: nowrap;
+  text-transform: uppercase;
+  z-index: 0;
+}
+
+.cover-gradient .watermark {
+  color: rgba(255, 255, 255, 0.03);
+}
+
+.page-number {
+  position: absolute;
+  bottom: 15mm;
+  right: 20mm;
+  font-size: 10px;
+  font-weight: 600;
+  color: #94A3B8;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 0 !important;
+  }
+  
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide everything except the PDF container during print */
+  #root > :not(.pdf-container),
+  .no-print {
+    display: none !important;
+  }
+
+  .pdf-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 210mm;
+  }
+
+  .a4-page {
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    margin: 0 auto !important;
+    padding: 12mm 15mm 14mm 15mm !important;
+    position: relative !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: white !important;
+    page-break-after: always !important;
+    page-break-inside: avoid !important;
+    break-after: page !important;
+    box-sizing: border-box !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .proposal-card, .soft-card, .navy-card {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .cover-gradient {
+    background: linear-gradient(135deg, #1668B2 0%, #0B0E14 100%) !important;
+    color: white !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Ensure all gradients and colors are forced */
+  .bg-primary { background-color: #99CB48 !important; }
+  .text-primary { color: #99CB48 !important; }
+  .bg-slate-900 { background-color: #0F172A !important; }
+}
+
+/* Screen View Adjustments for Preview */
+.pdf-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0; /* CRITICAL: zero gap so html2canvas page math is exact */
+  background: transparent;
+  padding: 1rem 0;
+  height: fit-content;
+  scroll-behavior: smooth;
+  scroll-padding-top: 2rem;
+}
+
+/* Visual spacing between pages in preview (not captured by html2canvas) */
+.pdf-container .a4-page {
+  margin-bottom: 0;
+  box-shadow: none;
+}
+
+/* Premium Responsive Zoom Preview for A4 Documents without Layout Flow Gaps */
+.pdf-preview-scale {
+  transform-origin: top center;
+  zoom: 0.48;
+  width: 210mm;
+}
+
+@media (max-width: 480px) {
+  .pdf-preview-scale {
+    zoom: 0.38;
+  }
+}
+
+@media (max-width: 380px) {
+  .pdf-preview-scale {
+    zoom: 0.34;
+  }
+}
+
+@media (min-width: 640px) {
+  .pdf-preview-scale {
+    zoom: 0.58;
+  }
+}
+
+@media (min-width: 1024px) {
+  .pdf-preview-scale {
+    zoom: 0.72;
+  }
+}
+
+@media (min-width: 1280px) {
+  .pdf-preview-scale {
+    zoom: 0.82;
+  }
+}
+
+@media (min-width: 1536px) {
+  .pdf-preview-scale {
+    zoom: 0.92;
+  }
+}
+
+/* ==========================================
+   GLOBAL PDF PRINT-READY CORE LAYOUT
+   ========================================== */
+
+.proposal-print-wrapper {
+  width: 210mm;
+  margin: 0 auto;
+  background: white;
+}
+
+.proposal-print-wrapper .pdf-page {
+  width: 210mm;
+  height: 297mm;
+  min-height: 297mm;
+  max-height: 297mm;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  page-break-after: always;
+  break-after: page;
+}
+
+/* ==========================================
+   NATIVE BROWSER PRINT-TO-PDF OVERRIDES
+   ========================================== */
+
+@page {
+  size: A4 portrait;
+  margin: 0 !important;
+}
+
+@media print {
+  /* Neutralize browser viewport standard offsets */
+  html, body {
+    width: 210mm !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  /* Completely strip out root background patterns */
+  #root {
+    background: #ffffff !important;
+    padding: 0 !important;
+  }
+
+  /* Global hidden elements during print */
+  .no-print {
+    display: none !important;
+  }
+
+  .proposal-print-wrapper {
+    width: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  /* Lock each PDF page to exact A4 dimensions */
+  .proposal-print-wrapper .pdf-page,
+  .proposal-print-wrapper .a4-page {
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    margin: 0 !important;
+    padding: 14mm !important; /* Standard print padding */
+    border: none !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Preserve cover/closing gradients during native print color adjustments */
+  .proposal-print-wrapper .a4-page.cover-gradient {
+    background: linear-gradient(135deg, #1668B2 0%, #0B0E14 100%) !important;
+  }
+
+  .proposal-print-wrapper .a4-page.closing-page {
+    background: linear-gradient(160deg, #0B0E14 0%, #0F1923 40%, #0B0E14 100%) !important;
+  }
+
+  /* Absolute anchoring for Header */
+  .proposal-print-wrapper .proposal-header {
+    position: absolute !important;
+    top: 12mm !important;
+    left: 14mm !important;
+    right: 14mm !important;
+    height: 12mm !important;
+    margin: 0 !important;
+    padding-bottom: 3mm !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    background: transparent !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    z-index: 50 !important;
+  }
+
+  /* Absolute anchoring for Content */
+  .proposal-print-wrapper .proposal-content {
+    margin-top: 15mm !important;
+    margin-bottom: 15mm !important;
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+  }
+
+  /* Absolute anchoring for Footer */
+  .proposal-print-wrapper .proposal-footer {
+    position: absolute !important;
+    bottom: 12mm !important;
+    left: 14mm !important;
+    right: 14mm !important;
+    height: 12mm !important;
+    margin: 0 !important;
+    padding-top: 4mm !important;
+    border-top: 1px solid #f1f5f9 !important;
+    background: transparent !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    z-index: 50 !important;
+  }
+
+  /* Fix Badges, Cards and Buttons alignment and spacing */
+  .proposal-print-wrapper .badge,
+  .proposal-print-wrapper .card,
+  .proposal-print-wrapper span,
+  .proposal-print-wrapper p,
+  .proposal-print-wrapper div {
+    white-space: normal !important;
+    word-break: break-word !important;
+    line-height: 1.4 !important;
+  }
+
+  .proposal-print-wrapper img {
+    max-width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+  }
+
+  /* Neutralize browser transitions, animation cycles, zoom shifts and transforms */
+  * {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+    transform: none !important;
+    zoom: 1 !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ==========================================
+   STABLE BROWSER PRINT / PDF EXPORT SYSTEM
+   ========================================== */
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  /* 1. Reset global body, html & root wrapper */
+  html, body, #root {
+    width: 210mm !important;
+    height: auto !important;
+    min-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 2. Global color adjust overrides */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    box-sizing: border-box !important;
+    animation: none !important;
+    transition: none !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    mix-blend-mode: normal !important;
+  }
+
+  /* 3. Hide all non-printable components */
+  .no-print,
+  header,
+  .sticky,
+  button,
+  .pdf-export-loader,
+  .fixed {
+    display: none !important;
+  }
+
+  /* 4. Reset flex layout wrappers so pages display sequentially */
+  div.max-w-\[1100px\],
+  .max-w-\[1100px\],
+  div.flex-1,
+  .pdf-container {
+    max-width: none !important;
+    width: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  /* 5. Normalize target export wrapper */
+  .pdf-export-wrapper {
+    width: 210mm !important;
+    max-width: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    transform: none !important;
+    zoom: 1 !important;
+    display: block !important;
+    background: transparent !important;
+  }
+
+  /* 6. A4 Portrait Page Constraints */
+  .pdf-page {
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    overflow: hidden !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    background: #ffffff !important;
+    position: relative !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  .a4-page {
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    padding: 12mm 15mm 14mm 15mm !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    background: white !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Restore cover and closing page background gradients */
+  .a4-page.cover-gradient {
+    background: linear-gradient(135deg, #1668B2 0%, #0B0E14 100%) !important;
+  }
+
+  .a4-page.closing-page {
+    background: linear-gradient(160deg, #0B0E14 0%, #0F1923 40%, #0B0E14 100%) !important;
+  }
+
+  svg {
+    background: transparent !important;
+  }
+}
+
+/* User Pagination Classes */
+.proposal-page {
+  width: 794px;
+  height: 1123px;
+  position: relative;
+  overflow: hidden;
+  page-break-after: always;
+  break-after: page;
+  background: transparent;
+  margin-bottom: 2.5rem; /* Space between pages in preview */
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.proposal-page:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.module-card {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
