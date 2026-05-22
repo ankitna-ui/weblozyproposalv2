@@ -545,7 +545,7 @@ export default function CreateProposal() {
         </div>
 
         {/* Cleaned Preview Panel (Dedicated Header & Soft Shadows) */}
-        <div className="hidden md:flex flex-col flex-1 bg-slate-50/50 border-l border-slate-100 overflow-hidden h-full relative">
+        <div className="hidden md:flex flex-col flex-1 bg-slate-100 border-l border-slate-200 overflow-hidden h-full relative">
            {/* Sticky Top Status Header */}
            <div className="sticky top-0 z-20 w-full bg-white/85 backdrop-blur-md border-b border-slate-100/80 px-6 py-4 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
@@ -558,9 +558,9 @@ export default function CreateProposal() {
            </div>
 
            {/* Scrollable Document Area */}
-           <div className="flex-1 overflow-y-auto p-12 custom-scrollbar flex justify-center items-start bg-slate-50/20">
+           <div className="flex-1 overflow-y-auto p-12 custom-scrollbar flex justify-center items-start bg-transparent bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:16px_16px]">
               <div className="relative z-10 flex justify-center h-fit w-full">
-                 <div className="pdf-preview-scale transition-all duration-500 h-fit rounded-lg overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.03)] border border-slate-100/80 bg-white">
+                 <div className="pdf-preview-scale transition-all duration-500 h-fit w-full flex justify-center">
                     <ProposalPDF proposal={proposal} />
                  </div>
               </div>
