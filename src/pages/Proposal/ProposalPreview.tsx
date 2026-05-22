@@ -133,154 +133,241 @@ export default function ProposalPreview() {
   };
 
   const exportPDF = async () => {
+    if ((window as any).__isExportingPDF) {
+      console.warn("PDF export already in progress.");
+      return;
+    }
+
     const originalElement = document.getElementById("proposal-pdf-content");
     if (!originalElement) return;
 
+    (window as any).__isExportingPDF = true;
     setIsExporting(true);
-    setExportProgress(5);
 
-    // Capture initial styles to restore them later
-    const originalZoom = originalElement.style.zoom;
-    const originalTransform = originalElement.style.transform;
-    const originalWidth = originalElement.style.width;
-    const originalBorderRadius = originalElement.style.borderRadius;
-    const originalShadow = originalElement.style.boxShadow;
-    const originalMargin = originalElement.style.margin;
+    // Create a global floating progress toast that survives navigation
+    let toast = document.getElementById("pdf-export-toast");
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = "pdf-export-toast";
+      toast.className = "fixed bottom-6 right-6 z-[99999] bg-[#0B0E14] text-white p-5 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10 flex flex-col gap-4 min-w-[320px] transition-all duration-500 transform translate-y-0 opacity-100";
+      toast.innerHTML = `
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+            <div class="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+          </div>
+          <div class="flex-1 pt-1">
+            <h4 class="text-[11px] font-black text-white uppercase tracking-[0.2em] mb-1">Generating PDF</h4>
+            <p class="text-[9px] text-white/50 uppercase tracking-widest font-bold progress-text">0% Complete</p>
+          </div>
+        </div>
+        <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+          <div class="h-full bg-[#99CB48] shadow-[0_0_10px_#99CB48] transition-all duration-300 progress-bar" style="width: 0%"></div>
+        </div>
+      `;
+      document.body.appendChild(toast);
+    }
+
+    const updateProgress = (percent: number) => {
+      setExportProgress(percent);
+      const text = toast?.querySelector('.progress-text');
+      const bar = toast?.querySelector('.progress-bar') as HTMLElement;
+      if (text) text.innerHTML = `${percent}% Complete <span class="lowercase text-white/30 ml-1 font-normal">(background task)</span>`;
+      if (bar) bar.style.width = `${percent}%`;
+    };
+
+    updateProgress(5);
+
+    // Create a hidden PDF-only cloned container for export
+    const exportContainer = document.createElement("div");
+    exportContainer.style.position = "absolute";
+    exportContainer.style.left = "-9999px";
+    exportContainer.style.top = "0";
+    exportContainer.style.width = "794px";
+    exportContainer.style.opacity = "0";
+    exportContainer.style.pointerEvents = "none";
+    document.body.appendChild(exportContainer);
 
     try {
-      console.log("[PDF Debug] Initializing high-precision client-side PDF export...");
-      setExportProgress(10);
+      console.log("[PDF Debug] Initializing high-precision client-side PDF export with cloned DOM...");
+      updateProgress(10);
       
-      // 1. Wait for web fonts and images to load completely
-      await waitForAssets(originalElement);
-      setExportProgress(20);
-
-      // 2. Temporarily reset zoom, transform, width, and shadows on the live container
-      // to let it render at full 1:1 scale (794px width) for precise pixel capturing.
-      originalElement.style.zoom = "1";
-      originalElement.style.transform = "none";
-      originalElement.style.borderRadius = "0";
-      originalElement.style.boxShadow = "none";
-      originalElement.style.width = "794px";
-      originalElement.style.margin = "0";
-
-      // Also force zoom override on class level by temporarily removing class
-      originalElement.classList.remove("pdf-preview-scale");
-      
-      // Allow browser layout engine to paint the unscaled DOM elements
-      await new Promise(resolve => setTimeout(resolve, 300));
-      setExportProgress(30);
-
       // Find all target .proposal-page containers
-      const pageElements = Array.from(originalElement.querySelectorAll(".proposal-page"));
-      console.log(`[PDF Debug] Found ${pageElements.length} pages to render.`);
+      const originalPages = Array.from(originalElement.querySelectorAll(".proposal-page"));
+      console.log(`[PDF Debug] Found ${originalPages.length} pages to render.`);
 
-      if (pageElements.length === 0) {
+      if (originalPages.length === 0) {
         throw new Error("No proposal pages found inside preview content container.");
       }
 
-      // Dynamic import html2canvas and jsPDF to optimize bundle sizes
-      const html2canvas = (await import('html2canvas')).default;
-      const { jsPDF } = await import('jspdf');
+      // Clone pages into exportContainer
+      originalPages.forEach((page) => {
+        const clone = page.cloneNode(true) as HTMLElement;
+        
+        // Apply fixed A4 sizing and styling only to cloned page
+        clone.style.setProperty('width', '794px', 'important');
+        clone.style.setProperty('height', '1123px', 'important');
+        clone.style.setProperty('min-height', '1123px', 'important');
+        clone.style.setProperty('max-height', '1123px', 'important');
+        clone.style.setProperty('overflow', 'hidden', 'important');
+        clone.style.setProperty('background', '#ffffff', 'important');
+        clone.style.setProperty('box-sizing', 'border-box', 'important');
+        clone.style.setProperty('margin', '0', 'important');
+        clone.style.setProperty('padding', '0', 'important');
+        clone.style.setProperty('position', 'relative', 'important');
+        
+        // Remove export-problematic styles from cloned pages
+        clone.style.setProperty('box-shadow', 'none', 'important');
+        clone.style.setProperty('outline', 'none', 'important');
+        clone.style.setProperty('border', 'none', 'important');
+        clone.style.setProperty('transform', 'none', 'important');
+        clone.style.setProperty('zoom', '1', 'important');
+        clone.style.setProperty('filter', 'none', 'important');
+        clone.style.setProperty('backdrop-filter', 'none', 'important');
+        clone.style.setProperty('animation', 'none', 'important');
+        clone.style.setProperty('transition', 'none', 'important');
+        clone.style.setProperty('border-radius', '0', 'important');
 
-      // Create PDF with exact requested pixels [794, 1123] for A4
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "px",
-        format: [794, 1123],
-        compress: true,
+        exportContainer.appendChild(clone);
       });
 
-      for (let i = 0; i < pageElements.length; i++) {
-        const pageEl = pageElements[i] as HTMLElement;
-        console.log(`[PDF Debug] Capturing page ${i + 1}/${pageElements.length}...`);
+      exportContainer.classList.add('pdf-export-mode');
+      const styleEl = document.createElement('style');
+      styleEl.innerHTML = `
+        .pdf-export-mode * {
+          font-family: "Outfit", Arial, sans-serif !important;
+          outline: none !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+          print-color-adjust: exact !important;
+          -webkit-print-color-adjust: exact !important;
+        }
+      `;
+      exportContainer.appendChild(styleEl);
+      
+      // Sanitize remote images to fix CSP blocking in html-to-image
+      const exportImages = Array.from(exportContainer.querySelectorAll("img"));
+      exportImages.forEach((img) => {
+        if (img.src.includes("api.microlink.io")) {
+          const fallback = img.getAttribute("data-fallback-src");
+          if (fallback) {
+            // Add a timestamp to bypass any browser cache that might hold the broken state
+            img.src = fallback;
+          } else {
+            // Invisible 1x1 pixel fallback if no placeholder exists
+            img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+          }
+        }
+      });
+      
+      // 1. Wait for web fonts and images to load completely inside cloned container
+      await waitForAssets(exportContainer);
+      updateProgress(20);
+
+      // Allow browser layout engine to paint the cloned unscaled DOM elements
+      await new Promise(resolve => setTimeout(resolve, 500));
+      updateProgress(30);
+
+      // Dynamic import html-to-image and jsPDF to optimize bundle sizes
+      const { toCanvas } = await import('html-to-image');
+      const { jsPDF } = await import('jspdf');
+
+      // Add export quality config for high quality rendering (target: 5MB-10MB)
+      const PDF_EXPORT_CONFIG = {
+        pixelRatio: 2,
+        imageType: "image/jpeg",
+        quality: 0.92,
+        compression: "MEDIUM" as const
+      };
+
+      // Use exact a4 dimensions in mm
+      const pdf = new jsPDF("p", "mm", "a4");
+
+      const rawPages = Array.from(exportContainer.querySelectorAll(".proposal-page"))
+        .filter((el) => el instanceof HTMLElement) as HTMLElement[];
         
-        const progress = 30 + Math.round((i / pageElements.length) * 65);
-        setExportProgress(progress);
+      const validPages = rawPages.filter((page) => {
+        const hasText = page.textContent && page.textContent.trim().length > 0;
+        const hasMedia = page.querySelector("img, svg, canvas, a, button");
+        const hasHeight = page.getBoundingClientRect().height > 20;
+        return (hasText || hasMedia) && hasHeight;
+      });
 
-        // Save original individual page styles to avoid visual layout shifts
-        const originalPageBorderRadius = pageEl.style.borderRadius;
-        const originalPageBoxShadow = pageEl.style.boxShadow;
-        const originalPageBorder = pageEl.style.border;
-        const originalPageMargin = pageEl.style.margin;
-        const originalPageTransform = pageEl.style.transform;
-        const originalPageTransition = pageEl.style.transition;
+      console.log(`[PDF Debug] Found ${validPages.length} valid pages to render`);
 
-        // Force exact crisp A4 print layout styles (flat, no margin/shadows/rounding/transitions)
-        pageEl.style.borderRadius = "0";
-        pageEl.style.boxShadow = "none";
-        pageEl.style.border = "none";
-        pageEl.style.margin = "0";
-        pageEl.style.transform = "none";
-        pageEl.style.transition = "none";
+      for (let i = 0; i < validPages.length; i++) {
+        const pageEl = validPages[i];
+        console.log(`[PDF Debug] Capturing valid page ${i + 1}/${validPages.length}...`);
+        
+        const progress = 30 + Math.round((i / validPages.length) * 65);
+        updateProgress(progress);
 
-        // Capture page using exact requested html2canvas settings
-        const canvas = await html2canvas(pageEl, {
-          scale: 3, // High scale factor for crisp printing
-          useCORS: true,
-          allowTaint: false,
-          backgroundColor: "#ffffff",
-          logging: false,
-          windowWidth: 794,
-          windowHeight: 1123,
-          scrollX: 0,
-          scrollY: 0
+        // Use html-to-image to generate canvas first instead of direct PNG
+        const canvas = await toCanvas(pageEl, {
+          width: 794,
+          height: 1123,
+          pixelRatio: PDF_EXPORT_CONFIG.pixelRatio,
+          cacheBust: true,
+          backgroundColor: "#ffffff"
         });
 
-        const imgData = canvas.toDataURL("image/png");
+        // Ensure transparent backgrounds are filled white before JPEG conversion
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.globalCompositeOperation = 'destination-over';
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
 
-        // Restore original page preview styles
-        pageEl.style.borderRadius = originalPageBorderRadius;
-        pageEl.style.boxShadow = originalPageBoxShadow;
-        pageEl.style.border = originalPageBorder;
-        pageEl.style.margin = originalPageMargin;
-        pageEl.style.transform = originalPageTransform;
-        pageEl.style.transition = originalPageTransition;
+        // Convert canvas to compressed JPEG
+        const jpegDataUrl = canvas.toDataURL(PDF_EXPORT_CONFIG.imageType, PDF_EXPORT_CONFIG.quality);
 
         if (i > 0) {
-          pdf.addPage([794, 1123], "portrait");
+          pdf.addPage("a4", "portrait");
         }
         
-        pdf.addImage(imgData, "PNG", 0, 0, 794, 1123);
+        pdf.addImage(jpegDataUrl, "JPEG", 0, 0, 210, 297, undefined, PDF_EXPORT_CONFIG.compression);
 
-        // Detect and overlay active links in the PDF page
+        // Keep clickable links working on cloned page
         const pageRect = pageEl.getBoundingClientRect();
         if (pageRect.width > 0 && pageRect.height > 0) {
-          const scaleX = 794 / pageRect.width;
-          const scaleY = 1123 / pageRect.height;
-          const anchors = Array.from(pageEl.querySelectorAll("a"));
+          // Convert DOM pixel positions to A4 PDF millimeters correctly
+          const scaleX = 210 / pageRect.width;
+          const scaleY = 297 / pageRect.height;
+          const anchors = Array.from(pageEl.querySelectorAll("a[href]"));
           
+          let addedLinksCount = 0;
+
           anchors.forEach((link) => {
-            const href = link.getAttribute("href");
+            let href = link.getAttribute("href");
             if (href && !href.startsWith("#") && href !== "javascript:void(0)") {
-              const linkRect = link.getBoundingClientRect();
-              const relLeft = (linkRect.left - pageRect.left) * scaleX;
-              const relTop = (linkRect.top - pageRect.top) * scaleY;
-              const relWidth = linkRect.width * scaleX;
-              const relHeight = linkRect.height * scaleY;
               
-              if (relWidth > 0 && relHeight > 0) {
-                pdf.link(relLeft, relTop, relWidth, relHeight, { url: href });
+              // Only add valid external links or relative paths resolved to absolute URLs
+              if (!href.startsWith("http://") && !href.startsWith("https://") && !href.startsWith("mailto:") && !href.startsWith("tel:")) {
+                 href = new URL(href, window.location.origin).href;
+              }
+
+              const linkRect = link.getBoundingClientRect();
+              const xMm = (linkRect.left - pageRect.left) * scaleX;
+              const yMm = (linkRect.top - pageRect.top) * scaleY;
+              const widthMm = linkRect.width * scaleX;
+              const heightMm = linkRect.height * scaleY;
+              
+              if (widthMm > 0 && heightMm > 0) {
+                pdf.link(xMm, yMm, widthMm, heightMm, { url: href });
+                addedLinksCount++;
               }
             }
           });
+          
+          console.log(`[PDF Debug] Added ${addedLinksCount} clickable links on page ${i + 1}`);
         }
 
-        // Clean canvas memory
+        // Clean up all canvas objects after each page render to reduce browser memory
         canvas.width = 0;
         canvas.height = 0;
       }
 
-      setExportProgress(95);
-
-      // Restore original container layout styles
-      originalElement.style.zoom = originalZoom;
-      originalElement.style.transform = originalTransform;
-      originalElement.style.borderRadius = originalBorderRadius;
-      originalElement.style.boxShadow = originalShadow;
-      originalElement.style.width = originalWidth;
-      originalElement.style.margin = originalMargin;
-      originalElement.classList.add("pdf-preview-scale");
+      updateProgress(95);
 
       // Calculate filename
       const refId = (proposal as any).referenceId || proposal.client?.referenceId || "proposal";
@@ -290,23 +377,29 @@ export default function ProposalPreview() {
       console.log(`[PDF Debug] Downloading PDF file: ${filename}`);
       pdf.save(filename);
 
-      setExportProgress(100);
+      updateProgress(100);
       await new Promise(resolve => setTimeout(resolve, 300));
     } catch (err) {
       console.error("High-precision PDF download failed:", err);
-      // Ensure we restore styles even on error
-      if (originalElement) {
-        originalElement.style.zoom = originalZoom;
-        originalElement.style.transform = originalTransform;
-        originalElement.style.borderRadius = originalBorderRadius;
-        originalElement.style.boxShadow = originalShadow;
-        originalElement.style.width = originalWidth;
-        originalElement.style.margin = originalMargin;
-        originalElement.classList.add("pdf-preview-scale");
-      }
     } finally {
+      // Remove cloned export container from DOM
+      if (document.body.contains(exportContainer)) {
+        document.body.removeChild(exportContainer);
+      }
       setIsExporting(false);
       setExportProgress(0);
+      (window as any).__isExportingPDF = false;
+
+      // Animate and remove toast
+      if (toast) {
+        toast.style.transform = "translate-y-10";
+        toast.style.opacity = "0";
+        setTimeout(() => {
+          if (toast && document.body.contains(toast)) {
+            document.body.removeChild(toast);
+          }
+        }, 500);
+      }
     }
   };
 
@@ -421,27 +514,6 @@ export default function ProposalPreview() {
       </div>
 
 
-      {isExporting && (
-        <div className="fixed inset-0 z-[9999] bg-[#0B0E14]/90 backdrop-blur-md flex items-center justify-center flex-col pdf-export-loader">
-          <div className="flex flex-col items-center gap-6 max-w-sm px-6 text-center">
-            <Loader2 className="w-14 h-14 text-primary animate-spin" />
-            <div className="space-y-2">
-              <h3 className="text-white text-[12px] font-black uppercase tracking-[0.4em] mb-1">Compiling Strategic Proposal</h3>
-              <p className="text-white/45 text-[8px] font-black uppercase tracking-[0.2em] mt-0.5">Please wait, generating print-ready vector frames...</p>
-            </div>
-
-            {/* High-contrast progress bar */}
-            <div className="w-64 h-1 bg-white/5 rounded-full overflow-hidden relative">
-              <div
-                className="h-full bg-[#99CB48] shadow-[0_0_12px_#99CB48] transition-all duration-300 rounded-full"
-                style={{ width: `${exportProgress}%` }}
-              />
-            </div>
-
-            <p className="text-white/30 text-[9px] font-black uppercase tracking-wider tabular-nums">{exportProgress}% Sync Complete</p>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

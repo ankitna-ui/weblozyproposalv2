@@ -39,6 +39,7 @@ export interface Module {
   description?: string;
   icon?: string;
   isCustom?: boolean;
+  isFutureScalability?: boolean;
 }
 
 export interface SolutionDetails {
@@ -47,6 +48,7 @@ export interface SolutionDetails {
   approachPoints: string[];
   selectedModules: Module[];
   customModules: Module[];
+  includeFutureScalability?: boolean;
   demoLinks: string[];
   timeline: string;
   integrations: string[];

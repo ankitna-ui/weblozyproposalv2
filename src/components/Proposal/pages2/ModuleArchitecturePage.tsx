@@ -32,19 +32,32 @@ const ModuleArchitecturePage: React.FC<ModulePageProps> = ({ proposal, pageNum, 
         )}
 
         <div className="flex-1 space-y-2 overflow-visible py-1">
-          {pageModules.map((module, mIdx) => (
-            <div key={mIdx} className="module-card break-inside-avoid w-full border-[1px] border-slate-900 overflow-hidden rounded-lg shadow-sm">
+          {pageModules.map((module, mIdx) => {
+            const isFuture = module.isFutureScalability;
+            const primaryColor = isFuture ? 'bg-[#1AA6E1]' : 'bg-[#99CB48]';
+            const borderColor = isFuture ? 'border-[#1AA6E1]' : 'border-slate-900';
+            const textColor = isFuture ? 'text-[#1AA6E1]' : 'text-[#99CB48]';
+            
+            return (
+            <div key={mIdx} className={`module-card break-inside-avoid w-full border-[1px] ${borderColor} overflow-hidden rounded-lg shadow-sm`}>
               {/* Compact Module Header */}
-              <div className="bg-[#99CB48] py-1.5 px-3 border-b-[1px] border-slate-900 flex justify-between items-center">
+              <div className={`${primaryColor} py-1.5 px-3 border-b-[1px] ${borderColor} flex justify-between items-center`}>
                 <h3 className="text-white font-extrabold tracking-wide text-[14px] leading-tight">
                   {module.name}
                 </h3>
-                {module.price && (
-                  <div className="bg-white px-2 py-0.5 rounded border border-slate-900 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] flex items-center gap-1">
-                    <IndianRupee size={9} className="text-slate-900" strokeWidth={3} />
-                    <span className="text-[11px] font-extrabold text-slate-900">{module.price}</span>
-                  </div>
-                )}
+                <div className="flex items-center gap-2">
+                  {isFuture && (
+                    <div className="bg-white/20 px-2 py-0.5 rounded border border-white/30 backdrop-blur-sm">
+                      <span className="text-[8px] font-black uppercase tracking-widest text-white">Future Scalability</span>
+                    </div>
+                  )}
+                  {module.price && (
+                    <div className="bg-white px-2 py-0.5 rounded border border-slate-900 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] flex items-center gap-1">
+                      <IndianRupee size={9} className="text-slate-900" strokeWidth={3} />
+                      <span className="text-[11px] font-extrabold text-slate-900">{module.price}</span>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* High-Density Features Table */}
@@ -57,19 +70,19 @@ const ModuleArchitecturePage: React.FC<ModulePageProps> = ({ proposal, pageNum, 
                     }`}
                   >
                     <div className="flex items-center gap-2">
-                       <div className="w-1 h-1 rounded-full bg-[#99CB48] shrink-0" />
+                       <div className={`w-1 h-1 rounded-full ${primaryColor} shrink-0`} />
                        <span className="text-[12px] font-semibold tracking-tight text-slate-700 leading-tight">
                          {typeof feature === 'string' ? feature : feature.name}
                        </span>
                     </div>
                     {feature.price && (
                        <div className="mr-3 px-1.5 py-0 bg-slate-50 border border-slate-200 rounded flex items-center gap-0.5">
-                          <IndianRupee size={8} className="text-[#99CB48]" strokeWidth={3} />
+                          <IndianRupee size={8} className={textColor} strokeWidth={3} />
                           <span className="text-[10px] font-bold text-slate-500">{feature.price}</span>
                        </div>
                     )}
                     <div className="flex justify-end">
-                       <div className="flex items-center justify-center w-5 h-5 rounded-full bg-[#99CB48] text-white shrink-0">
+                       <div className={`flex items-center justify-center w-5 h-5 rounded-full ${primaryColor} text-white shrink-0`}>
                           <CheckCircle2 size={12} strokeWidth={3} />
                        </div>
                     </div>
@@ -77,7 +90,7 @@ const ModuleArchitecturePage: React.FC<ModulePageProps> = ({ proposal, pageNum, 
                 ))}
               </div>
             </div>
-          ))}
+          )})}
         </div>
 
         <div className="mt-auto pt-4 flex items-center justify-between border-t border-slate-100">

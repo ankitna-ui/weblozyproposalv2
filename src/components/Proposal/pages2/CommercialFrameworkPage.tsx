@@ -43,25 +43,17 @@ const CommercialFrameworkPage: React.FC<PageProps> = ({ proposal, pageNum }) => 
   const f = calculateFinancials();
   const formatCurrency = (val: number) => `₹${Math.round(val).toLocaleString("en-IN")}`;
 
-  return (
-    <PageWrapper pageNum={pageNum} title="Commercial Framework">
-        <div className="flex flex-col h-full">
-           {/* Header Section */}
-           <div className="mb-6 flex justify-between items-end">
-              <div>
-                 <div className="flex items-center gap-2 mb-3">
-                    <div className="w-10 h-[3px] bg-[#99CB48] rounded-full" />
-                    <span className="text-[11px] font-black tracking-[0.15em] text-[#99CB48]">Strategic Investment Protocol</span>
-                 </div>
-                 <h2 className="text-6xl font-black tracking-tighter text-[#0B0E14] leading-none">
-                    Strategic <span className="text-slate-400">Value</span><span className="text-[#99CB48]">.</span>
-                 </h2>
-                 <div className="text-[10px] text-slate-400 tracking-wide font-black mt-2">Commercial framework for enterprise transformation</div>
-              </div>
-              <div className="flex flex-col items-end">
-                 <div className="text-[9px] font-black text-slate-900 bg-slate-100 px-4 py-1.5 rounded-full border border-slate-200 tracking-wide">Confidential Proposal</div>
-              </div>
-           </div>
+  return (<PageWrapper pageNum={pageNum} title="Commercial Framework">
+  <div className="flex flex-col h-full">
+    {/* Header Section */}
+    <div className="mb-6 flex flex-col items-center text-center">
+      <h2 className="text-6xl font-black tracking-tighter text-[#0B0E14] leading-none">
+        Strategic <span className="text-[#99CB48]">Value</span>
+      </h2>
+      <div className="text-[10px] text-slate-400 tracking-wide font-black mt-2">
+        Commercial framework for enterprise transformation
+      </div>
+    </div>
 
            <div className="flex-1 grid grid-cols-12 gap-6 items-start min-h-0">
               {/* Left Column: Financial Card (5 columns) */}
@@ -121,7 +113,7 @@ const CommercialFrameworkPage: React.FC<PageProps> = ({ proposal, pageNum }) => 
                        <div className="text-[10px] font-black tracking-[0.12em] text-slate-400">ROI Justification</div>
                     </div>
                     <div className="text-[11px] font-bold text-slate-800 leading-relaxed italic">
-                       "{proposal?.pricing?.roiLogic || "The investment is optimized for high-yield operational efficiency, with a projected systemic ROI realized through automated cost reduction."}"
+                       {proposal?.pricing?.roiLogic || "The investment is optimized for high-yield operational efficiency, with a projected systemic ROI realized through automated cost reduction."}
                     </div>
                  </div>
               </div>
@@ -213,10 +205,9 @@ const CommercialFrameworkPage: React.FC<PageProps> = ({ proposal, pageNum }) => 
                     </div>
                  </div>
               </div>
-              <div className="text-right">
-                 <div className="text-[9px] font-black text-slate-900 tracking-[0.12em]">Weblozy <span className="text-[#99CB48]">Strategic Services</span></div>
-                 <div className="text-[7px] font-black text-slate-300 tracking-wide mt-1 italic">Protocol ID: WBL-2024-ARCH</div>
-              </div>
+              <div className="text-center">
+  <div className="text-[7px] font-black text-slate-300 tracking-wide italic">Protocol ID: WBL-2024-ARCH</div>
+</div>
            </div>
         </div>
     </PageWrapper>

@@ -46,18 +46,16 @@ const CoverPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
                </div>
              </div>
              
-             <h1 className={`font-black tracking-[-0.04em] text-white drop-shadow-2xl transition-all duration-500 ${
-               (proposal?.client?.proposalTitle || "").length > 80 ? "text-[26px] leading-[1.1]" : 
-               (proposal?.client?.proposalTitle || "").length > 55 ? "text-[32px] leading-[1.05]" : 
-               (proposal?.client?.proposalTitle || "").length > 35 ? "text-[42px] leading-[1]" : 
-               (proposal?.client?.proposalTitle || "").length > 20 ? "text-[52px] leading-[0.95]" :
-               "text-[58px] leading-[0.95]"
+             <h1 className={`font-black tracking-[-0.04em] text-white drop-shadow-2xl transition-all duration-500 max-w-full ${
+               (proposal?.client?.proposalTitle || "").length > 120 ? "text-[32px] leading-[1.1]" : 
+               (proposal?.client?.proposalTitle || "").length > 90 ? "text-[40px] leading-[1.05]" : 
+               (proposal?.client?.proposalTitle || "").length > 60 ? "text-[48px] leading-[1]" : 
+               (proposal?.client?.proposalTitle || "").length > 30 ? "text-[54px] leading-[0.95]" :
+               "text-[60px] leading-[0.95]"
              }`}>
                {proposal?.client?.proposalTitle ? (
-                 (proposal?.client?.proposalTitle || '').split(' ').map((word, i) => (
-                   <span key={i} className="inline-block mr-[0.3em]">
-                      {word === '&' ? <span className="text-[#99CB48] font-light">&</span> : word}
-                   </span>
+                 (proposal?.client?.proposalTitle || '').split(/(&)/).map((part, i) => (
+                   part === '&' ? <span key={i} className="text-[#99CB48] font-light">&</span> : part
                  ))
                ) : (
                  <>
@@ -69,7 +67,7 @@ const CoverPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
              
              <div className="pt-6 flex items-center gap-6">
                 <div className="h-[2px] w-24 bg-gradient-to-r from-[#99CB48] to-transparent shrink-0" />
-                <div className={`font-semibold tracking-[0.07em] text-white/65 transition-all duration-300 leading-relaxed ${
+                <div className={`font-semibold tracking-[0.07em] text-white/65 transition-all duration-300 leading-relaxed break-words whitespace-normal max-w-full ${
                   (proposal?.client?.subTitle || "").length > 100 ? "text-[12px]" : (proposal?.client?.subTitle || "").length > 60 ? "text-[14px]" : "text-[16px]"
                 }`}>
                   {proposal?.client?.subTitle || "Bespoke Technical & Operational Roadmap"}

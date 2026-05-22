@@ -91,6 +91,7 @@ const CorporateAuthorityPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
                     src={`https://api.microlink.io/?url=${encodeURIComponent(project.url.startsWith('http') ? project.url : `https://${project.url}`)}&screenshot=true&embed=screenshot.url`} 
                     alt={project.title} 
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
+                    data-fallback-src={project.image}
                     onError={(e) => {
                       e.currentTarget.src = project.image;
                     }}
@@ -113,7 +114,7 @@ const CorporateAuthorityPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
               <div className="px-4 flex justify-between items-start">
                 <div className="space-y-1">
                   <div className="text-[8px] font-black tracking-[0.12em] text-[#3ABEF9]">{project.category}</div>
-                  <h3 className="text-[16px] font-extrabold tracking-tight text-[#0B0E14] group-hover:text-[#3ABEF9] transition-colors line-clamp-1">{project.title}</h3>
+                  <h3 className="text-[16px] font-extrabold tracking-tight text-[#0B0E14] group-hover:text-[#3ABEF9] transition-colors truncate pb-1">{project.title}</h3>
                 </div>
                 <div className="w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center text-slate-300 group-hover:border-[#3ABEF9] group-hover:text-[#3ABEF9] transition-all">
                   <ArrowUpRight size={14} />

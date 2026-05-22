@@ -489,13 +489,31 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
              <LabelPremium className="mb-0 text-slate-800 text-[10px]">Blueprint Registry</LabelPremium>
              <p className="text-[8px] font-bold text-slate-400 uppercase tracking-[0.2em]">Active operational modules</p>
           </div>
-          <Button 
-            onClick={handleAddManualModule} 
-            variant="outline" 
-            className="h-9 rounded-xl px-4 border-slate-200 text-[9px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all bg-white"
-          >
-            + Add Manual Node
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button 
+              onClick={() => {
+                const futureModule: Module = {
+                  id: Math.random().toString(36).substr(2, 9),
+                  name: "Future Scalability",
+                  features: [],
+                  price: "",
+                  isCustom: true,
+                  isFutureScalability: true
+                };
+                updateSolution({ selectedModules: [...proposal.solution.selectedModules, futureModule] });
+              }}
+              className="h-9 rounded-xl px-4 bg-[#1AA6E1]/10 text-[#1AA6E1] hover:bg-[#1AA6E1]/20 border border-[#1AA6E1]/30 text-[9px] font-black uppercase tracking-widest transition-all shadow-sm"
+            >
+              + Future Scalability
+            </Button>
+            <Button 
+              onClick={handleAddManualModule} 
+              variant="outline" 
+              className="h-9 rounded-xl px-4 border-slate-200 text-[9px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all bg-white"
+            >
+              + Add Manual Node
+            </Button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-6">

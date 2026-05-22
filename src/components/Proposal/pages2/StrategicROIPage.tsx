@@ -285,7 +285,7 @@ const StrategicROIPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
               </div>
               <div>
                 <div className="text-[8px] font-black tracking-[0.2em] text-[#99CB48] mb-0.5">
-              CLICK TO ACCESS
+                  CLICK TO ACCESS
                 </div>
                 <div className="text-[16px] font-extrabold text-white leading-none tracking-tight">
                   Business Health Report — Confidential Analysis

@@ -61,19 +61,24 @@ const CorporateIdentityPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
 
                 <div className="h-[1px] w-full bg-slate-200" />
 
-                <div className="space-y-6">
-                   <div className="text-slate-400 text-[8px] font-black tracking-[0.12em]">Why Weblozy?</div>
-                   <div className="grid grid-cols-1 gap-y-1.5">
+                <div className="space-y-4 pt-2">
+                   <div className="flex items-center gap-2">
+                     <div className="w-2 h-2 bg-[#99CB48] rounded-sm rotate-45" />
+                     <div className="text-[#0B0E14] text-[15px] font-black tracking-tight uppercase">Why Weblozy?</div>
+                   </div>
+                   <div className="grid grid-cols-1 gap-y-2">
                       {[
-                         { icon: <Target className="text-[#1AA6E1]" size={16} />, title: "Creatively Customized" },
-                         { icon: <ShieldCheck className="text-[#99CB48]" size={16} />, title: "Reliably Responsive" },
-                         { icon: <Zap className="text-[#1AA6E1]" size={16} />, title: "Effortlessly Efficient" },
-                         { icon: <Rocket className="text-[#99CB48]" size={16} />, title: "Securely Streamlined" },
-                         { icon: <Star className="text-yellow-500" size={16} />, title: "Exceptionally Experiential" }
+                         { icon: <Target className="text-[#1AA6E1]" size={18} />, title: "Creatively Customized" },
+                         { icon: <ShieldCheck className="text-[#99CB48]" size={18} />, title: "Reliably Responsive" },
+                         { icon: <Zap className="text-[#1AA6E1]" size={18} />, title: "Effortlessly Efficient" },
+                         { icon: <Rocket className="text-[#99CB48]" size={18} />, title: "Securely Streamlined" },
+                         { icon: <Star className="text-yellow-500" size={18} />, title: "Exceptionally Experiential" }
                       ].map((item, i) => (
-                         <div key={i} className="flex items-center gap-3">
-                            <div className="shrink-0">{item.icon}</div>
-                            <span className="text-[12px] font-semibold text-slate-800 leading-tight">{item.title}</span>
+                         <div key={i} className="flex items-center gap-4 bg-white p-2.5 rounded-xl border border-slate-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+                            <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100">
+                               {item.icon}
+                            </div>
+                            <span className="text-[14px] font-bold text-slate-800 tracking-tight">{item.title}</span>
                          </div>
                       ))}
                    </div>

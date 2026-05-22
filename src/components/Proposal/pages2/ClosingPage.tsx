@@ -159,7 +159,7 @@ const ClosingPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
                   <div className="w-2 h-2 rounded-full bg-[#99CB48] shadow-[0_0_10px_#99CB48]" />
                   <span className="text-[8px] font-black tracking-[0.15em] text-white/50">ESTABLISH CONNECTION</span>
                </div>
-               <h1 className="text-[60px] font-black leading-[0.82] tracking-[-0.04em]">
+               <h1 className="text-[60px] font-black leading-[0.82] tracking-[-0.04em] pb-3">
                   <span className="text-white/95 font-light italic">Let's</span><br />
                   <span className="text-[#99CB48] tracking-[-0.05em] uppercase">Collaborate.</span>
                </h1>
