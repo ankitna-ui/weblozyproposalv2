@@ -15,6 +15,12 @@ const CreateProposal = lazy(() => import('@/pages/Proposal/CreateProposal'));
 const EditProposal = lazy(() => import('@/pages/Proposal/EditProposal'));
 const SavedProposals = lazy(() => import('@/pages/Proposal/SavedProposals'));
 const ProposalPreview = lazy(() => import('@/pages/Proposal/ProposalPreview'));
+const UserProfile = lazy(() => import('@/pages/Users/UserProfile'));
+
+// New Strategic Pages
+const ActiveDrafts = lazy(() => import('@/pages/Strategic/ActiveDrafts'));
+const InstitutionalAssets = lazy(() => import('@/pages/Strategic/InstitutionalAssets'));
+const ClientNetwork = lazy(() => import('@/pages/Strategic/ClientNetwork'));
 const ErrorPage = lazy(() => import('@/pages/Error/ErrorPage'));
 
 function App() {
@@ -73,6 +79,11 @@ function App() {
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage />} />
+          
+          <Route path="/saved" element={user ? <SavedProposals /> : <Navigate to="/login" />} />
+          <Route path="/drafts" element={user ? <ActiveDrafts /> : <Navigate to="/login" />} />
+          <Route path="/assets" element={user ? <InstitutionalAssets /> : <Navigate to="/login" />} />
+          <Route path="/clients" element={user ? <ClientNetwork /> : <Navigate to="/login" />} />
         
           <Route 
             path="/" 
@@ -93,16 +104,16 @@ function App() {
             path="/edit/:id" 
             element={user ? <EditProposal /> : <Navigate to="/login" />} 
           />
-          
-          <Route 
-            path="/saved" 
-            element={user ? <SavedProposals /> : <Navigate to="/login" />} 
-          />
-          
           <Route 
             path="/preview/:id" 
             element={user ? <ProposalPreview /> : <Navigate to="/login" />} 
           />
+
+          <Route 
+            path="/profile" 
+            element={user ? <UserProfile /> : <Navigate to="/login" />} 
+          />
+
           <Route path="*" element={<ErrorPage type="404" />} />
         </Routes>
       </Suspense>

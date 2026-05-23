@@ -111,7 +111,7 @@ export default function ErrorPage({ type: propType }: ErrorPageProps) {
         >
           {/* Pulsing Icon Shield */}
           <div className="relative flex justify-center">
-            <div className="absolute inset-0 w-28 h-28 mx-auto rounded-3xl bg-white/50 border border-slate-200/40 shadow-2xl blur-[4px] pointer-events-none" />
+            <div className="absolute inset-0 w-28 h-28 mx-auto rounded-3xl bg-slate-100 dark:bg-white/50 border border-slate-200/40 shadow-2xl blur-[4px] pointer-events-none" />
             <motion.div 
               animate={{ 
                 scale: [1, 1.03, 1],
@@ -161,7 +161,7 @@ export default function ErrorPage({ type: propType }: ErrorPageProps) {
             
             <Button 
               onClick={() => navigate("/")} 
-              className="w-full sm:w-auto h-12 px-8 rounded-2xl bg-primary hover:bg-[#88B540] text-white shadow-lg shadow-primary/20 text-[10px] font-black uppercase tracking-[0.15em] transition-all flex items-center justify-center gap-2"
+              className="w-full sm:w-auto h-12 px-8 rounded-2xl bg-primary hover:bg-[#88B540] text-slate-900 dark:text-white shadow-lg shadow-primary/20 text-[10px] font-black uppercase tracking-[0.15em] transition-all flex items-center justify-center gap-2"
             >
               <Home size={14} />
               <span>{content.showRetry ? "Return Hub" : content.primaryBtnText}</span>

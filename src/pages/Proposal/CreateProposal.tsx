@@ -392,7 +392,7 @@ export default function CreateProposal() {
     <div className="min-h-screen bg-white">
       <div className="flex h-screen overflow-hidden">
         {/* Modernized Input Panel */}
-        <div className="w-full md:w-1/2 lg:w-[42%] xl:w-[40%] flex flex-col border-r border-slate-100 bg-[#F8FAFC] shadow-[20px_0_40px_-15px_rgba(0,0,0,0.03)] z-30 overflow-hidden relative">
+        <div className="w-full md:w-1/2 lg:w-[42%] xl:w-[40%] flex flex-col border-r border-slate-100 dark:border-white/5 bg-[#F8FAFC] dark:bg-[#11151D] shadow-[20px_0_40px_-15px_rgba(0,0,0,0.03)] z-30 overflow-hidden relative transition-colors">
           
           {/* ─── Smart Draft Restore Banner ─── */}
           <AnimatePresence>
@@ -402,7 +402,7 @@ export default function CreateProposal() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -40 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="absolute top-0 left-0 right-0 z-50 bg-[#0B0E14] border-b border-[#99CB48]/30 px-5 py-3 flex items-center justify-between gap-3 shadow-xl shadow-black/20"
+                className="absolute top-0 left-0 right-0 z-50 bg-slate-50 dark:bg-[#0B0E14] border-b border-[#99CB48]/30 px-5 py-3 flex items-center justify-between gap-3 shadow-xl shadow-black/20"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="w-8 h-8 rounded-xl bg-[#99CB48]/10 border border-[#99CB48]/25 flex items-center justify-center shrink-0">
@@ -410,7 +410,7 @@ export default function CreateProposal() {
                   </div>
                   <div className="min-w-0">
                     <div className="text-[10px] font-black text-[#99CB48] uppercase tracking-widest">Draft Auto-Restored ✓</div>
-                    <div className="text-[9px] text-white/50 font-semibold truncate">
+                    <div className="text-[9px] text-slate-900 dark:text-white/50 font-semibold truncate">
                       {draftBanner.title ? `"${draftBanner.title}"` : "Untitled Proposal"} · saved {formatDraftTime(draftBanner.timestamp)}
                     </div>
                   </div>
@@ -418,13 +418,13 @@ export default function CreateProposal() {
                 <div className="flex items-center gap-2 shrink-0">
                   <button
                     onClick={handleStartFresh}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 hover:bg-red-500/20 border border-white/10 hover:border-red-500/30 text-white/50 hover:text-red-400 text-[9px] font-black uppercase tracking-wider rounded-lg transition-all"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-white/5 hover:bg-red-500/20 border border-slate-300 dark:border-white/10 hover:border-red-500/30 text-slate-900 dark:text-white/50 hover:text-red-400 text-[9px] font-black uppercase tracking-wider rounded-lg transition-all"
                   >
                     Start Fresh
                   </button>
                   <button
                     onClick={handleDismissDraft}
-                    className="w-7 h-7 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-lg text-white/40 hover:text-white/70 transition-all border border-white/10"
+                    className="w-7 h-7 flex items-center justify-center bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:bg-white/10 rounded-lg text-slate-900 dark:text-white/40 hover:text-slate-900 dark:text-white/70 transition-all border border-slate-300 dark:border-white/10"
                   >
                     <X size={12} />
                   </button>
@@ -434,13 +434,13 @@ export default function CreateProposal() {
           </AnimatePresence>
 
           {/* Header */}
-          <div className="px-6 sm:px-10 py-6 sm:py-8 border-b border-slate-100 bg-white/80 backdrop-blur-md flex justify-between items-center sticky top-0 z-10">
+          <div className="px-6 sm:px-10 py-6 sm:py-8 border-b border-slate-100 dark:border-white/5 bg-white/80 dark:bg-[#11151D]/80 backdrop-blur-md flex justify-between items-center sticky top-0 z-10 transition-colors">
             <div className="flex items-center gap-4 sm:gap-5">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#0B0E14] rounded-2xl flex items-center justify-center text-white shadow-xl rotate-3 hover:rotate-0 transition-transform duration-500">
-                <img src={logo} alt="W" className="w-6 h-6 sm:w-8 sm:h-8 object-contain brightness-0 invert" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-slate-50 dark:bg-[#0B0E14] rounded-2xl flex items-center justify-center text-slate-900 dark:text-white shadow-xl rotate-3 hover:rotate-0 transition-transform duration-500 border border-slate-200 dark:border-white/10">
+                <img src={logo} alt="W" className="w-6 h-6 sm:w-8 sm:h-8 object-contain brightness-0 dark:invert" />
               </div>
               <div>
-                <h1 className="text-xl sm:text-2xl font-black uppercase tracking-tighter text-[#0B0E14]">Proposal <span className="text-primary italic">OS.</span></h1>
+                <h1 className="text-xl sm:text-2xl font-black uppercase tracking-tighter text-[#0B0E14] dark:text-white">Proposal <span className="text-primary italic">OS.</span></h1>
                 <div className="flex items-center gap-2 mt-0.5 sm:mt-1">
                   <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_#99CB48]" />
                   <p className="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.4em] text-slate-400">Strategic Editor V3</p>
@@ -453,7 +453,7 @@ export default function CreateProposal() {
           </div>
 
           {/* Premium Step Navigation */}
-          <div className="px-5 sm:px-8 py-3.5 sm:py-5 bg-white/40 border-b border-slate-100 flex gap-2.5 overflow-x-auto no-scrollbar scroll-smooth">
+          <div className="px-5 sm:px-8 py-3.5 sm:py-5 bg-white/40 dark:bg-white/5 border-b border-slate-100 dark:border-white/5 flex gap-2.5 overflow-x-auto no-scrollbar scroll-smooth transition-colors">
             {dynamicSteps.map((step, i) => {
               const StepIcon = step.icon;
               const isActive = currentStep === i;
@@ -463,8 +463,8 @@ export default function CreateProposal() {
                   onClick={() => setCurrentStep(i)} 
                   className={`flex-shrink-0 flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all duration-300 ${
                     isActive 
-                      ? "bg-[#0B0E14] text-white shadow-xl shadow-black/10 scale-105" 
-                      : "bg-white/80 border border-slate-100 text-slate-400 hover:border-primary/30 hover:text-slate-600"
+                      ? "bg-slate-50 dark:bg-[#0B0E14] text-slate-900 dark:text-white shadow-xl shadow-black/10 scale-105" 
+                      : "bg-white/80 dark:bg-white/10 border border-slate-100 dark:border-white/5 text-slate-400 hover:border-primary/30 hover:text-slate-600 dark:hover:text-slate-300"
                   }`}
                 >
                   <div className={`p-1.5 rounded-lg ${isActive ? "bg-primary/20 text-primary" : "bg-slate-100 text-slate-300"}`}>
@@ -477,7 +477,7 @@ export default function CreateProposal() {
           </div>
 
           {/* Form Content Area */}
-          <div className="flex-1 overflow-y-auto p-6 sm:p-12 custom-scrollbar bg-white/30">
+          <div className="flex-1 overflow-y-auto p-6 sm:p-12 custom-scrollbar bg-white/30 dark:bg-[#0B0E14]/30 transition-colors">
             <AnimatePresence mode="wait">
               <motion.div 
                 key={currentStep} 
@@ -502,7 +502,7 @@ export default function CreateProposal() {
           </div>
 
           {/* Modernized Footer Controls */}
-          <div className="p-6 sm:p-10 border-t border-slate-100 bg-white/90 backdrop-blur-xl flex justify-between items-center sticky bottom-0 z-40">
+          <div className="p-6 sm:p-10 border-t border-slate-100 dark:border-white/5 bg-white/90 dark:bg-[#11151D]/90 backdrop-blur-xl flex justify-between items-center sticky bottom-0 z-40 transition-colors">
             {/* Absolute Top Border Progress Bar */}
             <div className="absolute top-0 left-0 w-full h-[2px] bg-slate-100">
               <div 
@@ -515,7 +515,7 @@ export default function CreateProposal() {
               variant="outline" 
               onClick={() => setCurrentStep(prev => Math.max(0, prev - 1))} 
               disabled={currentStep === 0} 
-              className="h-12 sm:h-14 px-5 sm:px-8 rounded-xl sm:rounded-2xl border-slate-200 text-[10px] font-black uppercase tracking-widest bg-white hover:bg-slate-50 transition-all disabled:opacity-30"
+              className="h-12 sm:h-14 px-5 sm:px-8 rounded-xl sm:rounded-2xl border-slate-200 dark:border-white/10 text-[10px] font-black uppercase tracking-widest bg-white dark:bg-white/5 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/10 transition-all disabled:opacity-30"
             >
               <ChevronLeft size={18} className="mr-1 sm:mr-2" /> Back
             </Button>
@@ -528,13 +528,13 @@ export default function CreateProposal() {
             
             <div className="flex gap-2 items-center">
               {currentStep < dynamicSteps.length - 1 ? (
-                <Button onClick={nextStep} className="h-12 sm:h-14 px-6 sm:px-10 rounded-xl sm:rounded-2xl bg-[#0B0E14] hover:bg-black text-white shadow-xl shadow-black/10 text-[10px] font-black uppercase tracking-[0.2em] group">
+                <Button onClick={nextStep} className="h-12 sm:h-14 px-6 sm:px-10 rounded-xl sm:rounded-2xl bg-slate-50 dark:bg-[#0B0E14] hover:bg-black text-slate-900 dark:text-white shadow-xl shadow-black/10 text-[10px] font-black uppercase tracking-[0.2em] group">
                   <span className="hidden sm:inline">Next Sequence</span>
                   <span className="inline sm:hidden">Next</span>
                   <ChevronRight size={18} className="text-primary ml-1.5 sm:ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
               ) : (
-                <Button onClick={handleSave} disabled={isSaving} className="h-12 sm:h-14 px-6 sm:px-10 rounded-xl sm:rounded-2xl bg-primary hover:bg-[#88B540] text-white shadow-xl shadow-primary/20 text-[10px] font-black uppercase tracking-[0.2em]">
+                <Button onClick={handleSave} disabled={isSaving} className="h-12 sm:h-14 px-6 sm:px-10 rounded-xl sm:rounded-2xl bg-primary hover:bg-[#88B540] text-slate-900 dark:text-white shadow-xl shadow-primary/20 text-[10px] font-black uppercase tracking-[0.2em]">
                   {isSaving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} className="mr-1 sm:mr-2" />}
                   <span className="hidden sm:inline">Finalize Protocol</span>
                   <span className="inline sm:hidden">Finalize</span>

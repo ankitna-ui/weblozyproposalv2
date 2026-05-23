@@ -337,10 +337,10 @@ export default function EditProposal() {
 
   if (isLoading) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center bg-[#0B0E14]">
+      <div className="h-screen w-screen flex items-center justify-center bg-slate-50 dark:bg-[#0B0E14]">
         <div className="flex flex-col items-center gap-6">
           <Loader2 className="w-12 h-12 text-primary animate-spin" />
-          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-white/40">Loading Protocol...</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-900 dark:text-white/40">Loading Protocol...</p>
         </div>
       </div>
     );
@@ -367,32 +367,32 @@ export default function EditProposal() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#07090C] transition-colors duration-500">
       <div className="flex h-screen overflow-hidden">
         {/* Modernized Input Panel with Glassmorphism */}
-        <div className="w-full md:w-1/2 lg:w-[42%] xl:w-[40%] flex flex-col border-r border-slate-100 bg-white/40 backdrop-blur-3xl z-30 overflow-hidden relative shadow-[20px_0_60px_-15px_rgba(0,0,0,0.05)]">
+        <div className="w-full md:w-1/2 lg:w-[42%] xl:w-[40%] flex flex-col border-r border-slate-100 bg-white dark:bg-[#0B0E14] z-30 overflow-hidden relative shadow-[20px_0_60px_-15px_rgba(0,0,0,0.05)] dark:shadow-none transition-colors duration-500">
            
            {/* High-End Header */}
-           <div className="px-6 sm:px-10 py-6 sm:py-10 border-b border-slate-100/50 bg-white/20 backdrop-blur-md flex justify-between items-center sticky top-0 z-40">
+           <div className="px-6 sm:px-10 py-6 sm:py-10 border-b border-slate-100/50 bg-white/80 dark:bg-[#0B0E14]/80 backdrop-blur-md flex justify-between items-center sticky top-0 z-40 border-b border-slate-200 dark:border-white/10 transition-colors duration-500">
               <div className="flex items-center gap-4 sm:gap-6">
-                 <div className="w-10 h-10 sm:w-14 sm:h-14 bg-[#0B0E14] rounded-[0.8rem] sm:rounded-[1.25rem] flex items-center justify-center text-white shadow-2xl rotate-3 hover:rotate-0 transition-all duration-500 group">
-                    <img src={logo} alt="W" className="w-6 h-6 sm:w-9 sm:h-9 object-contain brightness-0 invert transition-transform group-hover:scale-110" />
+                 <div className="w-10 h-10 sm:w-14 sm:h-14 bg-slate-50 dark:bg-[#0B0E14] rounded-[0.8rem] sm:rounded-[1.25rem] flex items-center justify-center text-slate-900 dark:text-white shadow-2xl rotate-3 hover:rotate-0 transition-all duration-500 group">
+                    <img src={logo} alt="W" className="w-6 h-6 sm:w-9 sm:h-9 object-contain dark:brightness-0 dark:invert transition-transform group-hover:scale-110" />
                  </div>
                  <div>
-                    <h1 className="text-xl sm:text-3xl font-black uppercase tracking-tighter text-[#0B0E14]">Strategic <span className="text-primary italic">OS.</span></h1>
+                    <h1 className="text-xl sm:text-3xl font-black uppercase tracking-tighter text-[#0B0E14] dark:text-white transition-colors duration-500">Strategic <span className="text-primary italic">OS.</span></h1>
                     <div className="flex items-center gap-2 mt-0.5 sm:mt-1.5">
                        <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_12px_#99CB48]" />
                        <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.5em] text-slate-400">Tactical Editor V4.0</p>
                     </div>
                  </div>
               </div>
-              <button onClick={() => navigate("/dashboard")} className="w-10 h-10 flex items-center justify-center bg-slate-100/80 hover:bg-red-500 rounded-xl text-slate-400 hover:text-white transition-all duration-300 border border-transparent shadow-sm">
+              <button onClick={() => navigate("/dashboard")} className="w-10 h-10 flex items-center justify-center bg-slate-100/80 hover:bg-red-500 rounded-xl text-slate-400 hover:text-slate-900 dark:text-white transition-all duration-300 border border-transparent shadow-sm">
                  <X size={20} />
               </button>
            </div>
 
            {/* Advanced Step Navigation */}
-           <div className="px-5 sm:px-10 py-3.5 sm:py-6 bg-slate-50/30 border-b border-slate-100/50 flex gap-2.5 sm:gap-4 overflow-x-auto no-scrollbar scroll-smooth">
+           <div className="px-5 sm:px-10 py-3.5 sm:py-6 bg-slate-50 dark:bg-[#07090C] border-b border-slate-200 dark:border-white/10 flex gap-2.5 sm:gap-4 transition-colors duration-500 overflow-x-auto no-scrollbar scroll-smooth">
               {dynamicSteps.map((step, i) => {
                  const StepIcon = step.icon;
                  const isActive = currentStep === i;
@@ -402,11 +402,11 @@ export default function EditProposal() {
                        onClick={() => setCurrentStep(i)} 
                        className={`flex-shrink-0 flex items-center gap-2 sm:gap-3.5 px-4 sm:px-6 py-2 sm:py-3 rounded-xl sm:rounded-2xl transition-all duration-500 relative group ${
                           isActive 
-                             ? "bg-[#0B0E14] text-white shadow-2xl shadow-black/20 scale-105" 
-                             : "bg-white/60 border border-slate-100/50 text-slate-400 hover:border-primary/50 hover:text-slate-700"
+                             ? "bg-slate-50 dark:bg-[#0B0E14] text-slate-900 dark:text-white shadow-2xl shadow-black/20 scale-105" 
+                             : "bg-white dark:bg-[#161B22] border border-slate-200 dark:border-white/10 text-slate-400 hover:border-primary/50 hover:text-slate-700 dark:hover:text-white transition-colors duration-500"
                        }`}
                     >
-                       <div className={`p-1.5 sm:p-2 rounded-lg sm:rounded-xl transition-colors duration-500 ${isActive ? "bg-primary text-white shadow-[0_0_15px_#99CB48]" : "bg-slate-100 text-slate-400 group-hover:bg-slate-200"}`}>
+                       <div className={`p-1.5 sm:p-2 rounded-lg sm:rounded-xl transition-colors duration-500 ${isActive ? "bg-primary text-slate-900 dark:text-white shadow-[0_0_15px_#99CB48]" : "bg-slate-100 text-slate-400 group-hover:bg-slate-200"}`}>
                           <StepIcon size={12} />
                        </div>
                        <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap">{step.name}</span>
@@ -419,7 +419,7 @@ export default function EditProposal() {
            </div>
 
            {/* Form Content Area */}
-           <div className="flex-1 overflow-y-auto p-6 sm:p-12 custom-scrollbar bg-white/30">
+           <div className="flex-1 overflow-y-auto p-6 sm:p-12 custom-scrollbar bg-white dark:bg-[#07090C] transition-colors duration-500">
             <AnimatePresence mode="wait">
               <motion.div 
                 key={currentStep} 
@@ -444,7 +444,7 @@ export default function EditProposal() {
           </div>
 
            {/* Premium Control Footer */}
-           <div className="p-6 sm:p-10 border-t border-slate-100/50 bg-white/80 backdrop-blur-2xl flex justify-between items-center sticky bottom-0 z-40">
+           <div className="p-6 sm:p-10 border-t border-slate-200 dark:border-white/10 bg-white/80 dark:bg-[#0B0E14]/80 backdrop-blur-2xl flex justify-between items-center sticky bottom-0 z-40 transition-colors duration-500">
               {/* Absolute Top Border Progress Bar */}
               <div className="absolute top-0 left-0 w-full h-[2px] bg-slate-100">
                 <div 
@@ -457,7 +457,7 @@ export default function EditProposal() {
                  variant="outline" 
                  onClick={() => setCurrentStep(prev => Math.max(0, prev - 1))} 
                  disabled={currentStep === 0} 
-                 className="h-12 sm:h-16 px-5 sm:px-10 rounded-xl sm:rounded-[1.25rem] border-slate-200 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] bg-white hover:bg-slate-900 hover:text-white transition-all duration-500 disabled:opacity-20 shadow-sm"
+                 className="h-12 sm:h-16 px-5 sm:px-10 rounded-xl sm:rounded-[1.25rem] border-slate-200 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] bg-white hover:bg-slate-100 dark:hover:bg-[#1C2128] text-slate-900 dark:text-white border-slate-200 dark:border-white/10 dark:bg-[#161B22] transition-all duration-500 disabled:opacity-20 shadow-sm"
               >
                  <ChevronLeft size={20} className="mr-1.5 sm:mr-3" />
                  <span className="hidden sm:inline">Back Sequence</span>
@@ -466,13 +466,13 @@ export default function EditProposal() {
               
               <div className="flex gap-2 sm:gap-4 items-center">
                  {currentStep < dynamicSteps.length - 1 ? (
-                    <Button onClick={nextStep} className="h-12 sm:h-16 px-6 sm:px-12 rounded-xl sm:rounded-[1.25rem] bg-[#0B0E14] hover:bg-primary hover:text-white shadow-2xl shadow-black/20 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.3em] group transition-all duration-500">
+                    <Button onClick={nextStep} className="h-12 sm:h-16 px-6 sm:px-12 rounded-xl sm:rounded-[1.25rem] bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-primary dark:hover:bg-primary hover:text-slate-900 dark:hover:text-slate-900 shadow-2xl shadow-slate-900/20 dark:shadow-white/10 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.3em] group transition-all duration-500">
                        <span className="hidden sm:inline">Proceed</span>
                        <span className="inline sm:hidden">Next</span>
-                       <ChevronRight size={20} className="text-primary group-hover:text-white ml-1.5 sm:ml-3 group-hover:translate-x-2 transition-all" />
+                       <ChevronRight size={20} className="text-[#99CB48] group-hover:text-slate-900 ml-1.5 sm:ml-3 group-hover:translate-x-2 transition-all" />
                     </Button>
                  ) : (
-                    <Button onClick={handleSave} disabled={isSaving} className="h-12 sm:h-16 px-6 sm:px-12 rounded-xl sm:rounded-[1.25rem] bg-primary hover:bg-[#88B540] text-white shadow-2xl shadow-primary/30 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.3em] transition-all duration-500 scale-105 active:scale-95">
+                    <Button onClick={handleSave} disabled={isSaving} className="h-12 sm:h-16 px-6 sm:px-12 rounded-xl sm:rounded-[1.25rem] bg-primary hover:bg-[#88B540] text-slate-900 dark:text-white shadow-2xl shadow-primary/30 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.3em] transition-all duration-500 scale-105 active:scale-95">
                        {isSaving ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} className="mr-1.5 sm:mr-3" />}
                        <span className="hidden sm:inline">Finalize Protocol</span>
                        <span className="inline sm:hidden">Finalize</span>

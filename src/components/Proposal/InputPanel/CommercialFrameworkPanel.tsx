@@ -54,8 +54,8 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
           <div className="relative">
              <ModernInput 
                 type="number" 
-                className="h-11 pl-9 pr-3 text-base font-semibold text-slate-800 border-slate-200/80 focus-visible:ring-primary rounded-xl" 
-                placeholder="0,00,000"
+                className="h-11 pl-9 pr-3 text-base font-semibold text-slate-800 border-slate-200 dark:border-white/10 focus-visible:ring-primary rounded-xl" 
+                placeholder="e.g. 50,000"
                 value={proposal.pricing.coreValuation} 
                 onChange={(e) => updatePricing({ coreValuation: e.target.value })} 
              />
@@ -71,8 +71,8 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
           <div className="relative">
              <ModernInput 
                 type="number" 
-                className="h-11 pl-4 pr-9 text-base font-semibold text-emerald-600 border-slate-200/80 focus-visible:ring-primary rounded-xl" 
-                placeholder="0"
+                className="h-11 pl-4 pr-9 text-base font-semibold text-emerald-600 border-slate-200 dark:border-white/10 focus-visible:ring-primary rounded-xl" 
+                placeholder="e.g. 0"
                 value={proposal.pricing.discountPercentage} 
                 onChange={(e) => updatePricing({ discountPercentage: e.target.value })} 
              />
@@ -82,14 +82,14 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
       </div>
 
       {/* ──── CALCULATION ENGINE (PREMIUM DARK) ──── */}
-      <div className="p-6 sm:p-8 bg-[#0B0E14] rounded-2xl text-white relative overflow-hidden shadow-xl border border-white/5">
+      <div className="p-6 sm:p-8 bg-slate-50 dark:bg-[#0B0E14] rounded-2xl text-slate-900 dark:text-white relative overflow-hidden shadow-xl border border-slate-200 dark:border-white/5">
          <div className="absolute top-0 right-0 p-8 opacity-[0.02] rotate-12 scale-150 pointer-events-none">
             <Calculator size={180} className="text-primary" />
          </div>
          
          <div className="relative z-10 space-y-5">
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-white/5 pb-3">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/5 pb-3">
                <div className="flex items-center gap-2 text-primary">
                   <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                   <span className="text-[9px] font-black uppercase tracking-[0.3em]">Investment Synthesis</span>
@@ -101,39 +101,39 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
             
             {/* Investment Pointers */}
             <div className="space-y-3.5 max-w-full">
-               <div className="flex justify-between items-center text-xs border-b border-white/5 pb-2">
-                  <span className="text-white/40 font-black uppercase tracking-wider text-[9px]">Gross Valuation</span>
-                  <span className="font-bold text-white/90">{formatINR(stats.base)}</span>
+               <div className="flex justify-between items-center text-xs border-b border-slate-200 dark:border-white/5 pb-2">
+                  <span className="text-slate-900 dark:text-white/40 font-black uppercase tracking-wider text-[9px]">Gross Valuation</span>
+                  <span className="font-bold text-slate-900 dark:text-white/90">{formatINR(stats.base)}</span>
                </div>
                {stats.discAmt > 0 && (
-                 <div className="flex justify-between items-center text-xs border-b border-white/5 pb-2">
+                 <div className="flex justify-between items-center text-xs border-b border-slate-200 dark:border-white/5 pb-2">
                     <span className="text-emerald-400/40 font-black uppercase tracking-wider text-[9px]">Strategic Relief ({stats.discPct}%)</span>
                     <span className="font-bold text-emerald-400">- {formatINR(stats.discAmt)}</span>
                  </div>
                )}
                <div className="flex justify-between items-center">
-                  <span className="text-white/40 font-black uppercase tracking-wider text-[9px]">Current Tax (GST)</span>
+                  <span className="text-slate-900 dark:text-white/40 font-black uppercase tracking-wider text-[9px]">Current Tax (GST)</span>
                   <div className="flex items-center gap-2">
-                     <span className="text-[9px] font-black text-white/25">RATE</span>
+                     <span className="text-[9px] font-black text-slate-900 dark:text-white/25">RATE</span>
                      <input 
                         type="number" 
-                        className="w-10 h-7 bg-white/5 border border-white/10 rounded-md text-center text-xs font-bold py-0.5 focus:outline-none focus:border-primary/40 focus:bg-[#0B0E14] text-white" 
+                        className="w-10 h-7 bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/10 rounded-md text-center text-xs font-bold py-0.5 focus:outline-none focus:border-primary/40 focus:bg-slate-50 dark:bg-[#0B0E14] text-slate-900 dark:text-white" 
                         value={proposal.pricing.taxRate || 18} 
                         onChange={(e) => updatePricing({ taxRate: e.target.value })}
                      />
-                     <span className="text-[9px] font-black text-white/25">%</span>
+                     <span className="text-[9px] font-black text-slate-900 dark:text-white/25">%</span>
                   </div>
                </div>
             </div>
 
             {/* Net Capital Commitment Sub-card (Full Width) */}
-            <div className="p-4 sm:p-5 bg-white/5 border border-white/10 rounded-xl backdrop-blur-xl space-y-2">
+            <div className="p-4 sm:p-5 bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/10 rounded-xl backdrop-blur-xl space-y-2">
                <div className="text-[8px] font-black uppercase tracking-[0.4em] text-primary">Net Capital Commitment</div>
                <div className="flex flex-wrap items-baseline gap-2">
-                  <div className="text-3xl sm:text-4xl font-black tracking-tight text-white leading-none select-all">{formatINR(stats.total)}</div>
-                  <div className="text-[9px] font-black text-white/30 uppercase tracking-widest">+ GST Extra</div>
+                  <div className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-white leading-none select-all">{formatINR(stats.total)}</div>
+                  <div className="text-[9px] font-black text-slate-900 dark:text-white/30 uppercase tracking-widest">+ GST Extra</div>
                </div>
-               <p className="text-[8px] font-medium text-white/20 uppercase tracking-wider leading-relaxed">
+               <p className="text-[8px] font-medium text-slate-900 dark:text-white/20 uppercase tracking-wider leading-relaxed">
                   * Final valuation subject to milestone alignment and service level specifications.
                </p>
             </div>
@@ -148,7 +148,7 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
             <Server size={14} className="text-slate-300 group-hover:text-primary transition-colors" />
           </div>
           <ModernInput 
-            className="h-11 px-3.5 text-sm font-semibold text-slate-800 border-slate-200/80 focus-visible:ring-primary rounded-xl" 
+            className="h-11 px-3.5 text-sm font-semibold text-slate-800 border-slate-200 dark:border-white/10 focus-visible:ring-primary rounded-xl" 
             placeholder="e.g. Billed at Actuals / Monthly"
             value={proposal.pricing.hostingCost} 
             onChange={(e) => updatePricing({ hostingCost: e.target.value })} 
@@ -160,7 +160,7 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
             <ShieldCheck size={14} className="text-slate-300 group-hover:text-primary transition-colors" />
           </div>
           <ModernInput 
-            className="h-11 px-3.5 text-sm font-semibold text-slate-800 border-slate-200/80 focus-visible:ring-primary rounded-xl" 
+            className="h-11 px-3.5 text-sm font-semibold text-slate-800 border-slate-200 dark:border-white/10 focus-visible:ring-primary rounded-xl" 
             placeholder="e.g. 15% Annual Post-Warranty"
             value={proposal.pricing.maintenanceCost} 
             onChange={(e) => updatePricing({ maintenanceCost: e.target.value })} 
@@ -169,7 +169,7 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
       </div>
 
       {/* ──── MILESTONE ROADMAP ──── */}
-      <div className="space-y-6 bg-slate-50/40 p-6 sm:p-8 rounded-2xl border border-slate-100/80 shadow-sm">
+      <div className="space-y-6 bg-slate-50 dark:bg-white/5 p-6 sm:p-8 rounded-2xl border border-slate-100 dark:border-white/5 shadow-sm">
         <div className="flex justify-between items-center px-1">
            <div className="space-y-0.5">
               <LabelPremium className="mb-0 text-slate-800 text-[10px]">Investment Roadmap</LabelPremium>
@@ -177,7 +177,7 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
            </div>
            <button 
              onClick={addMilestone} 
-             className="text-[9px] font-bold uppercase text-primary hover:text-white hover:bg-primary px-4 py-2 border border-primary/20 rounded-xl transition-all shadow-sm bg-white"
+             className="text-[9px] font-bold uppercase text-primary hover:text-slate-900 dark:text-white hover:bg-primary px-4 py-2 border border-primary/20 rounded-xl transition-all shadow-sm bg-white dark:bg-white/5"
            >
              + Add Milestone
            </button>
@@ -185,8 +185,8 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
 
         <div className="grid grid-cols-1 gap-4">
            {proposal.pricing.milestones?.map((m: any, i: number) => (
-              <div key={i} className="relative group bg-white p-5 rounded-xl border border-slate-100 hover:border-primary/20 transition-all duration-300 shadow-sm flex gap-4 items-start">
-                 <div className="w-10 h-10 bg-[#0B0E14] rounded-xl flex items-center justify-center font-black text-white text-sm italic shrink-0 shadow-md -rotate-3 group-hover:rotate-0 transition-transform">
+              <div key={i} className="relative group bg-white dark:bg-white/5 p-5 rounded-xl border border-slate-100 dark:border-white/5 hover:border-primary/20 transition-all duration-300 shadow-sm flex gap-4 items-start">
+                 <div className="w-10 h-10 bg-slate-50 dark:bg-[#0B0E14] rounded-xl flex items-center justify-center font-black text-slate-900 dark:text-white text-sm italic shrink-0 shadow-md -rotate-3 group-hover:rotate-0 transition-transform">
                     {String(i + 1).padStart(2, '0')}
                  </div>
                  
@@ -196,14 +196,14 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
                           <div className="space-y-1">
                              <p className="text-[8px] font-bold uppercase text-slate-300 tracking-widest pl-0.5">Milestone Phase</p>
                              <ModernInput 
-                               className="bg-transparent border-b border-transparent focus:border-slate-200 font-semibold text-slate-800 p-0 h-8 text-sm focus:bg-white focus:px-2 rounded transition-all" 
+                               className="bg-transparent border-b border-transparent focus:border-slate-200 dark:border-white/10 font-semibold text-slate-800 p-0 h-8 text-sm focus:bg-white dark:bg-white/5 focus:px-2 rounded transition-all" 
                                placeholder="e.g. System Blueprint & Initiation"
                                value={m.name} 
                                onChange={(e) => updateMilestone(i, { name: e.target.value })} 
                              />
                           </div>
                           <ModernTextArea 
-                            className="bg-slate-50 border border-slate-100/50 text-xs font-medium text-slate-500 p-3 min-h-[60px] focus:bg-white focus:border-primary/20 rounded-lg transition-all" 
+                            className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-xs font-medium text-slate-500 p-3 min-h-[60px] focus:bg-white dark:bg-white/5 focus:border-primary/20 rounded-lg transition-all" 
                             placeholder="Describe the scope and delivery logic for this phase..."
                             value={m.description} 
                             onChange={(e) => updateMilestone(i, { description: e.target.value })} 
@@ -215,7 +215,7 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
                              <div className="relative">
                                 <ModernInput 
                                   type="number"
-                                  className="h-10 pl-3 pr-8 font-semibold text-primary text-sm bg-slate-50 border border-slate-100/50 rounded-lg focus-visible:ring-primary focus:bg-white text-center" 
+                                  className="h-10 pl-3 pr-8 font-semibold text-primary text-sm bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-lg focus-visible:ring-primary focus:bg-white dark:bg-white/5 text-center" 
                                   value={m.percentage} 
                                   onChange={(e) => updateMilestone(i, { percentage: e.target.value })} 
                                 />
@@ -244,7 +244,7 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
            <span className="text-[8px] font-bold uppercase text-emerald-500 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">Financial Logic</span>
         </div>
         <ModernTextArea 
-          className="min-h-[120px] p-4 text-sm font-medium text-slate-700 leading-relaxed rounded-xl border border-slate-200/80 focus-visible:ring-primary focus-visible:ring-offset-0 focus:border-primary/40 focus:bg-white transition-all bg-slate-50/20" 
+          className="min-h-[120px] p-4 text-sm font-medium text-slate-700 dark:text-gray-300 leading-relaxed rounded-xl border border-slate-200 dark:border-white/10 focus-visible:ring-primary focus-visible:ring-offset-0 focus:border-primary/40 focus:bg-white dark:bg-white/5 transition-all bg-slate-50 dark:bg-white/5" 
           placeholder="Clarify the settlement logic. E.g., 'Payment for each phase is due upon successful deployment to the staging environment and client protocol sign-off...'" 
           value={proposal.pricing.roiLogic} 
           onChange={(e) => updatePricing({ roiLogic: e.target.value })} 

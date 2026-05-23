@@ -89,19 +89,19 @@ export default function StrategicROIPanel({ proposal, currentStep, updateROI }: 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
         {/* Monthly Revenue */}
-        <div className="p-5 bg-white border border-slate-100 rounded-2xl space-y-2 hover:shadow-sm transition-all">
+        <div className="p-5 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl space-y-2 hover:shadow-sm transition-all">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
               <DollarSign size={16} />
             </div>
-            <LabelPremium className="mb-0 text-[11px] font-extrabold text-slate-700 uppercase tracking-wider">
+            <LabelPremium className="mb-0 text-[11px] font-extrabold text-slate-700 dark:text-gray-300 uppercase tracking-wider">
               Current Monthly Revenue (₹)
             </LabelPremium>
           </div>
           <ModernInput
             type="number"
             placeholder="e.g. 500000"
-            className="h-10 px-3 text-sm font-semibold text-slate-700 bg-slate-50 border-none rounded-lg focus-visible:ring-emerald-500"
+            className="h-10 px-3 text-sm font-semibold text-slate-700 dark:text-gray-300 bg-slate-50 dark:bg-white/5 border-none rounded-lg focus-visible:ring-emerald-500"
             value={proposal.roi.monthlyRevenue || ""}
             onChange={(e) => updateROI({ monthlyRevenue: e.target.value })}
           />
@@ -111,19 +111,19 @@ export default function StrategicROIPanel({ proposal, currentStep, updateROI }: 
         </div>
 
         {/* Total Employees */}
-        <div className="p-5 bg-white border border-slate-100 rounded-2xl space-y-2 hover:shadow-sm transition-all">
+        <div className="p-5 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl space-y-2 hover:shadow-sm transition-all">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
               <Users size={16} />
             </div>
-            <LabelPremium className="mb-0 text-[11px] font-extrabold text-slate-700 uppercase tracking-wider">
+            <LabelPremium className="mb-0 text-[11px] font-extrabold text-slate-700 dark:text-gray-300 uppercase tracking-wider">
               Total Employees
             </LabelPremium>
           </div>
           <ModernInput
             type="number"
             placeholder="e.g. 10"
-            className="h-10 px-3 text-sm font-semibold text-slate-700 bg-slate-50 border-none rounded-lg focus-visible:ring-blue-500"
+            className="h-10 px-3 text-sm font-semibold text-slate-700 dark:text-gray-300 bg-slate-50 dark:bg-white/5 border-none rounded-lg focus-visible:ring-blue-500"
             value={proposal.roi.totalEmployees || ""}
             onChange={(e) => updateROI({ totalEmployees: e.target.value })}
           />
@@ -133,19 +133,19 @@ export default function StrategicROIPanel({ proposal, currentStep, updateROI }: 
         </div>
 
         {/* Hours Saved Per Month */}
-        <div className="p-5 bg-white border border-slate-100 rounded-2xl space-y-2 hover:shadow-sm transition-all">
+        <div className="p-5 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl space-y-2 hover:shadow-sm transition-all">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600">
               <Clock size={16} />
             </div>
-            <LabelPremium className="mb-0 text-[11px] font-extrabold text-slate-700 uppercase tracking-wider">
+            <LabelPremium className="mb-0 text-[11px] font-extrabold text-slate-700 dark:text-gray-300 uppercase tracking-wider">
               Hours Saved / Month (Approx)
             </LabelPremium>
           </div>
           <ModernInput
             type="number"
             placeholder="e.g. 160"
-            className="h-10 px-3 text-sm font-semibold text-slate-700 bg-slate-50 border-none rounded-lg focus-visible:ring-amber-500"
+            className="h-10 px-3 text-sm font-semibold text-slate-700 dark:text-gray-300 bg-slate-50 dark:bg-white/5 border-none rounded-lg focus-visible:ring-amber-500"
             value={proposal.roi.manualHoursPerMonth || ""}
             onChange={(e) => updateROI({ manualHoursPerMonth: e.target.value })}
           />
@@ -155,19 +155,19 @@ export default function StrategicROIPanel({ proposal, currentStep, updateROI }: 
         </div>
 
         {/* Expected Growth */}
-        <div className="p-5 bg-white border border-slate-100 rounded-2xl space-y-2 hover:shadow-sm transition-all">
+        <div className="p-5 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl space-y-2 hover:shadow-sm transition-all">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-[#99CB48]/10 flex items-center justify-center text-[#99CB48]">
               <TrendingUp size={16} />
             </div>
-            <LabelPremium className="mb-0 text-[11px] font-extrabold text-slate-700 uppercase tracking-wider">
+            <LabelPremium className="mb-0 text-[11px] font-extrabold text-slate-700 dark:text-gray-300 uppercase tracking-wider">
               Expected Revenue Growth (%)
             </LabelPremium>
           </div>
           <ModernInput
             type="number"
             placeholder="e.g. 25"
-            className="h-10 px-3 text-sm font-semibold text-slate-700 bg-slate-50 border-none rounded-lg focus-visible:ring-[#99CB48]"
+            className="h-10 px-3 text-sm font-semibold text-slate-700 dark:text-gray-300 bg-slate-50 dark:bg-white/5 border-none rounded-lg focus-visible:ring-[#99CB48]"
             value={proposal.roi.expectedGrowthGoal || ""}
             onChange={(e) => updateROI({ expectedGrowthGoal: e.target.value })}
           />
@@ -180,7 +180,7 @@ export default function StrategicROIPanel({ proposal, currentStep, updateROI }: 
       {/* ── Business Problems (multi-select) ── */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <LabelPremium className="mb-0 text-[11px] font-extrabold text-slate-700 uppercase tracking-wider">
+          <LabelPremium className="mb-0 text-[11px] font-extrabold text-slate-700 dark:text-gray-300 uppercase tracking-wider">
             Business Problems to Solve
           </LabelPremium>
           <span className="text-[8.5px] font-bold text-slate-400 uppercase tracking-widest">
@@ -198,7 +198,7 @@ export default function StrategicROIPanel({ proposal, currentStep, updateROI }: 
                 className={`p-3.5 rounded-xl border text-left text-xs font-bold flex items-center justify-between transition-all ${
                   selected
                     ? "bg-[#99CB48]/10 border-[#99CB48] text-[#0B0E14] shadow-sm"
-                    : "bg-slate-50 border-slate-100 hover:border-slate-300 text-slate-600"
+                    : "bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/5 hover:border-slate-300 dark:border-white/20 text-slate-600 dark:text-gray-400"
                 }`}
               >
                 <span>{problem}</span>
@@ -212,22 +212,22 @@ export default function StrategicROIPanel({ proposal, currentStep, updateROI }: 
       </div>
 
       {/* ── Live ROI Preview ── */}
-      <div className="p-6 bg-[#0B0E14] rounded-2xl text-white relative overflow-hidden shadow-xl border border-white/5">
+      <div className="p-6 bg-slate-50 dark:bg-[#0B0E14] rounded-2xl text-slate-900 dark:text-white relative overflow-hidden shadow-xl border border-slate-200 dark:border-white/5">
         <div className="absolute top-[-30px] right-[-30px] w-44 h-44 rounded-full bg-[#99CB48]/5 blur-3xl pointer-events-none" />
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <span className="text-[7.5px] font-black uppercase tracking-[0.25em] text-[#99CB48]">
               Live Projected ROI
             </span>
-            <div className="text-3xl font-black text-white mt-1 leading-none">
+            <div className="text-3xl font-black text-slate-900 dark:text-white mt-1 leading-none">
               {proposal.roi.expectedROI || "₹15L / Year"}
             </div>
-            <p className="text-[9px] font-semibold text-white/40 mt-1">
+            <p className="text-[9px] font-semibold text-slate-900 dark:text-white/40 mt-1">
               Auto-calculated from your inputs
             </p>
           </div>
           <div className="flex flex-col sm:items-end justify-center">
-            <span className="text-[7.5px] font-black uppercase tracking-[0.25em] text-white/30">
+            <span className="text-[7.5px] font-black uppercase tracking-[0.25em] text-slate-900 dark:text-white/30">
               Revenue Growth Range
             </span>
             <div className="text-base font-extrabold text-[#99CB48] mt-1">
@@ -238,24 +238,24 @@ export default function StrategicROIPanel({ proposal, currentStep, updateROI }: 
       </div>
 
       {/* ── Optional Report Link ── */}
-      <div className="p-5 bg-white border border-dashed border-slate-200 rounded-2xl space-y-3 hover:shadow-sm transition-all">
+      <div className="p-5 bg-white dark:bg-white/5 border border-dashed border-slate-200 dark:border-white/10 rounded-2xl space-y-3 hover:shadow-sm transition-all">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-500">
             <Link2 size={16} />
           </div>
           <div>
-            <LabelPremium className="mb-0 text-[11px] font-extrabold text-slate-700 uppercase tracking-wider">
+            <LabelPremium className="mb-0 text-[11px] font-extrabold text-slate-700 dark:text-gray-300 uppercase tracking-wider">
               Company Health Report Link (Optional)
             </LabelPremium>
             <p className="text-[9px] text-slate-400 font-medium mt-0.5">
-              Paste a Google Drive / PDF link — a "Weblozy Company Health Report" button will appear on the proposal page
+              Paste a Google Drive / PDF link — a "Company Health Report" button will appear on the proposal page
             </p>
           </div>
         </div>
         <ModernInput
           type="url"
           placeholder="https://drive.google.com/file/..."
-          className="h-10 px-3 text-sm font-semibold text-slate-700 bg-slate-50 border-none rounded-lg focus-visible:ring-indigo-400"
+          className="h-10 px-3 text-sm font-semibold text-slate-700 dark:text-gray-300 bg-slate-50 dark:bg-white/5 border-none rounded-lg focus-visible:ring-indigo-400"
           value={proposal.roi.roiReportLink || ""}
           onChange={(e) => updateROI({ roiReportLink: e.target.value })}
         />

@@ -20,7 +20,7 @@ export default function LoadingScreen() {
   }, []);
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#05070a] overflow-hidden font-sans">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-50 dark:bg-[#05070a] overflow-hidden font-sans transition-colors">
       
       {/* Dynamic Grid Background */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px] opacity-20" />
@@ -50,7 +50,7 @@ export default function LoadingScreen() {
           <motion.div 
             animate={{ rotate: 360 }}
             transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-            className="absolute inset-[-10px] rounded-full border border-white/5 border-dashed" 
+            className="absolute inset-[-10px] rounded-full border border-slate-200 dark:border-white/5 border-dashed" 
           />
 
           {/* Primary Ring */}
@@ -72,7 +72,7 @@ export default function LoadingScreen() {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 1, ease: "easeOut" }}
-            className="absolute inset-[15px] flex items-center justify-center p-6 bg-[#0B0E14] rounded-full shadow-[inset_0_0_30px_rgba(0,0,0,0.8),_0_0_20px_rgba(153,203,72,0.1)] border border-white/5 backdrop-blur-xl"
+            className="absolute inset-[15px] flex items-center justify-center p-6 bg-slate-50 dark:bg-[#0B0E14] rounded-full shadow-[inset_0_0_30px_rgba(0,0,0,0.8),_0_0_20px_rgba(153,203,72,0.1)] border border-slate-200 dark:border-white/5 backdrop-blur-xl"
           >
             <motion.img 
               animate={{ opacity: [0.7, 1, 0.7] }}
@@ -87,7 +87,7 @@ export default function LoadingScreen() {
         {/* Text & Progress Section */}
         <div className="w-full mt-4">
            <div className="flex flex-col items-center justify-center text-center space-y-2 mb-6">
-              <h2 className="text-white text-sm md:text-base font-black tracking-[0.4em] uppercase">
+              <h2 className="text-slate-900 dark:text-white text-sm md:text-base font-black tracking-[0.4em] uppercase">
                 Authenticating
               </h2>
               <div className="text-[10px] text-[#99CB48] font-black tracking-widest uppercase flex items-center justify-center gap-2">
@@ -102,7 +102,7 @@ export default function LoadingScreen() {
 
            {/* High-Tech Progress Bar */}
            <div className="flex items-center gap-4 w-full px-2">
-             <div className="h-2 flex-1 bg-white/10 rounded-full overflow-hidden relative backdrop-blur-md shadow-inner">
+             <div className="h-2 flex-1 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden relative backdrop-blur-md shadow-inner">
                <motion.div 
                  className="absolute top-0 bottom-0 left-0 bg-gradient-to-r from-[#99CB48]/40 via-[#99CB48]/80 to-[#99CB48] shadow-[0_0_20px_rgba(153,203,72,1)]"
                  initial={{ width: 0 }}
@@ -110,8 +110,8 @@ export default function LoadingScreen() {
                  transition={{ ease: "linear", duration: 0.4 }}
                />
              </div>
-             <div className="text-xl md:text-2xl font-black text-white tracking-tighter tabular-nums drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] w-16 text-right shrink-0">
-                {progress > 100 ? 100 : progress}<span className="text-xs text-white/70 ml-1">%</span>
+             <div className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tighter tabular-nums drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] w-16 text-right shrink-0">
+                {progress > 100 ? 100 : progress}<span className="text-xs text-slate-900 dark:text-white/70 ml-1">%</span>
              </div>
            </div>
         </div>
@@ -120,11 +120,11 @@ export default function LoadingScreen() {
         <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-8 opacity-40">
            <div className="flex items-center gap-2">
              <div className="w-1 h-1 bg-[#99CB48] rounded-full animate-ping" />
-             <span className="text-[7px] font-black uppercase tracking-[0.3em] text-white">Cloud Node Active</span>
+             <span className="text-[7px] font-black uppercase tracking-[0.3em] text-slate-900 dark:text-white">Cloud Node Active</span>
            </div>
            <div className="flex items-center gap-2">
              <div className="w-1 h-1 bg-blue-400 rounded-full animate-ping" style={{ animationDelay: '500ms' }} />
-             <span className="text-[7px] font-black uppercase tracking-[0.3em] text-white">Encryption V4.0</span>
+             <span className="text-[7px] font-black uppercase tracking-[0.3em] text-slate-900 dark:text-white">Encryption V4.0</span>
            </div>
         </div>
 

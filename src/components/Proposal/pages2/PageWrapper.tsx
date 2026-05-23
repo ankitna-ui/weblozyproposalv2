@@ -13,15 +13,15 @@ const PageWrapper = ({ children, pageNum, className = "", title = "" }: PageWrap
     <div className="watermark text-[#99CB48]/5">WEBLOZY</div>
     
     {/* Page Header */}
-    <div className="relative z-20 flex justify-between items-center mb-6 border-b pb-4 border-slate-100 proposal-header">
-       <div className="flex items-center gap-3">
-          <a href="https://www.weblozy.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
-            <img src={bannerLogo} alt="Weblozy" style={{ height: '18px', width: 'auto', objectFit: 'contain' }} className="opacity-90" />
+    <div className="relative z-20 flex justify-between items-center mb-10 pb-4 border-b border-slate-100 proposal-header">
+      <div className="flex items-center gap-4">
+          <a href="https://www.weblozy.com" target="_blank" rel="noopener noreferrer">
+            <img src={bannerLogo} alt="Weblozy" style={{ height: '20px', width: 'auto', objectFit: 'contain' }} className="opacity-90" />
           </a>
-          <div className="h-3 w-[1px] bg-slate-200" />
-          <div className="text-[9px] font-black tracking-[0.12em] text-slate-400">{title}</div>
-       </div>
-       <div className="text-[8px] font-extrabold tracking-[0.15em] text-slate-300">Corporate / Strategic</div>
+          <div className="h-4 w-[1.5px] bg-slate-200" />
+          <div className="text-[9.5px] font-black tracking-[0.15em] text-slate-400 uppercase mt-0.5">{title}</div>
+      </div>
+      <div className="text-[8.5px] font-black tracking-[0.2em] text-slate-300 uppercase mt-0.5">Corporate / Strategic</div>
     </div>
 
     <div className="relative z-10 flex-1 flex flex-col min-h-0 proposal-content">

@@ -316,7 +316,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
         </div>
         <div className="flex gap-3">
           <ModernInput 
-            className="flex-1 h-11 px-3.5 text-xs font-semibold bg-white border-slate-200/80 rounded-xl" 
+            className="flex-1 h-11 px-3.5 text-xs font-semibold bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 rounded-xl" 
             placeholder="System Domain (e.g. Smart Logistics Engine)" 
             value={singleModuleName}
             onChange={(e) => setSingleModuleName(e.target.value)}
@@ -325,7 +325,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
           <Button 
             onClick={handleAddSingleModule} 
             disabled={isAiLoading} 
-            className="h-11 bg-[#0B0E14] hover:bg-black text-white rounded-xl px-5 text-xs font-bold tracking-wider shadow-sm transition-all hover:scale-102 active:scale-98 shrink-0"
+            className="h-11 bg-slate-50 dark:bg-[#0B0E14] hover:bg-black text-slate-900 dark:text-white rounded-xl px-5 text-xs font-bold tracking-wider shadow-sm transition-all hover:scale-102 active:scale-98 shrink-0"
           >
             {isAiLoading ? <Loader2 size={14} className="animate-spin" /> : "Generate"}
           </Button>
@@ -338,15 +338,15 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
             initial={{ opacity: 0, scale: 0.98 }} 
             animate={{ opacity: 1, scale: 1 }} 
             exit={{ opacity: 0, scale: 0.98 }} 
-            className="p-5 sm:p-6 bg-[#0B0E14] rounded-2xl border border-primary/30 shadow-xl space-y-5"
+            className="p-5 sm:p-6 bg-slate-50 dark:bg-[#0B0E14] rounded-2xl border border-primary/30 shadow-xl space-y-5"
           >
             <div className="flex justify-between items-start">
                <div className="space-y-1">
                   <div className="text-[8px] font-black uppercase tracking-[0.4em] text-primary">Preview Node: AI Synthesized</div>
-                  <h4 className="text-xl font-black uppercase text-white tracking-tighter">{previewModule.name}</h4>
-                  <p className="text-white/40 text-[9px] uppercase tracking-wider">Uncheck the features you do not want to include</p>
+                  <h4 className="text-xl font-black uppercase text-slate-900 dark:text-white tracking-tighter">{previewModule.name}</h4>
+                  <p className="text-slate-900 dark:text-white/40 text-[9px] uppercase tracking-wider">Uncheck the features you do not want to include</p>
                </div>
-               <button onClick={() => setPreviewModule(null)} className="p-1.5 bg-white/5 rounded-lg text-white/40 hover:text-white transition-colors border border-white/5"><X size={16} /></button>
+               <button onClick={() => setPreviewModule(null)} className="p-1.5 bg-slate-100 dark:bg-white/5 rounded-lg text-slate-900 dark:text-white/40 hover:text-slate-900 dark:text-white transition-colors border border-slate-200 dark:border-white/5"><X size={16} /></button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                {previewModule.features.map((f: any, i: number) => {
@@ -359,7 +359,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                         className={`flex items-center gap-3 border p-3 rounded-xl cursor-pointer transition-all ${
                           isChecked 
                             ? "bg-primary/10 border-primary/40 hover:bg-primary/15" 
-                            : "bg-white/5 border-white/5 opacity-40 hover:bg-white/[0.08] hover:opacity-60"
+                            : "bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/5 opacity-40 hover:bg-white dark:bg-white/5/[0.08] hover:opacity-60"
                         }`}
                      >
                         <div className={`w-5 h-5 rounded flex items-center justify-center border transition-all ${
@@ -367,7 +367,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                         }`}>
                            {isChecked && <CheckCircle size={12} strokeWidth={3} />}
                         </div>
-                        <span className="text-xs font-semibold text-white uppercase tracking-widest leading-none truncate">{fName}</span>
+                        <span className="text-xs font-semibold text-slate-900 dark:text-white uppercase tracking-widest leading-none truncate">{fName}</span>
                      </div>
                   );
                })}
@@ -387,22 +387,22 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
             initial={{ opacity: 0, scale: 0.98 }} 
             animate={{ opacity: 1, scale: 1 }} 
             exit={{ opacity: 0, scale: 0.98 }} 
-            className="p-5 sm:p-6 bg-[#0B0E14] rounded-2xl border border-primary/30 shadow-xl space-y-6"
+            className="p-5 sm:p-6 bg-slate-50 dark:bg-[#0B0E14] rounded-2xl border border-primary/30 shadow-xl space-y-6"
           >
             <div className="flex justify-between items-start">
                <div className="space-y-1">
                   <div className="text-[8px] font-black uppercase tracking-[0.4em] text-primary">Preview Node: Bulk AI Synthesized Modules</div>
-                  <p className="text-white/60 text-xs">Toggle the modules and individual features you want to import below:</p>
+                  <p className="text-slate-900 dark:text-white/60 text-xs">Toggle the modules and individual features you want to import below:</p>
                </div>
-               <button onClick={() => setPreviewBulkModules(null)} className="p-1.5 bg-white/5 rounded-lg text-white/40 hover:text-white transition-colors border border-white/5"><X size={16} /></button>
+               <button onClick={() => setPreviewBulkModules(null)} className="p-1.5 bg-slate-100 dark:bg-white/5 rounded-lg text-slate-900 dark:text-white/40 hover:text-slate-900 dark:text-white transition-colors border border-slate-200 dark:border-white/5"><X size={16} /></button>
             </div>
 
             <div className="space-y-5 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
               {previewBulkModules.map((module) => {
                 const isModuleChecked = !!selectedBulkModules[module.id];
                 return (
-                  <div key={module.id} className="border border-white/10 rounded-xl p-4 space-y-3 bg-white/[0.02]">
-                    <div className="flex items-center justify-between pb-2 border-b border-white/5">
+                  <div key={module.id} className="border border-slate-300 dark:border-white/10 rounded-xl p-4 space-y-3 bg-white dark:bg-white/5/[0.02]">
+                    <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-white/5">
                       <div 
                         onClick={() => setSelectedBulkModules(prev => ({ ...prev, [module.id]: !prev[module.id] }))}
                         className="flex items-center gap-3 cursor-pointer"
@@ -412,9 +412,9 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                         }`}>
                           {isModuleChecked && <CheckCircle size={12} strokeWidth={3} />}
                         </div>
-                        <span className="text-sm font-black uppercase text-white tracking-wider">{module.name}</span>
+                        <span className="text-sm font-black uppercase text-slate-900 dark:text-white tracking-wider">{module.name}</span>
                       </div>
-                      <span className="text-[9px] font-bold text-white/30 uppercase tracking-widest">Module</span>
+                      <span className="text-[9px] font-bold text-slate-900 dark:text-white/30 uppercase tracking-widest">Module</span>
                     </div>
 
                     {isModuleChecked && (
@@ -433,7 +433,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                               className={`flex items-center gap-3 border p-2 rounded-lg cursor-pointer transition-all ${
                                 isFeatureChecked 
                                   ? "bg-primary/10 border-primary/40 hover:bg-primary/15" 
-                                  : "bg-white/5 border-white/5 opacity-40 hover:bg-white/[0.08] hover:opacity-60"
+                                  : "bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/5 opacity-40 hover:bg-white dark:bg-white/5/[0.08] hover:opacity-60"
                               }`}
                             >
                               <div className={`w-4 h-4 rounded flex items-center justify-center border transition-all ${
@@ -441,7 +441,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                               }`}>
                                 {isFeatureChecked && <CheckCircle size={10} strokeWidth={3} />}
                               </div>
-                              <span className="text-[10px] font-semibold text-white/80 uppercase tracking-wider truncate">{fName}</span>
+                              <span className="text-[10px] font-semibold text-slate-900 dark:text-white/80 uppercase tracking-wider truncate">{fName}</span>
                             </div>
                           );
                         })}
@@ -462,13 +462,13 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
       </AnimatePresence>
 
       {/* Bulk Extraction Panel */}
-      <div className="p-5 sm:p-6 bg-slate-50 border border-slate-100 rounded-2xl space-y-4">
+      <div className="p-5 sm:p-6 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl space-y-4">
         <div className="flex items-center gap-2 text-slate-400">
            <Wand2 size={14} className="shrink-0" />
            <span className="text-[9px] font-black uppercase tracking-[0.3em]">Bulk Tactical Extraction</span>
         </div>
         <ModernTextArea 
-          className="min-h-[100px] p-3.5 text-xs font-medium text-slate-700 bg-white border border-slate-200/80 rounded-xl focus:bg-white" 
+          className="min-h-[100px] p-3.5 text-xs font-medium text-slate-700 dark:text-gray-300 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl focus:bg-white dark:bg-white/5" 
           placeholder="Paste entire system requirements or legacy audit notes here for neural parsing..." 
           value={bulkContext} 
           onChange={(e) => setBulkContext(e.target.value)} 
@@ -476,7 +476,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
         <Button 
           onClick={handleBulkExtract} 
           disabled={isAiLoading || !bulkContext} 
-          className="w-full h-11 bg-white border border-slate-200 text-[#0B0E14] hover:bg-[#0B0E14] hover:text-white rounded-xl text-xs font-bold tracking-wider transition-all shadow-sm"
+          className="w-full h-11 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-[#0B0E14] hover:bg-slate-50 dark:bg-[#0B0E14] hover:text-slate-900 dark:text-white rounded-xl text-xs font-bold tracking-wider transition-all shadow-sm"
         >
           Extract All Protocol Nodes
         </Button>
@@ -509,7 +509,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
             <Button 
               onClick={handleAddManualModule} 
               variant="outline" 
-              className="h-9 rounded-xl px-4 border-slate-200 text-[9px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all bg-white"
+              className="h-9 rounded-xl px-4 border-slate-200 dark:border-white/10 text-[9px] font-black uppercase tracking-widest hover:bg-slate-50 dark:bg-white/5 transition-all bg-white dark:bg-white/5"
             >
               + Add Manual Node
             </Button>
@@ -518,11 +518,11 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
 
         <div className="grid grid-cols-1 gap-6">
           {proposal.solution.selectedModules.map((module: Module, mIdx: number) => (
-            <Card key={module.id} className="border-slate-100 overflow-hidden rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 group bg-white">
+            <Card key={module.id} className="border-slate-100 dark:border-white/5 overflow-hidden rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 group bg-white dark:bg-white/5">
               {/* Card Header (Sleek and Packed) */}
-              <div className="p-4 sm:p-5 bg-slate-50/50 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4 group-hover:bg-white transition-colors">
+              <div className="p-4 sm:p-5 bg-slate-50 dark:bg-white/5 border-b border-slate-100 dark:border-white/5 flex flex-wrap items-center justify-between gap-4 group-hover:bg-white dark:bg-white/5 transition-colors">
                 <div className="flex items-center gap-3 flex-1 min-w-[200px]">
-                   <div className="w-8 h-8 rounded-lg bg-[#0B0E14] flex items-center justify-center text-white font-black italic shadow-sm rotate-3 group-hover:rotate-0 transition-all duration-500 shrink-0 text-xs">
+                   <div className="w-8 h-8 rounded-lg bg-slate-50 dark:bg-[#0B0E14] flex items-center justify-center text-slate-900 dark:text-white font-black italic shadow-sm rotate-3 group-hover:rotate-0 transition-all duration-500 shrink-0 text-xs">
                       M{mIdx + 1}
                    </div>
                    <input 
@@ -544,7 +544,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                       <input 
                          type="text" 
                          placeholder="e.g. 25,000" 
-                         className="w-full h-8 pl-5 pr-2 bg-white border border-slate-200/80 rounded-lg text-xs font-bold text-[#0B0E14] focus:outline-none focus:border-primary/50 text-right"
+                         className="w-full h-8 pl-5 pr-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg text-xs font-bold text-[#0B0E14] focus:outline-none focus:border-primary/50 text-right"
                          value={module.price || ""} 
                          onChange={(e) => {
                             const next = [...proposal.solution.selectedModules];
@@ -570,14 +570,14 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                   {module.features.map((feature: any, fIdx: number) => (
                     <div 
                       key={fIdx} 
-                      className="flex items-center gap-2 group/item relative bg-slate-50/20 hover:bg-slate-50/60 p-2 border border-slate-100/80 rounded-xl transition-all duration-300 w-full min-w-0 shadow-sm hover:shadow"
+                      className="flex items-center gap-2 group/item relative bg-slate-50 dark:bg-white/5 hover:bg-slate-50 dark:bg-white/5 p-2 border border-slate-100 dark:border-white/5 rounded-xl transition-all duration-300 w-full min-w-0 shadow-sm hover:shadow"
                     >
                        <div className="w-1.5 h-1.5 rounded-full bg-primary shrink-0 shadow-[0_0_8px_#99CB48]" />
                        
                        {/* Feature Name Input */}
                        <input 
                           type="text"
-                          className="flex-1 bg-transparent border-none text-xs font-semibold text-slate-600 focus:outline-none focus:ring-0 min-w-0 p-0" 
+                          className="flex-1 bg-transparent border-none text-xs font-semibold text-slate-600 dark:text-gray-400 focus:outline-none focus:ring-0 min-w-0 p-0" 
                           value={typeof feature === 'string' ? feature : feature.name} 
                           onChange={(e) => {
                              const next = [...proposal.solution.selectedModules];
@@ -592,7 +592,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                           <input 
                              type="text" 
                              placeholder="Price" 
-                             className="w-full h-6 pl-3.5 pr-1.5 bg-white border border-slate-200/60 rounded-md text-[9px] font-bold text-slate-700 focus:outline-none focus:border-primary/40 text-right p-0"
+                             className="w-full h-6 pl-3.5 pr-1.5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-md text-[9px] font-bold text-slate-700 dark:text-gray-300 focus:outline-none focus:border-primary/40 text-right p-0"
                              value={typeof feature === 'string' ? "" : (feature.price || "")} 
                              onChange={(e) => {
                                 const next = [...proposal.solution.selectedModules];
@@ -620,7 +620,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                 
                 {/* Add Feature Buttons */}
                 {activeBulkImportMIdx === mIdx ? (
-                  <div className="mt-3 p-3 bg-slate-50 border border-slate-200/60 rounded-xl space-y-2">
+                  <div className="mt-3 p-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl space-y-2">
                     <div className="flex justify-between items-center">
                       <span className="text-[8px] font-black uppercase tracking-wider text-slate-500">Paste ChatGPT / Gemini Features</span>
                       <button 
@@ -635,7 +635,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                     </div>
                     <textarea
                       rows={4}
-                      className="w-full p-2.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-primary/50 placeholder:text-slate-400 placeholder:font-normal"
+                      className="w-full p-2.5 text-xs font-semibold text-slate-700 dark:text-gray-300 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg focus:outline-none focus:border-primary/50 placeholder:text-slate-400 placeholder:font-normal"
                       placeholder="Paste pointers here (e.g.)&#10;- Advanced Lead Management Dashboard&#10;- Real-time pipeline status sync&#10;- Custom notification triggers"
                       value={bulkImportText}
                       onChange={(e) => setBulkImportText(e.target.value)}
@@ -669,7 +669,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                         setActiveBulkImportMIdx(null);
                         setBulkImportText("");
                       }}
-                      className="w-full h-8 bg-[#0B0E14] hover:bg-black text-white text-[9px] font-black uppercase tracking-widest rounded-lg transition-all"
+                      className="w-full h-8 bg-slate-50 dark:bg-[#0B0E14] hover:bg-black text-slate-900 dark:text-white text-[9px] font-black uppercase tracking-widest rounded-lg transition-all"
                     >
                       Parse & Import Features
                     </button>
@@ -682,7 +682,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                         next[mIdx].features.push({ name: "New Feature Protocol", price: "" });
                         updateSolution({ selectedModules: next });
                       }} 
-                      className="flex items-center gap-1.5 text-[8px] font-bold uppercase text-primary hover:text-primary/80 transition-all pl-3 border-l border-slate-200 py-0.5"
+                      className="flex items-center gap-1.5 text-[8px] font-bold uppercase text-primary hover:text-primary/80 transition-all pl-3 border-l border-slate-200 dark:border-white/10 py-0.5"
                     >
                        <Plus size={10} /> Add Feature
                     </button>
@@ -692,7 +692,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                         setActiveBulkImportMIdx(mIdx);
                         setBulkImportText("");
                       }} 
-                      className="flex items-center gap-1.5 text-[8px] font-bold uppercase text-indigo-500 hover:text-indigo-750 transition-all pl-3 border-l border-slate-200 py-0.5"
+                      className="flex items-center gap-1.5 text-[8px] font-bold uppercase text-indigo-500 hover:text-indigo-750 transition-all pl-3 border-l border-slate-200 dark:border-white/10 py-0.5"
                     >
                        <Clipboard size={10} /> Paste Bulk Features
                     </button>
@@ -712,7 +712,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="w-full max-w-md bg-[#0B0E14] border border-rose-500/30 rounded-3xl p-6 sm:p-7 shadow-2xl relative overflow-hidden space-y-5"
+              className="w-full max-w-md bg-slate-50 dark:bg-[#0B0E14] border border-rose-500/30 rounded-3xl p-6 sm:p-7 shadow-2xl relative overflow-hidden space-y-5"
             >
               {/* background red glow */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-rose-500/10 blur-[50px] -mr-16 -mt-16" />
@@ -723,11 +723,11 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                 </div>
                 <div>
                   <div className="text-[8px] font-black uppercase tracking-[0.2em] text-rose-500/70">API LIMIT REACHED</div>
-                  <h3 className="text-base font-black text-white uppercase tracking-wider">Quota Exhausted (429)</h3>
+                  <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-wider">Quota Exhausted (429)</h3>
                 </div>
               </div>
 
-              <div className="space-y-2.5 text-xs font-semibold text-white/70 leading-relaxed">
+              <div className="space-y-2.5 text-xs font-semibold text-slate-900 dark:text-white/70 leading-relaxed">
                 <p>
                   Your free-tier Gemini API credits are currently exhausted (Quota Limit Reached).
                 </p>
@@ -752,7 +752,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                 </button>
                 <button
                   onClick={() => setShowQuotaModal(false)}
-                  className="px-5 h-11 bg-white/5 hover:bg-white/10 text-white/80 font-black uppercase tracking-[0.15em] text-[10px] rounded-xl transition-all border border-white/5"
+                  className="px-5 h-11 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:bg-white/5 text-slate-900 dark:text-white/80 font-black uppercase tracking-[0.15em] text-[10px] rounded-xl transition-all border border-slate-200 dark:border-white/5"
                 >
                   Dismiss
                 </button>

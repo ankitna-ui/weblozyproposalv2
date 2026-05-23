@@ -31,7 +31,7 @@ const ModuleArchitecturePage: React.FC<ModulePageProps> = ({ proposal, pageNum, 
           </div>
         )}
 
-        <div className="flex-1 space-y-2 overflow-visible py-1">
+        <div className="flex-1 flex flex-col gap-5 overflow-visible py-1">
           {pageModules.map((module, mIdx) => {
             const isFuture = module.isFutureScalability;
             const primaryColor = isFuture ? 'bg-[#1AA6E1]' : 'bg-[#99CB48]';
@@ -41,7 +41,7 @@ const ModuleArchitecturePage: React.FC<ModulePageProps> = ({ proposal, pageNum, 
             return (
             <div key={mIdx} className={`module-card break-inside-avoid w-full border-[1px] ${borderColor} overflow-hidden rounded-lg shadow-sm`}>
               {/* Compact Module Header */}
-              <div className={`${primaryColor} py-1.5 px-3 border-b-[1px] ${borderColor} flex justify-between items-center`}>
+              <div className={`${primaryColor} py-2.5 px-4 border-b-[1px] ${borderColor} flex justify-between items-center`}>
                 <h3 className="text-white font-extrabold tracking-wide text-[14px] leading-tight">
                   {module.name}
                 </h3>
@@ -65,7 +65,7 @@ const ModuleArchitecturePage: React.FC<ModulePageProps> = ({ proposal, pageNum, 
                 {module.features.map((feature: any, fIdx: number) => (
                   <div 
                     key={fIdx} 
-                    className={`grid grid-cols-[1fr,auto,30px] items-center py-1.5 px-3 ${
+                    className={`grid grid-cols-[1fr,auto,30px] items-center py-2.5 px-4 ${
                       fIdx !== module.features.length - 1 ? "border-b border-slate-100" : ""
                     }`}
                   >

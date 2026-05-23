@@ -13,10 +13,10 @@ export default function TechnicalStackPanel({ proposal, currentStep, updateTechA
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-4 group">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300 shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-500 dark:text-blue-400 group-hover:bg-blue-500 group-hover:text-white dark:group-hover:text-white transition-all duration-300 shadow-sm">
                <Monitor size={18} />
             </div>
-            <LabelPremium className="mb-0 text-slate-900">Frontend Interface Stack</LabelPremium>
+            <LabelPremium className="mb-0 text-slate-900 dark:text-white">Frontend Interface Stack</LabelPremium>
           </div>
           <ModernInput 
             placeholder="React, Next.js, Tailwind CSS..." 
@@ -27,10 +27,10 @@ export default function TechnicalStackPanel({ proposal, currentStep, updateTechA
 
         <div className="space-y-4 group">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-500 group-hover:bg-purple-500 group-hover:text-white transition-all duration-300 shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-500/10 flex items-center justify-center text-purple-500 dark:text-purple-400 group-hover:bg-purple-500 group-hover:text-white dark:group-hover:text-white transition-all duration-300 shadow-sm">
                <Server size={18} />
             </div>
-            <LabelPremium className="mb-0 text-slate-900">Core Engine (Backend)</LabelPremium>
+            <LabelPremium className="mb-0 text-slate-900 dark:text-white">Core Engine (Backend)</LabelPremium>
           </div>
           <ModernInput 
             placeholder="Node.js, Python, Go..." 
@@ -41,10 +41,10 @@ export default function TechnicalStackPanel({ proposal, currentStep, updateTechA
 
         <div className="space-y-4 group">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300 shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-500 dark:text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white dark:group-hover:text-white transition-all duration-300 shadow-sm">
                <Database size={18} />
             </div>
-            <LabelPremium className="mb-0 text-slate-900">Data Architecture</LabelPremium>
+            <LabelPremium className="mb-0 text-slate-900 dark:text-white">Data Architecture</LabelPremium>
           </div>
           <ModernInput 
             placeholder="PostgreSQL, MongoDB, Redis..." 
@@ -55,10 +55,10 @@ export default function TechnicalStackPanel({ proposal, currentStep, updateTechA
 
         <div className="space-y-4 group">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300 shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center text-orange-500 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white dark:group-hover:text-white transition-all duration-300 shadow-sm">
                <Cloud size={18} />
             </div>
-            <LabelPremium className="mb-0 text-slate-900">Infrastructure & Hosting</LabelPremium>
+            <LabelPremium className="mb-0 text-slate-900 dark:text-white">Infrastructure & Hosting</LabelPremium>
           </div>
           <ModernInput 
             placeholder="AWS, Azure, Vercel..." 
@@ -68,8 +68,8 @@ export default function TechnicalStackPanel({ proposal, currentStep, updateTechA
         </div>
       </div>
 
-      <div className="p-8 bg-slate-50 border border-slate-100 rounded-[2.5rem] flex items-start gap-4 shadow-inner">
-         <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-primary shrink-0">
+      <div className="p-8 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-[2.5rem] flex items-start gap-4 shadow-inner">
+         <div className="w-10 h-10 rounded-xl bg-white dark:bg-white/5 shadow-sm flex items-center justify-center text-primary shrink-0">
             <ShieldCheck size={20} />
          </div>
          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed pt-1">

@@ -377,6 +377,17 @@ export default function ProposalPreview() {
       console.log(`[PDF Debug] Downloading PDF file: ${filename}`);
       pdf.save(filename);
 
+      // Track download
+      if (proposal.id) {
+        try {
+          // Import dynamic to avoid top-level issues if any
+          const { updateProposal } = await import("@/lib/firestore");
+          await updateProposal(proposal.id, { isDownloaded: true, client: { ...proposal.client, status: 'Sent' } });
+        } catch(e) {
+          console.error("Failed to update download status", e);
+        }
+      }
+
       updateProgress(100);
       await new Promise(resolve => setTimeout(resolve, 300));
     } catch (err) {

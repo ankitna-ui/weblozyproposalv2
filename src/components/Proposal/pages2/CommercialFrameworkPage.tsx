@@ -98,7 +98,7 @@ const CommercialFrameworkPage: React.FC<PageProps> = ({ proposal, pageNum }) => 
                              <div className="text-[10px] font-black tracking-tight text-[#99CB48]">Phase-Based</div>
                           </div>
                           <div className="space-y-1">
-                             <div className="text-[8px] font-black tracking-wide text-white/20">Quote Life</div>
+                             <div className="text-[8px] font-black tracking-wide text-white/20">Delivery Time</div>
                              <div className="text-[10px] font-black tracking-tight text-[#99CB48]">30 Days</div>
                           </div>
                        </div>

@@ -1,187 +1,81 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import React, { useState, useEffect } from "react";
+import { 
+  Mail, KeyRound, User, Building2, Eye, EyeOff, Activity, 
+  ShieldCheck, CheckCircle2, Lock, ChevronRight, Zap, BarChart2
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { auth, db } from "@/lib/firebase";
-import { doc, setDoc } from "firebase/firestore";
-import {
-  signInWithEmailAndPassword,
+import { 
+  signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
-  confirmPasswordReset,
   sendEmailVerification,
+  sendPasswordResetEmail,
   signOut
 } from "firebase/auth";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { ShieldCheck, Zap, ChevronRight, ArrowLeft, Mail, Lock, CheckCircle2, Cpu, Globe, Database, UserCheck, IdCard, Eye, EyeOff, Activity, Terminal, LockKeyhole, RefreshCw } from "lucide-react";
+import { auth, db } from "@/lib/firebase";
+import { doc, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
-import banner2Logo from "@/assets/banner2_logo.png";
-import weblozyLogo from "@/assets/weblozy-logo.png";
 
-type AuthMode = "login" | "signup" | "forgot-password" | "reset-password" | "success" | "loading";
+type AuthMode = "login" | "signup" | "forgot-password" | "loading";
 
 export default function LoginPage() {
+  const [authMode, setAuthMode] = useState<AuthMode>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [employeeId, setEmployeeId] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [authMode, setAuthMode] = useState<AuthMode>("login");
-  const [loadingProgress, setLoadingProgress] = useState(0);
-  const [loadingText, setLoadingText] = useState("Initializing System...");
-  const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [time, setTime] = useState("");
 
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      setTime(now.toLocaleTimeString("en-US", { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }));
-    };
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const oobCode = searchParams.get("oobCode");
-  const mode = searchParams.get("mode");
+
+  // Load logos
+  const banner2Logo = new URL('@/assets/banner2_logo.png', import.meta.url).href; // Light text (Dark Mode)
+  const bannerLogo = new URL('@/assets/banner_logo.png', import.meta.url).href;   // Dark text (Light Mode)
 
   useEffect(() => {
-    if (mode === "resetPassword" && oobCode) {
-      setAuthMode("reset-password");
-    }
-  }, [mode, oobCode]);
-
-  useEffect(() => {
-    setError(null);
-  }, [email, password, newPassword, confirmPassword, fullName, employeeId, authMode]);
-
-  useEffect(() => {
-    if (authMode === "loading") {
-      const texts = [
-        "Establishing Secure Bridge...",
-        "Synchronizing Strategic Modules...",
-        "Decrypting Executive Assets...",
-        "Validating Authority Tokens...",
-        "Launching Weblozy OS..."
-      ];
-      let currentTextIndex = 0;
-
-      const interval = setInterval(() => {
-        setLoadingProgress(prev => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            setTimeout(() => navigate("/"), 500);
-            return 100;
-          }
-
-          if (prev % 20 === 0 && prev > 0) {
-            currentTextIndex = Math.min(currentTextIndex + 1, texts.length - 1);
-            setLoadingText(texts[currentTextIndex]);
-          }
-
-          return prev + 1;
-        });
-      }, 30);
-
-      return () => clearInterval(interval);
-    }
-  }, [authMode, navigate]);
-
-  const getBrandedErrorMessage = (error: any): string => {
-    if (!error) return "Authentication protocol failed. Please verify credentials.";
-
-    switch (error.code) {
-      case "auth/user-not-found":
-      case "auth/wrong-password":
-      case "auth/invalid-credential":
-        return "Weblozy System Alert: Invalid credentials for this corporate terminal.";
-      case "auth/email-already-in-use":
-        return "Weblozy System Alert: This official email is already registered in the system database. Please login or reset your credentials.";
-      case "auth/invalid-email":
-        return "Weblozy System Alert: Invalid email address format. Only official @weblozy.com and @weblozy.in accounts are accepted.";
-      case "auth/weak-password":
-        return "Weblozy System Alert: Access Key does not meet security protocols. Minimum 6 characters required.";
-      case "auth/too-many-requests":
-        return "Weblozy System Alert: Access temporarily suspended due to multiple failed attempts. Try again later.";
-      case "auth/network-request-failed":
-        return "Weblozy System Alert: Network communication failure. Please verify corporate gateway connectivity.";
-      default:
-        const message = error.message || "Authentication protocol failed. Please verify credentials.";
-        return message.replace(/Firebase/gi, "Weblozy System");
-    }
-  };
+    const updateTime = () => setTime(new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+    updateTime();
+    const int = setInterval(updateTime, 1000);
+    return () => clearInterval(int);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
 
-    // Advanced Local Validations
-    if (authMode === "login" || authMode === "signup" || authMode === "forgot-password") {
-      if (!email.trim()) {
-        setError("Operator Validation Failure: Terminal ID (Email) cannot be empty.");
-        return;
+    if (authMode === "forgot-password") {
+      if (!email) { setError("Please enter your corporate email."); return; }
+      setLoading(true);
+      try {
+        await sendPasswordResetEmail(auth, email);
+        toast.success("Password reset link sent securely.");
+        setAuthMode("login");
+      } catch (err: any) {
+        setError(err.message || "Failed to send reset link.");
+      } finally {
+        setLoading(false);
       }
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        setError("Security Alert: Invalid Terminal ID (Email) format.");
-        return;
-      }
+      return;
     }
 
+    if (!email || !password) { setError("Required credentials missing."); return; }
+    
     if (authMode === "signup") {
-      if (!fullName.trim()) {
-        setError("Operator Validation Failure: Employee Full Name is required.");
-        return;
-      }
-      if (!employeeId.trim()) {
-        setError("Operator Validation Failure: Employee ID is required.");
-        return;
-      }
-      if (!confirmPassword) {
-        setError("Security Alert: Please confirm your Access Key.");
-        return;
-      }
-      if (password !== confirmPassword) {
-        setError("Security Alert: Access keys do not match.");
-        return;
-      }
-    }
-
-    if (authMode === "login" || authMode === "signup") {
-      if (!password) {
-        setError("Security Alert: Access Key (Password) cannot be empty.");
-        return;
-      }
-      if (password.length < 6) {
-        setError("Security Alert: Access Key must contain at least 6 characters.");
-        return;
-      }
-    }
-
-    if (authMode === "reset-password") {
-      if (!newPassword || !confirmPassword) {
-        setError("Security Alert: Keys cannot be empty.");
-        return;
-      }
-      if (newPassword.length < 6) {
-        setError("Security Alert: New Access Key must contain at least 6 characters.");
-        return;
-      }
-      if (newPassword !== confirmPassword) {
-        setError("Security Alert: Security keys do not match.");
-        return;
-      }
+      if (!fullName) { setError("Full Name is required."); return; }
+      if (!employeeId) { setError("Employee ID is required."); return; }
+      if (password !== confirmPassword) { setError("Access keys do not match."); return; }
+      if (password.length < 6) { setError("Access key must be at least 6 characters."); return; }
     }
 
     setLoading(true);
-
     try {
       const isDomainAuthorized = (emailAddr: string) => {
         const normalized = emailAddr.trim().toLowerCase();
@@ -190,559 +84,465 @@ export default function LoginPage() {
 
       if (authMode === "login") {
         if (!isDomainAuthorized(email)) {
-          setError("Security Access Alert: Unauthorized Domain. Only official @weblozy.com and @weblozy.in accounts are permitted.");
-          setLoading(false);
-          return;
+          setError("Terminal Access Denied. Identity validation failed corporate security policy.");
+          setLoading(false); return;
         }
-
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-        if (!user.emailVerified && !isLocal) {
-          await sendEmailVerification(user);
-          await signOut(auth);
-          setError("Activation Pending: A secure verification link was sent to your official inbox. Please verify your email before terminal access is granted.");
-          setLoading(false);
-          return;
-        }
-
-        toast.success("Identity Verified. Accessing Strategic Dashboard.");
-        setAuthMode("loading");
-      } else if (authMode === "signup") {
-        if (!isDomainAuthorized(email)) {
-          setError("Security Access Alert: Unauthorized Domain. Only official @weblozy.com and @weblozy.in accounts can establish credentials.");
-          setLoading(false);
-          return;
-        }
-
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
-        // Persist complete employee profile details into Firestore database under users collection
-        await setDoc(doc(db, "users", userCredential.user.uid), {
-          uid: userCredential.user.uid,
-          email: email.trim().toLowerCase(),
-          fullName: fullName.trim(),
-          employeeId: employeeId.trim(),
-          role: "operator",
-          createdAt: new Date().toISOString()
-        });
-
-        const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-        if (isLocal) {
-          toast.success("Local Identity Setup Approved. Accessing Workspace.");
-          setAuthMode("loading");
-        } else {
+        if (!userCredential.user.emailVerified && window.location.hostname !== "localhost") {
           await sendEmailVerification(userCredential.user);
           await signOut(auth);
-          toast.success("Identity Setup Initiated. Activation link dispatched.");
-          setAuthMode("success");
+          setError("Verification pending. Check your email.");
+          setLoading(false); return;
         }
-      } else if (authMode === "forgot-password") {
-        await sendPasswordResetEmail(auth, email);
-        toast.success("Recovery Protocol Dispatched to your inbox.");
-        setAuthMode("success");
-      } else if (authMode === "reset-password") {
-        if (oobCode) {
-          await confirmPasswordReset(auth, oobCode, newPassword);
-          toast.success("Security Key Re-established successfully.");
-          setAuthMode("success");
+        toast.success("Identity Verified.");
+        setAuthMode("loading");
+        navigate("/dashboard");
+      } else if (authMode === "signup") {
+        if (!isDomainAuthorized(email)) {
+          setError("Terminal Access Denied. Identity validation failed corporate security policy.");
+          setLoading(false); return;
         }
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await setDoc(doc(db, "users", userCredential.user.uid), {
+          fullName,
+          employeeId,
+          email: userCredential.user.email,
+          role: "user",
+          createdAt: new Date().toISOString()
+        });
+        await sendEmailVerification(userCredential.user);
+        toast.success("Account initialized. Please verify your email.");
+        await signOut(auth);
+        setAuthMode("login");
       }
-    } catch (error: any) {
-      console.error(error);
-      const friendlyMessage = getBrandedErrorMessage(error);
-      setError(friendlyMessage);
-      setLoading(false);
+    } catch (err: any) {
+      console.error(err);
+      setError(err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' 
+        ? "Invalid access credentials." 
+        : err.message || "Authentication protocol failed.");
+    } finally {
+      if (authMode !== "loading") setLoading(false);
     }
   };
 
-  const getTitle = () => {
-    switch (authMode) {
-      case "signup": return "Operator Onboarding";
-      case "forgot-password": return "Account Recovery";
-      case "reset-password": return "Re-establish Keys";
-      case "success": return "System Dispatch";
-      default: return "Workstation Login";
-    }
-  };
-
-  const getSubtitle = () => {
-    switch (authMode) {
-      case "signup": return "Establish your secure credentials inside the corporate index.";
-      case "forgot-password": return "Request a security link to recover your terminal access keys.";
-      case "reset-password": return "Set a new high-strength password to authorize your session.";
-      case "success": return "Your secure request was successfully dispatched to the server.";
-      default: return "Welcome back. Initialize your workspace terminal to access Proposals.";
-    }
+  const itemVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 300, damping: 24 } }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#06080C] via-[#0D1117] to-[#040507] p-6 relative overflow-hidden font-sans">
-      {/* Cinematic Background Layer */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div
-          className="absolute inset-0 opacity-[0.06]"
-          style={{
-            backgroundImage: `linear-gradient(#A3E635 1px, transparent 1px), linear-gradient(90deg, #A3E635 1px, transparent 1px)`,
-            backgroundSize: '40px 40px',
-            maskImage: 'radial-gradient(circle at 50% 50%, black, transparent 75%)'
-          }}
-        />
-        {/* Soft neon green top-right glow */}
-        <motion.div
-          animate={{ scale: [1, 1.15, 1], opacity: [0.12, 0.2, 0.12], x: [0, 20, 0], y: [0, -20, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-[#A3E635] blur-[150px] rounded-full"
-        />
-        {/* Deep navy bottom-left glow */}
-        <motion.div
-          animate={{ scale: [1, 1.25, 1], opacity: [0.08, 0.15, 0.08], x: [0, -30, 0], y: [0, 30, 0] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          className="absolute bottom-[-20%] left-[-10%] w-[550px] h-[550px] bg-[#1668B2] blur-[140px] rounded-full"
-        />
+    <div className="min-h-screen w-full flex items-center justify-center bg-slate-50 dark:bg-[#07090C] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-slate-200 dark:from-[#0B101A] dark:via-[#07090C] dark:to-[#040507] font-sans selection:bg-[#99CB48]/30 overflow-hidden relative transition-colors duration-500">
+      
+      {/* CSS FIX FOR BROWSER AUTOFILL BACKGROUND */}
+      <style dangerouslySetInnerHTML={{__html: `
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+            transition: background-color 5000s ease-in-out 0s;
+            -webkit-text-fill-color: currentColor !important;
+        }
+        @keyframes moveGrid {
+           0% { background-position-y: 0px; }
+           100% { background-position-y: 100px; }
+        }
+        .animate-grid {
+           animation: moveGrid 3s linear infinite;
+        }
+      `}} />
+      {/* AMBIENT GLOWING ORBS */}
+      <motion.div 
+         animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.25, 0.15] }}
+         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+         className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-[#99CB48]/20 dark:bg-[#99CB48]/10 blur-[120px] pointer-events-none"
+      />
+      <motion.div 
+         animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
+         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+         className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-blue-500/15 dark:bg-blue-600/10 blur-[120px] pointer-events-none"
+      />
+
+      {/* NOISE TEXTURE */}
+      <div 
+         className="absolute inset-0 opacity-[0.025] dark:opacity-[0.015] pointer-events-none mix-blend-overlay" 
+         style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} 
+      />
+
+
+      {/* GLOBAL 3D GRID BACKGROUND (Dark Mode) */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden hidden dark:flex justify-center items-end opacity-40 transition-opacity duration-500">
+         <div 
+            className="w-[200vw] h-[60vh] animate-grid"
+            style={{
+               background: `
+                  linear-gradient(transparent 0%, #99CB48 2%, transparent 4%),
+                  linear-gradient(90deg, transparent 0%, #99CB48 1%, transparent 2%)
+               `,
+               backgroundSize: '100px 40px, 40px 100px',
+               transform: 'perspective(500px) rotateX(60deg) translateY(100px) translateZ(-200px)',
+               maskImage: 'linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%)'
+            }}
+         />
       </div>
 
-      <AnimatePresence mode="wait">
-        {authMode === "loading" ? (
-          <motion.div
-            key="loading"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.05 }}
-            className="w-full max-w-sm space-y-10 text-center relative z-10"
+      {/* GLOBAL 3D GRID BACKGROUND (Light Mode) */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden flex dark:hidden justify-center items-end opacity-100 transition-opacity duration-500">
+         <div 
+            className="w-[200vw] h-[60vh] animate-grid"
+            style={{
+               background: `
+                  linear-gradient(transparent 0%, #7AA82B 3%, transparent 5%),
+                  linear-gradient(90deg, transparent 0%, #7AA82B 2%, transparent 3%)
+               `,
+               backgroundSize: '100px 40px, 40px 100px',
+               transform: 'perspective(500px) rotateX(60deg) translateY(100px) translateZ(-200px)',
+               maskImage: 'linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%)'
+            }}
+         />
+      </div>
+
+      {/* Main Container - Adjusted max-w to bring panels closer to center */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full max-w-[1100px] mx-auto flex flex-col lg:flex-row h-screen lg:h-[750px] lg:max-h-[90vh] relative z-10 p-4 sm:p-8 lg:gap-12"
+      >
+        
+        {/* === LEFT PANEL (BRANDING) === */}
+        <div className="w-full lg:w-[50%] flex flex-col justify-between py-8 lg:py-12 relative">
+          
+          {/* Header */}
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="flex items-center gap-4 mb-8"
           >
-            <div className="relative mx-auto w-32 h-32">
-              <div className="absolute inset-0 bg-primary/15 blur-[50px] animate-pulse rounded-full" />
-              <motion.img
-                src={weblozyLogo}
-                alt="Weblozy"
-                className="w-full h-full object-contain relative z-10 p-2"
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              />
-            </div>
-
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <h2 className="text-xl font-black text-white uppercase tracking-[0.4em] leading-none">{loadingText}</h2>
-                <p className="text-[9px] text-primary font-black uppercase tracking-[0.2em] italic">Access Channel Validating</p>
-              </div>
-
-              <div className="relative space-y-2">
-                <div className="h-[1.5px] w-full bg-white/5 rounded-full overflow-hidden">
-                  <motion.div
-                    className="absolute inset-y-0 left-0 bg-primary shadow-[0_0_10px_#99CB48]"
-                    initial={{ width: "0%" }}
-                    animate={{ width: `${loadingProgress}%` }}
-                  />
-                </div>
-                <div className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">
-                  <span>System Logic Hook: {loadingProgress}%</span>
-                </div>
-              </div>
-            </div>
+            <img src={bannerLogo} alt="Weblozy Logo" className="h-6 object-contain dark:hidden" />
+            <img src={banner2Logo} alt="Weblozy Logo" className="h-6 object-contain hidden dark:block" />
+            <div className="h-4 w-px bg-slate-300 dark:bg-white/20" />
+            <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 dark:text-white/60">Enterprise Portal</span>
           </motion.div>
-        ) : (
-          <motion.div
-            key="auth"
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-4xl min-h-[550px] md:min-h-[660px] md:h-[680px] grid md:grid-cols-2 bg-[#0E1217]/90 backdrop-blur-3xl rounded-[2rem] sm:rounded-[3rem] shadow-[0_0_80px_rgba(0,0,0,0.6)] overflow-hidden border border-white/5 relative z-10"
+
+          {/* Typography */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.4 }}
+            className="mb-8"
           >
-            {/* Left Side: Institutional Cybernetic Telemetry Deck */}
-            <div className="hidden md:flex flex-col justify-between p-12 bg-gradient-to-br from-primary/[0.03] via-transparent to-transparent relative border-r border-white/5 overflow-hidden">
-              {/* Background ambient glowing mesh grids */}
-              <div className="absolute inset-0 pointer-events-none opacity-20">
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    backgroundImage: `radial-gradient(circle at 10% 20%, rgba(22, 104, 178, 0.05) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(153, 203, 72, 0.05) 0%, transparent 40%)`
-                  }}
-                />
-              </div>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-200/50 dark:bg-white/5 border border-slate-300/50 dark:border-white/10 mb-6 backdrop-blur-md">
+               <div className="w-1.5 h-1.5 rounded-full bg-[#99CB48] shadow-[0_0_8px_#99CB48]" />
+               <span className="text-[9px] font-bold tracking-[0.15em] text-[#99CB48] uppercase">System Online</span>
+            </div>
+            
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+              className="text-5xl lg:text-6xl font-black tracking-tighter leading-[1.05] mb-4 text-slate-900 dark:text-white"
+            >
+              Strategic<br />
+              <span className="text-[#99CB48]">Workstation.</span>
+            </motion.h1>
+            
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed max-w-sm"
+            >
+              Secure corporate environment for generating, analyzing, and deploying strategic business proposals.
+            </motion.p>
+          </motion.div>
 
-              <div className="space-y-12 relative z-10">
-                <motion.div
-                  initial={{ y: -10, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  className="flex items-center justify-between"
+          {/* Feature Cards - Changed to items-center */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="space-y-4 max-w-sm mb-12 lg:mb-0"
+          >
+             <div className="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 shadow-sm dark:shadow-none hover:bg-slate-50 dark:hover:bg-white/[0.04] transition-colors">
+                <div className="w-10 h-10 shrink-0 rounded-xl bg-slate-50 dark:bg-transparent border border-[#99CB48]/30 flex items-center justify-center text-[#99CB48]">
+                   <ShieldCheck className="w-5 h-5" />
+                </div>
+                <div>
+                   <h3 className="text-slate-900 dark:text-white text-sm font-bold mb-0.5">Secure</h3>
+                   <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Enterprise-grade security and data protection.</p>
+                </div>
+             </div>
+             
+             <div className="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 shadow-sm dark:shadow-none hover:bg-slate-50 dark:hover:bg-white/[0.04] transition-colors">
+                <div className="w-10 h-10 shrink-0 rounded-xl bg-slate-50 dark:bg-transparent border border-[#99CB48]/30 flex items-center justify-center text-[#99CB48]">
+                   <Zap className="w-5 h-5" />
+                </div>
+                <div>
+                   <h3 className="text-slate-900 dark:text-white text-sm font-bold mb-0.5">Automated</h3>
+                   <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Intelligent automation for maximum efficiency.</p>
+                </div>
+             </div>
+
+             <div className="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 shadow-sm dark:shadow-none hover:bg-slate-50 dark:hover:bg-white/[0.04] transition-colors">
+                <div className="w-10 h-10 shrink-0 rounded-xl bg-slate-50 dark:bg-transparent border border-[#99CB48]/30 flex items-center justify-center text-[#99CB48]">
+                   <BarChart2 className="w-5 h-5" />
+                </div>
+                <div>
+                   <h3 className="text-slate-900 dark:text-white text-sm font-bold mb-0.5">Strategic</h3>
+                   <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Data-driven insights for smarter decisions.</p>
+                </div>
+             </div>
+          </motion.div>
+
+          {/* Footer inside Left Panel */}
+          <motion.div 
+             initial={{ opacity: 0 }}
+             animate={{ opacity: 1 }}
+             transition={{ duration: 0.8, delay: 1 }}
+             className="flex items-center justify-between w-full max-w-sm mt-auto"
+          >
+             <div className="flex items-center gap-2 text-[#99CB48]">
+                <Lock className="w-4 h-4" />
+                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-300">AES-256 Encrypted</span>
+             </div>
+             <div className="flex flex-col text-right">
+                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">System Time</span>
+                <span className="text-[10px] font-bold text-[#99CB48] tracking-widest">{time || "00:00:00 AM"}</span>
+             </div>
+          </motion.div>
+        </div>
+
+        {/* === RIGHT PANEL (FORM CARD) === */}
+        <div className="w-full lg:w-[50%] flex items-center justify-center relative h-full">
+          
+          <motion.div 
+            initial="hidden"
+            animate="visible"
+            className="w-full max-w-[460px] h-[650px] overflow-y-auto custom-scrollbar flex flex-col bg-white dark:bg-[#0E1218] border border-slate-200 dark:border-white/[0.06] rounded-[2rem] p-8 sm:p-10 shadow-2xl dark:shadow-2xl relative z-10"
+          >
+            
+            <motion.div variants={itemVariants} className="mb-8">
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight mb-2">
+                {authMode === "signup" ? "Create Your Account" : authMode === "forgot-password" ? "Recover Account" : "Welcome Back"}
+              </h2>
+              <p className="text-[13px] text-slate-500 dark:text-slate-400">
+                {authMode === "signup" ? "Join Weblozy and elevate your automation journey." : "Sign in to access your Weblozy workspace."}
+              </p>
+            </motion.div>
+
+            {/* Segmented Control / Tab Switcher */}
+            {(authMode === "login" || authMode === "signup") && (
+              <motion.div variants={itemVariants} className="flex bg-slate-100 dark:bg-[#161B23] rounded-xl mb-8 p-1">
+                {(['login', 'signup'] as const).map((mode) => (
+                  <button
+                    key={mode}
+                    type="button"
+                    onClick={() => { setAuthMode(mode); setError(null); }}
+                    className={`flex-1 py-3 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-all duration-300 relative z-10 ${
+                      authMode === mode 
+                        ? "text-[#99CB48]" 
+                        : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                    }`}
+                  >
+                    {mode === 'login' ? 'SIGN IN' : 'SIGN UP'}
+                    {authMode === mode && (
+                      <motion.div
+                        layoutId="activeTab"
+                        className="absolute inset-0 bg-white dark:bg-white/5 rounded-lg border border-slate-200 dark:border-[#99CB48]/20 shadow-sm dark:shadow-none -z-10"
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      />
+                    )}
+                  </button>
+                ))}
+              </motion.div>
+            )}
+
+            {/* Error Message */}
+            <AnimatePresence>
+              {error && (
+                <motion.div 
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mb-6 overflow-hidden"
                 >
-                  <div className="flex items-center gap-4">
-                    <img src={banner2Logo} alt="Partners" className="h-10 w-auto object-contain max-w-[200px]" />
-                    <div className="h-5 w-px bg-white/10" />
-                    <span className="text-[6px] uppercase tracking-[0.4em] text-white/30 font-black flex items-center gap-1"><Terminal className="w-3 h-3 text-primary" />System Time</span>
-                  </div>
-
-                  {/* Dynamic Real-time Workstation Clock */}
-                  <div className="flex flex-col items-end text-right bg-white/[0.02] border border-white/5 px-3 py-1.5 rounded-xl backdrop-blur-md">
-                    <span className="text-[11px] font-mono font-bold text-primary tracking-[0.15em] leading-none">{time || "12:00:00"}</span>
+                  <div className="p-3 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-400 text-xs font-semibold flex items-center gap-2">
+                    <Activity className="w-3.5 h-3.5" />
+                    <span>{error}</span>
                   </div>
                 </motion.div>
+              )}
+            </AnimatePresence>
 
-                <div className="space-y-6 pt-6">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/5 border border-primary/10 rounded-full">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                    <span className="text-[8px] font-black uppercase tracking-[0.3em] text-primary">Strategic Core OS v3.2</span>
-                  </div>
-                  <AnimatePresence mode="wait">
-                    <motion.h1
-                      key={authMode}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -12 }}
-                      transition={{ duration: 0.25, ease: "easeInOut" }}
-                      className="text-5xl font-black text-white leading-[0.95] tracking-tight uppercase"
-                    >
-                      {authMode === "signup" ? (
-                        <>
-                          Absolute <br />
-                          <span className="text-primary italic relative">
-                            Authority.
-                            <span className="absolute bottom-1 left-0 w-full h-[3.5px] bg-primary/20 rounded shadow-[0_0_12px_rgba(163,230,53,0.3)]" />
-                          </span>
-                        </>
-                      ) : (
-                        <>
-                          Welcome Back <br />
-                          <span className="text-primary italic relative">
-                            Commander.
-                            <span className="absolute bottom-1 left-0 w-full h-[3.5px] bg-primary/20 rounded shadow-[0_0_12px_rgba(163,230,53,0.3)]" />
-                          </span>
-                        </>
-                      )}
-                    </motion.h1>
-                  </AnimatePresence>
-                  <p className="text-gray-500 text-sm leading-relaxed max-w-[320px] font-medium tracking-tight">
-                    High-impact enterprise documentation pipeline & multi-operator strategic automation ecosystem.
-                  </p>
-                </div>
-              </div>
-
-              {/* Minimal Luxury Footer */}
-              <div className="space-y-2.5 relative z-10 opacity-70 border-t border-white/5 pt-6">
-                <div className="text-[9px] font-black text-white uppercase tracking-[0.4em] flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-primary animate-pulse" />
-                  <span>SECURE ENTERPRISE LAYER</span>
-                </div>
-                <p className="text-[8px] text-gray-500 font-bold uppercase tracking-widest leading-relaxed">
-                  ENCRYPTED MULTI-OPERATOR WORKSTATION ACCESS APPROVED FOR OFFICIAL CORPORATE DEPLOYS.
-                </p>
-              </div>
-            </div>
-
-            {/* Right Side: Authentication Interface */}
-            <div className="p-6 sm:p-10 md:p-12 flex flex-col justify-center bg-black/20 h-full overflow-y-auto custom-scrollbar relative">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={authMode === "login" || authMode === "signup" ? "login-signup" : authMode}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
-                  transition={{ duration: 0.25, ease: "easeInOut" }}
-                  className="space-y-5"
-                >
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <h2 className="text-4xl font-black text-white tracking-tighter uppercase leading-none">
-                        {getTitle()}
-                      </h2>
-                      {authMode !== "login" && authMode !== "signup" && authMode !== "success" && (
-                        <button onClick={() => setAuthMode("login")} className="text-primary hover:text-white transition-colors">
-                          <ArrowLeft className="w-4 h-4" />
-                        </button>
-                      )}
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-5">
+              
+              {/* Signup Fields (Animated) */}
+              <AnimatePresence>
+                {authMode === "signup" && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                    animate={{ opacity: 1, height: "auto", marginTop: "1.25rem" }}
+                    exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="grid grid-cols-2 gap-4 overflow-hidden mb-5"
+                  >
+                    <div className="space-y-1.5">
+                      <Label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Full Name</Label>
+                      <div className="relative group">
+                        <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500 group-focus-within:text-[#99CB48] transition-colors" />
+                        <Input 
+                          type="text" placeholder="Enter your full name" value={fullName} onChange={(e) => setFullName(e.target.value)}
+                          className="h-12 pl-10 bg-slate-50 dark:bg-[#161B23] border-slate-200 dark:border-[#222934] rounded-xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:ring-1 focus:ring-[#99CB48]/50 focus:border-[#99CB48] transition-all"
+                        />
+                      </div>
                     </div>
-                    <p className="text-gray-500 text-sm font-medium tracking-tight">
-                      {getSubtitle()}
-                    </p>
-                  </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Employee ID</Label>
+                      <div className="relative group">
+                        <Building2 className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500 group-focus-within:text-[#99CB48] transition-colors" />
+                        <Input 
+                          type="text" placeholder="Enter employee ID" value={employeeId} onChange={(e) => setEmployeeId(e.target.value)}
+                          className="h-12 pl-10 bg-slate-50 dark:bg-[#161B23] border-slate-200 dark:border-[#222934] rounded-xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:ring-1 focus:ring-[#99CB48]/50 focus:border-[#99CB48] transition-all"
+                        />
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-                  {/* Interactive Premium Tab Switcher */}
-                  {(authMode === "login" || authMode === "signup") && (
-                    <div className="grid grid-cols-2 p-1 bg-white/[0.02] border border-white/5 rounded-2xl relative">
-                      <button
-                        type="button"
-                        onClick={() => { setAuthMode("login"); setError(null); }}
-                        className={`py-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 relative z-10 ${authMode === "login"
-                          ? "text-black bg-primary shadow-lg shadow-primary/20"
-                          : "text-gray-500 hover:text-white"
-                          }`}
-                      >
-                        Sign In (Authorized)
+              <motion.div variants={itemVariants} className="space-y-1.5">
+                <Label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Corporate Email</Label>
+                <div className="relative group">
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500 group-focus-within:text-[#99CB48] transition-colors" />
+                  <Input 
+                    type="email" 
+                    placeholder="Enter your corporate email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-12 pl-10 bg-slate-50 dark:bg-[#161B23] border-slate-200 dark:border-[#222934] rounded-xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:ring-1 focus:ring-[#99CB48]/50 focus:border-[#99CB48] transition-all"
+                  />
+                  {email && email.includes('@') && (
+                    <motion.div initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }}>
+                      <CheckCircle2 className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#99CB48]" />
+                    </motion.div>
+                  )}
+                </div>
+              </motion.div>
+
+              {(authMode === "login" || authMode === "signup") && (
+                <motion.div variants={itemVariants} className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Access Key</Label>
+                    {authMode === "login" && (
+                      <button type="button" onClick={() => setAuthMode("forgot-password")} className="text-[10px] font-bold text-[#99CB48] hover:text-[#b1e658] transition-colors">
+                        Forgot Key?
                       </button>
-                      <button
-                        type="button"
-                        onClick={() => { setAuthMode("signup"); setError(null); }}
-                        className={`py-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 relative z-10 ${authMode === "signup"
-                          ? "text-black bg-primary shadow-lg shadow-primary/20"
-                          : "text-gray-500 hover:text-white"
-                          }`}
-                      >
-                        Sign Up (New Employee)
+                    )}
+                  </div>
+                  <div className="relative group">
+                    <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500 group-focus-within:text-[#99CB48] transition-colors" />
+                    <Input 
+                      type={showPassword ? "text" : "password"} 
+                      placeholder="Enter access key"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="h-12 pl-10 pr-10 bg-slate-50 dark:bg-[#161B23] border-slate-200 dark:border-[#222934] rounded-xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 tracking-wide focus:ring-1 focus:ring-[#99CB48]/50 focus:border-[#99CB48] transition-all"
+                    />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Confirm Password (Animated) */}
+              <AnimatePresence>
+                {authMode === "signup" && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                    animate={{ opacity: 1, height: "auto", marginTop: "1.25rem" }}
+                    exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="space-y-1.5 overflow-hidden"
+                  >
+                    <Label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Confirm Access Key</Label>
+                    <div className="relative group">
+                      <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500 group-focus-within:text-[#99CB48] transition-colors" />
+                      <Input 
+                        type={showConfirmPassword ? "text" : "password"} 
+                        placeholder="Confirm access key"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        className="h-12 pl-10 pr-10 bg-slate-50 dark:bg-[#161B23] border-slate-200 dark:border-[#222934] rounded-xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 tracking-wide focus:ring-1 focus:ring-[#99CB48]/50 focus:border-[#99CB48] transition-all"
+                      />
+                      <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
+                        {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Remember Me & Terms Checkbox */}
+              <motion.div variants={itemVariants} className="flex justify-between items-center pt-2">
+                 {authMode === 'login' ? (
+                    <>
+                       <label className="flex items-center gap-2 cursor-pointer group">
+                          <div className="w-4 h-4 rounded border border-slate-300 dark:border-[#222934] group-hover:border-[#99CB48] bg-white dark:bg-[#161B23] flex items-center justify-center transition-colors">
+                             <CheckCircle2 className="w-3 h-3 text-[#99CB48] opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </div>
+                          <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Remember me</span>
+                       </label>
+                       <span className="text-[11px] font-bold text-[#99CB48] cursor-pointer hover:underline">Need help?</span>
+                    </>
+                 ) : authMode === 'signup' && (
+                    <label className="flex items-center gap-2 cursor-pointer group">
+                       <div className="w-4 h-4 rounded border border-slate-300 dark:border-[#222934] group-hover:border-[#99CB48] bg-white dark:bg-[#161B23] flex items-center justify-center transition-colors">
+                          <CheckCircle2 className="w-3 h-3 text-[#99CB48]" />
+                       </div>
+                       <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+                          I agree to the <span className="text-[#99CB48] hover:underline">Terms of Service</span> and <span className="text-[#99CB48] hover:underline">Privacy Policy</span>
+                       </span>
+                    </label>
+                 )}
+              </motion.div>
+
+              {/* Submit Button */}
+              <motion.div variants={itemVariants} className="pt-4">
+                <Button 
+                  type="submit" 
+                  disabled={loading}
+                  className="w-full h-[52px] bg-[#99CB48] hover:bg-[#A9DF50] text-black font-black uppercase tracking-[0.1em] text-xs rounded-xl shadow-[0_4px_25px_-5px_rgba(153,203,72,0.4)] transition-all duration-300 hover:scale-[1.02] active:scale-95 group"
+                >
+                  {loading ? (
+                    <div className="flex items-center gap-3">
+                      <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                      <span>Authenticating...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center gap-2">
+                      {authMode === "login" ? "SIGN IN" : authMode === "signup" ? "CREATE ACCOUNT" : "SEND RESET LINK"}
+                      <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </div>
                   )}
+                </Button>
+              </motion.div>
 
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    {authMode === "success" ? (
-                      <div className="text-center space-y-8 py-6">
-                        <div className="mx-auto w-20 h-20 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center relative">
-                          <div className="absolute inset-0 rounded-full bg-primary/5 animate-pulse" />
-                          <CheckCircle2 className="w-10 h-10 text-primary relative z-10" />
-                        </div>
-                        <div className="space-y-3">
-                          <h3 className="text-lg font-black uppercase tracking-[0.2em] text-white leading-none">Identity Dispatch Complete</h3>
-                          <p className="text-gray-400 text-xs leading-relaxed max-w-sm mx-auto">
-                            A secure activation protocol has been successfully transmitted to your inbox <span className="text-primary font-black uppercase">{email}</span>. Please click the validation link inside your email to unlock your Proposal OS terminal.
-                          </p>
-                        </div>
-                        <Button
-                          type="button"
-                          onClick={() => { setAuthMode("login"); setError(null); }}
-                          className="w-full h-14 text-sm font-black uppercase tracking-[0.4em] bg-primary text-black hover:bg-primary/90 rounded-[1.2rem] shadow-lg shadow-primary/10 transition-all active:scale-[0.98]"
-                        >
-                          Return to Login Hub
-                        </Button>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="grid grid-cols-2 gap-3.5">
-                          {/* Terminal ID (Company Email) - Spans both columns */}
-                          {(authMode === "login" || authMode === "signup" || authMode === "forgot-password") && (
-                            <div className="col-span-2 space-y-1.5">
-                              <Label className="text-gray-600 font-black uppercase tracking-[0.3em] text-[8px] ml-1">Terminal ID (Company Email)</Label>
-                              <div className="relative group">
-                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within:text-primary transition-colors" />
-                                <Input
-                                  type="email"
-                                  placeholder="OPERATOR@WEBLOZY.COM"
-                                  value={email}
-                                  onChange={(e) => setEmail(e.target.value)}
-                                  className="h-11 pl-11 bg-white/[0.02] border-white/10 rounded-xl focus:ring-1 focus:ring-primary text-white placeholder:text-gray-800 font-bold tracking-tight uppercase transition-all text-xs focus:border-primary/30"
-                                />
-                              </div>
-                            </div>
-                          )}
 
-                          {/* Sign Up Fields: Employee Name & Employee ID side-by-side */}
-                          {authMode === "signup" && (
-                            <>
-                              <div className="col-span-1 space-y-1.5">
-                                <Label className="text-gray-600 font-black uppercase tracking-[0.3em] text-[8px] ml-1">Employee Full Name</Label>
-                                <div className="relative group">
-                                  <UserCheck className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within:text-primary transition-colors" />
-                                  <Input
-                                    type="text"
-                                    placeholder="Enter Name"
-                                    value={fullName}
-                                    onChange={(e) => setFullName(e.target.value)}
-                                    className="h-11 pl-11 bg-white/[0.02] border-white/10 rounded-xl focus:ring-1 focus:ring-primary text-white placeholder:text-gray-800 font-bold tracking-tight uppercase transition-all text-xs focus:border-primary/30"
-                                  />
-                                </div>
-                              </div>
 
-                              <div className="col-span-1 space-y-1.5">
-                                <Label className="text-gray-600 font-black uppercase tracking-[0.3em] text-[8px] ml-1">Employee ID</Label>
-                                <div className="relative group">
-                                  <IdCard className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within:text-primary transition-colors" />
-                                  <Input
-                                    type="text"
-                                    placeholder="Enter EMP-ID"
-                                    value={employeeId}
-                                    onChange={(e) => setEmployeeId(e.target.value)}
-                                    className="h-11 pl-11 bg-white/[0.02] border-white/10 rounded-xl focus:ring-1 focus:ring-primary text-white placeholder:text-gray-800 font-bold tracking-tight uppercase transition-all text-xs focus:border-primary/30"
-                                  />
-                                </div>
-                              </div>
-                            </>
-                          )}
+              {/* Footer */}
+              <motion.div variants={itemVariants} className="mt-auto pt-8 flex items-center justify-center gap-2 text-[10px] text-slate-400 dark:text-slate-500 font-medium">
+                <Lock className="w-3 h-3" />
+                <span>End-to-end encrypted protocol</span>
+              </motion.div>
 
-                          {/* Passwords for Login - spans full column */}
-                          {authMode === "login" && (
-                            <div className="col-span-2 space-y-1.5">
-                              <div className="flex justify-between items-center px-1">
-                                <Label className="text-gray-600 font-black uppercase tracking-[0.3em] text-[8px]">Access Key (Password)</Label>
-                                <button type="button" onClick={() => setAuthMode("forgot-password")} className="text-[8px] font-black text-primary hover:text-white uppercase tracking-widest transition-colors">Recover Password?</button>
-                              </div>
-                              <div className="relative group">
-                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within:text-primary transition-colors" />
-                                <Input
-                                  type={showPassword ? "text" : "password"}
-                                  placeholder="••••••••"
-                                  value={password}
-                                  onChange={(e) => setPassword(e.target.value)}
-                                  className="h-11 pl-11 pr-10 bg-white/[0.02] border-white/10 rounded-xl focus:ring-1 focus:ring-primary text-white placeholder:text-gray-800 font-bold transition-all text-xs focus:border-primary/30"
-                                />
-                                <button
-                                  type="button"
-                                  onClick={() => setShowPassword(prev => !prev)}
-                                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-700 hover:text-primary transition-colors z-20"
-                                >
-                                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                                </button>
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Passwords for Signup - side-by-side */}
-                          {authMode === "signup" && (
-                            <>
-                              <div className="col-span-1 space-y-1.5">
-                                <Label className="text-gray-600 font-black uppercase tracking-[0.3em] text-[8px] ml-1">Access Key</Label>
-                                <div className="relative group">
-                                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within:text-primary transition-colors" />
-                                  <Input
-                                    type={showPassword ? "text" : "password"}
-                                    placeholder="••••••••"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="h-11 pl-11 pr-10 bg-white/[0.02] border-white/10 rounded-xl focus:ring-1 focus:ring-primary text-white placeholder:text-gray-800 font-bold transition-all text-xs focus:border-primary/30"
-                                  />
-                                  <button
-                                    type="button"
-                                    onClick={() => setShowPassword(prev => !prev)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-700 hover:text-primary transition-colors z-20"
-                                  >
-                                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                                  </button>
-                                </div>
-                              </div>
-
-                              <div className="col-span-1 space-y-1.5">
-                                <Label className="text-gray-600 font-black uppercase tracking-[0.3em] text-[8px] ml-1">Confirm Access Key</Label>
-                                <div className="relative group">
-                                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within:text-primary transition-colors" />
-                                  <Input
-                                    type={showConfirmPassword ? "text" : "password"}
-                                    placeholder="••••••••"
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                    className="h-11 pl-11 pr-10 bg-white/[0.02] border-white/10 rounded-xl focus:ring-1 focus:ring-primary text-white placeholder:text-gray-800 font-bold transition-all text-xs focus:border-primary/30"
-                                  />
-                                  <button
-                                    type="button"
-                                    onClick={() => setShowConfirmPassword(prev => !prev)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-700 hover:text-primary transition-colors z-20"
-                                  >
-                                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                                  </button>
-                                </div>
-                              </div>
-                            </>
-                          )}
-
-                          {/* Reset Password fields - side-by-side */}
-                          {authMode === "reset-password" && (
-                            <>
-                              <div className="col-span-1 space-y-1.5">
-                                <Label className="text-gray-600 font-black uppercase tracking-[0.3em] text-[8px] ml-1">New Access Key</Label>
-                                <div className="relative group">
-                                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within:text-primary transition-colors" />
-                                  <Input
-                                    type={showNewPassword ? "text" : "password"}
-                                    placeholder="••••••••"
-                                    value={newPassword}
-                                    onChange={(e) => setNewPassword(e.target.value)}
-                                    className="h-11 pl-11 pr-10 bg-white/[0.02] border-white/10 rounded-xl focus:ring-1 focus:ring-primary text-white placeholder:text-gray-800 font-bold transition-all text-xs focus:border-primary/30"
-                                  />
-                                  <button
-                                    type="button"
-                                    onClick={() => setShowNewPassword(prev => !prev)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-700 hover:text-primary transition-colors z-20"
-                                  >
-                                    {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                                  </button>
-                                </div>
-                              </div>
-
-                              <div className="col-span-1 space-y-1.5">
-                                <Label className="text-gray-600 font-black uppercase tracking-[0.3em] text-[8px] ml-1">Confirm Access Key</Label>
-                                <div className="relative group">
-                                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within:text-primary transition-colors" />
-                                  <Input
-                                    type={showConfirmPassword ? "text" : "password"}
-                                    placeholder="••••••••"
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                    className="h-11 pl-11 pr-10 bg-white/[0.02] border-white/10 rounded-xl focus:ring-1 focus:ring-primary text-white placeholder:text-gray-800 font-bold transition-all text-xs focus:border-primary/30"
-                                  />
-                                  <button
-                                    type="button"
-                                    onClick={() => setShowConfirmPassword(prev => !prev)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-700 hover:text-primary transition-colors z-20"
-                                  >
-                                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                                  </button>
-                                </div>
-                              </div>
-                            </>
-                          )}
-                        </div>
-
-                        {(authMode === "login" || authMode === "signup") && (
-                          <label className="flex items-center gap-2 px-1 cursor-pointer group select-none pt-1">
-                            <input
-                              type="checkbox"
-                              required
-                              className="w-3.5 h-3.5 rounded bg-white/[0.02] border-white/10 text-primary focus:ring-primary focus:ring-offset-0 transition-colors cursor-pointer accent-primary"
-                            />
-                            <span className="text-[8.5px] text-gray-500 font-bold uppercase tracking-wider group-hover:text-gray-400 transition-colors">
-                              I authorize secure workstation security protocol
-                            </span>
-                          </label>
-                        )}
-
-                        {error && (
-                          <motion.div
-                            initial={{ opacity: 0, y: -5 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[9px] font-black uppercase tracking-widest text-center shadow-lg shadow-red-500/5"
-                          >
-                            {error}
-                          </motion.div>
-                        )}
-
-                        <Button type="submit" className="w-full h-11 text-xs font-black uppercase tracking-[0.3em] bg-primary text-black hover:bg-primary/90 rounded-xl shadow-lg shadow-primary/10 transition-all active:scale-[0.98] group overflow-hidden relative mt-1">
-                          {loading ? "Authorizing..." : (
-                            <div className="flex items-center gap-1.5">
-                              {authMode === "login" ? "Authorize & Sign In" : authMode === "signup" ? "Register & Onboard" : "Send Reset Link"}
-                              <ChevronRight className="w-4 h-4" />
-                            </div>
-                          )}
-                        </Button>
-
-                        {(authMode === "login" || authMode === "signup") && (
-                          <>
-                            <div className="text-center">
-                              <p className="text-[8.5px] text-gray-600 font-bold uppercase tracking-widest leading-none">
-                                {authMode === "login"
-                                  ? "New member? Switch to Sign Up tab above to onboard."
-                                  : "Already registered? Switch to Sign In tab above."}
-                              </p>
-                            </div>
-
-                            <div className="flex items-center justify-center gap-1.5 text-[8px] text-white/30 uppercase tracking-[0.2em] pt-1">
-                              <LockKeyhole className="w-3 h-3 text-primary/60" />
-                              <span>AES-256 SECURED GATEWAY</span>
-                            </div>
-                          </>
-                        )}
-                      </>
-                    )}
-                  </form>
-                </motion.div>
-              </AnimatePresence>
-            </div>
+            </form>
           </motion.div>
-        )}
-      </AnimatePresence>
 
-      {/* Institutional Footer */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-center opacity-15 pointer-events-none">
-        <div className="text-[9px] font-black text-white uppercase tracking-[0.8em]">Weblozy Labs • Secure Terminal</div>
-      </div>
+        </div>
+      </motion.div>
     </div>
   );
 }
-

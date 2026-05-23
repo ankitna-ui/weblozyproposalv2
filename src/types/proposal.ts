@@ -1,11 +1,13 @@
 export interface ClientDetails {
   companyName: string;
+  clientLogoUrl?: string;
   contactPerson?: string; // Commented out in form defaults to save Firebase space
   clientName?: string; // Specific name for "Name: Valued Client"
   industry?: string; // Commented out in form defaults to save Firebase space
   industryTitle?: string; // For "Business Automation" heading
   meetingDate?: string; // Commented out in form defaults to save Firebase space
   proposalTitle: string;
+  titleHighlight?: string;
   tagline?: string; // For "We Automate Businesses"
   preparedBy: string;
   referenceId: string;
@@ -174,4 +176,5 @@ export interface Proposal {
   creatorName?: string;
   creatorEmployeeId?: string;
   pageConfig?: PageConfig[];
+  isDownloaded?: boolean;
 }

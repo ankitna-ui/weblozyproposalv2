@@ -20,7 +20,7 @@ export default function StrategicEcosystemPanel({ proposal, currentStep, updateS
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {(proposal.solution.integrations || []).map((link, i) => (
-              <div key={i} className="flex gap-3 group items-center bg-white p-2 pr-4 rounded-[1.25rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
+              <div key={i} className="flex gap-3 group items-center bg-white dark:bg-white/5 p-2 pr-4 rounded-[1.25rem] border border-slate-100 dark:border-white/5 shadow-sm hover:shadow-md transition-all">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 shrink-0">
                    <Globe size={18} />
                 </div>
@@ -38,7 +38,7 @@ export default function StrategicEcosystemPanel({ proposal, currentStep, updateS
               </div>
             ))}
             {(proposal.solution.integrations?.length === 0 || !proposal.solution.integrations) && (
-              <div className="col-span-full py-8 border-2 border-dashed border-slate-100 rounded-[2rem] flex flex-col items-center justify-center text-slate-300 gap-2">
+              <div className="col-span-full py-8 border-2 border-dashed border-slate-100 dark:border-white/5 rounded-[2rem] flex flex-col items-center justify-center text-slate-300 gap-2">
                  <Globe size={24} className="opacity-20" />
                  <p className="text-[10px] font-black uppercase tracking-[0.3em]">No Active Connectivity Nodes</p>
               </div>
@@ -54,7 +54,7 @@ export default function StrategicEcosystemPanel({ proposal, currentStep, updateS
         </div>
         <div className="grid grid-cols-2 gap-6">
           {(proposal.solution.approachPoints || []).map((point: string, i: number) => (
-            <div key={i} className="flex gap-3 items-center bg-white p-2 pr-4 rounded-[1.25rem] border border-slate-100 shadow-sm group transition-all">
+            <div key={i} className="flex gap-3 items-center bg-white dark:bg-white/5 p-2 pr-4 rounded-[1.25rem] border border-slate-100 dark:border-white/5 shadow-sm group transition-all">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0 font-black italic text-[11px]">
                  0{i+1}
               </div>
@@ -74,15 +74,15 @@ export default function StrategicEcosystemPanel({ proposal, currentStep, updateS
         </div>
       </div>
 
-      <div className="space-y-10 border-t border-slate-100 pt-12">
+      <div className="space-y-10 border-t border-slate-100 dark:border-white/5 pt-12">
         <div className="flex justify-between items-center">
            <div className="space-y-1.5">
-             <LabelPremium className="mb-0 text-slate-900">User Access Hierarchy</LabelPremium>
+             <LabelPremium className="mb-0 text-slate-900 dark:text-white">User Access Hierarchy</LabelPremium>
              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">System authority nodes & permissions</p>
            </div>
            <Button 
              onClick={() => updateSolution({ userRoles: [...(proposal.solution.userRoles || []), "New Strategic Role|Define access permissions..."] })} 
-             className="bg-[#0B0E14] hover:bg-black text-white rounded-2xl px-8 h-12 text-[10px] font-black uppercase tracking-widest shadow-2xl"
+             className="bg-slate-50 dark:bg-[#0B0E14] hover:bg-black text-slate-900 dark:text-white rounded-2xl px-8 h-12 text-[10px] font-black uppercase tracking-widest shadow-2xl"
            >
              <Plus size={16} className="mr-2 text-primary" /> Add Access Node
            </Button>
@@ -92,14 +92,14 @@ export default function StrategicEcosystemPanel({ proposal, currentStep, updateS
           {(proposal.solution.userRoles?.length > 0 ? proposal.solution.userRoles : ["Master Administrator|Complete system control & strategic management", "Operator Node|Routine operational workflows & task execution"]).map((roleStr, rIdx) => {
             const [title, desc] = (roleStr || "|").split("|");
             return (
-              <div key={rIdx} className="group relative bg-white border border-slate-100 hover:border-primary/20 rounded-[2.5rem] p-8 transition-all duration-500 shadow-sm hover:shadow-xl hover:-translate-y-1">
-                <div className="absolute -top-4 -left-4 w-12 h-12 bg-[#0B0E14] rounded-2xl flex items-center justify-center text-white text-[12px] font-black italic shadow-2xl border-4 border-white rotate-3">
+              <div key={rIdx} className="group relative bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 hover:border-primary/20 rounded-[2.5rem] p-8 transition-all duration-500 shadow-sm hover:shadow-xl hover:-translate-y-1">
+                <div className="absolute -top-4 -left-4 w-12 h-12 bg-slate-50 dark:bg-[#0B0E14] rounded-2xl flex items-center justify-center text-slate-900 dark:text-white text-[12px] font-black italic shadow-2xl border-4 border-white rotate-3">
                   <ShieldCheck size={20} className="text-primary" />
                 </div>
                 
                 <div className="space-y-5 pt-2">
                   <ModernInput 
-                    className="h-10 bg-slate-50/50 border-none rounded-xl font-black uppercase tracking-tight text-slate-900" 
+                    className="h-10 bg-slate-50 dark:bg-white/5 border-none rounded-xl font-black uppercase tracking-tight text-slate-900 dark:text-white" 
                     placeholder="Role Title" 
                     value={title} 
                     onChange={(e) => {
@@ -109,7 +109,7 @@ export default function StrategicEcosystemPanel({ proposal, currentStep, updateS
                     }}
                   />
                   <ModernTextArea 
-                    className="bg-slate-50/50 border-none rounded-xl text-[11px] font-bold text-slate-500 min-h-[80px]" 
+                    className="bg-slate-50 dark:bg-white/5 border-none rounded-xl text-[11px] font-bold text-slate-500 min-h-[80px]" 
                     placeholder="Responsibilities & Permissions..." 
                     value={desc} 
                     onChange={(e) => {

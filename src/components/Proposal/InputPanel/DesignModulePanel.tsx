@@ -75,7 +75,7 @@ function CustomSwitch({ checked, disabled, onChange }: CustomSwitchProps) {
       style={{ width: "32px", height: "18px" }}
     >
       <span 
-        className={`absolute top-[2px] left-[2px] w-[14px] h-[14px] rounded-full bg-white transition-all duration-300 transform shadow-sm ${
+        className={`absolute top-[2px] left-[2px] w-[14px] h-[14px] rounded-full bg-white dark:bg-white/5 transition-all duration-300 transform shadow-sm ${
           checked ? "translate-x-[14px]" : "translate-x-0"
         }`}
       />
@@ -118,14 +118,14 @@ export default function DesignModulePanel({ proposal, updatePageConfig, setPropo
   };
 
   return (
-    <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-5 bg-slate-50/50">
+    <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-5 bg-slate-50 dark:bg-white/5">
       {/* Step Header */}
       <div>
         <div className="flex items-center gap-2 mb-1.5">
           <div className="w-6 h-[2px] bg-[#99CB48]" />
           <span className="text-[8px] font-black uppercase tracking-[0.4em] text-[#99CB48]">MODULE 12: PROPOSAL ARCHITECTURE</span>
         </div>
-        <h2 className="text-xl font-black uppercase tracking-tighter text-[#0B0E14] leading-none">
+        <h2 className="text-xl font-black uppercase tracking-tighter text-[#0B0E14] dark:text-white leading-none">
           Page <span className="text-[#99CB48] italic">Customizer.</span>
         </h2>
         <p className="text-slate-500 text-[10px] font-bold uppercase tracking-wider mt-1 max-w-md leading-relaxed">
@@ -134,12 +134,12 @@ export default function DesignModulePanel({ proposal, updatePageConfig, setPropo
       </div>
 
       {/* Quick Guide Information Box */}
-      <div className="p-3 rounded-xl bg-white border border-slate-100/80 flex gap-2.5 shadow-sm">
+      <div className="p-3 rounded-xl bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 flex gap-2.5 shadow-sm">
         <div className="w-7 h-7 rounded-lg bg-[#99CB48]/10 flex items-center justify-center text-[#99CB48] shrink-0">
           <Layers size={13} />
         </div>
         <div className="space-y-0.5">
-          <h4 className="text-[10px] font-black uppercase tracking-wider text-slate-800">Dynamic Live Rendering</h4>
+          <h4 className="text-[10px] font-black uppercase tracking-wider text-slate-800 dark:text-gray-200">Dynamic Live Rendering</h4>
           <p className="text-[8.5px] text-slate-400 font-bold uppercase tracking-wider leading-normal">
             Reordering pages or hiding them will instantly update the dynamic PDF generation sequence and active paginations.
           </p>
@@ -148,7 +148,7 @@ export default function DesignModulePanel({ proposal, updatePageConfig, setPropo
 
       {/* Pages Container list */}
       <div className="space-y-2">
-        <div className="flex items-center justify-between text-[8px] font-black uppercase tracking-widest text-slate-400 px-2 pb-0.5 border-b border-slate-100">
+        <div className="flex items-center justify-between text-[8px] font-black uppercase tracking-widest text-slate-400 px-2 pb-0.5 border-b border-slate-100 dark:border-white/5">
           <span>Proposal Page Flow</span>
           <span>Visibility & Order</span>
         </div>
@@ -164,27 +164,27 @@ export default function DesignModulePanel({ proposal, updatePageConfig, setPropo
                   key={page.id}
                   layout
                   transition={{ type: "spring", stiffness: 500, damping: 40 }}
-                  className={`py-2 px-3 rounded-xl bg-white border transition-all duration-300 shadow-sm flex items-center justify-between group ${
-                    page.visible ? "border-slate-100 hover:border-slate-200" : "border-slate-100/50 opacity-60 bg-slate-50/30"
+                  className={`py-2 px-3 rounded-xl bg-white dark:bg-white/5 border transition-all duration-300 shadow-sm flex items-center justify-between group ${
+                    page.visible ? "border-slate-100 dark:border-white/5 hover:border-slate-200 dark:border-white/10" : "border-slate-100 dark:border-white/5 opacity-60 bg-slate-50 dark:bg-white/5"
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     {/* Drag / Position Indicator */}
-                    <div className="w-6 h-6 rounded-md bg-slate-50 border border-slate-100/80 flex items-center justify-center text-[9px] font-mono font-black text-slate-400 shadow-inner group-hover:bg-slate-100/50 transition-colors">
+                    <div className="w-6 h-6 rounded-md bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 flex items-center justify-center text-[9px] font-mono font-black text-slate-400 shadow-inner group-hover:bg-slate-100 dark:bg-white/5 transition-colors">
                       {String(idx + 1).padStart(2, "0")}
                     </div>
 
                     <div className="flex items-center gap-2.5">
                       <div className={`w-6 h-6 rounded-lg flex items-center justify-center transition-colors ${
-                        page.visible ? "bg-[#99CB48]/5 text-[#99CB48]" : "bg-slate-100 text-slate-400"
+                        page.visible ? "bg-[#99CB48]/5 text-[#99CB48]" : "bg-slate-100 dark:bg-white/5 text-slate-400"
                       }`}>
                         <Icon size={12} />
                       </div>
                       <div>
-                        <h4 className="text-[11px] font-black uppercase tracking-wider text-slate-800 flex items-center gap-1">
+                        <h4 className="text-[11px] font-black uppercase tracking-wider text-slate-800 dark:text-gray-200 flex items-center gap-1">
                           {page.name}
                           {isCoverOrClosing && (
-                            <span className="text-[6px] font-black tracking-widest bg-slate-100 text-slate-400 px-1 py-0.2 rounded uppercase select-none">
+                            <span className="text-[6px] font-black tracking-widest bg-slate-100 dark:bg-white/5 text-slate-400 px-1 py-0.2 rounded uppercase select-none">
                               Core
                             </span>
                           )}
@@ -195,12 +195,12 @@ export default function DesignModulePanel({ proposal, updatePageConfig, setPropo
 
                   <div className="flex items-center gap-3">
                     {/* Reordering Controls */}
-                    <div className="flex items-center border border-slate-100 bg-slate-50 rounded-md p-0.5 shadow-inner">
+                    <div className="flex items-center border border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/5 rounded-md p-0.5 shadow-inner">
                       <button
                         type="button"
                         disabled={idx === 0}
                         onClick={() => handleMove(idx, "up")}
-                        className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-slate-900 disabled:opacity-30 disabled:pointer-events-none hover:bg-white transition-all"
+                        className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-slate-900 dark:text-white disabled:opacity-30 disabled:pointer-events-none hover:bg-white dark:bg-white/5 transition-all"
                       >
                         <ChevronUp size={11} />
                       </button>
@@ -209,7 +209,7 @@ export default function DesignModulePanel({ proposal, updatePageConfig, setPropo
                         type="button"
                         disabled={idx === pageConfig.length - 1}
                         onClick={() => handleMove(idx, "down")}
-                        className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-slate-900 disabled:opacity-30 disabled:pointer-events-none hover:bg-white transition-all"
+                        className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-slate-900 dark:text-white disabled:opacity-30 disabled:pointer-events-none hover:bg-white dark:bg-white/5 transition-all"
                       >
                         <ChevronDown size={11} />
                       </button>

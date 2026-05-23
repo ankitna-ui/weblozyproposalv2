@@ -1,10 +1,10 @@
 const TOTAL_PAGE_HEIGHT = 1123;
-const HEADER_FOOTER_PADDING = 250; // A4 page height minus header, footer, padding
-const FIRST_PAGE_TITLE_AREA = 120; // Extra space taken by the title on the first page
+const HEADER_FOOTER_PADDING = 320; // Accounts for A4 margins, headers, footers
+const FIRST_PAGE_TITLE_AREA = 70; // Extra space taken by the title on the first page
 
-const BASE_CARD_HEIGHT = 90; // suggested baseCardHeight
-const FEATURE_ROW_HEIGHT = 34; // suggested featureRowHeight
-const CARD_GAP = 16; // suggested cardGap
+const BASE_CARD_HEIGHT = 46; // Header and padding of module card
+const FEATURE_ROW_HEIGHT = 38; // Height per feature row
+const CARD_GAP = 20; // space-y-2 -> 8px
 
 export function paginateModules(allModules: any[]): any[][] {
   const pages: any[][] = [];
@@ -30,7 +30,7 @@ export function paginateModules(allModules: any[]): any[][] {
     }
 
     currentPage.push(module);
-    currentHeight += moduleHeight + (currentPage.length > 1 ? CARD_GAP : 0);
+    currentHeight += moduleHeight + gapToAdd;
   });
 
   if (currentPage.length > 0) {
@@ -39,5 +39,3 @@ export function paginateModules(allModules: any[]): any[][] {
 
   return pages;
 }
-
-

@@ -62,7 +62,7 @@ const TokenAnalyticsBar: React.FC = () => {
   };
 
   return (
-    <div className="w-full bg-[#0B0E14] rounded-2xl p-4 border border-white/5 shadow-2xl relative overflow-hidden group mb-6 transition-all duration-300">
+    <div className="w-full bg-slate-50 dark:bg-[#0B0E14] rounded-2xl p-4 border border-slate-200 dark:border-white/5 shadow-2xl relative overflow-hidden group mb-6 transition-all duration-300">
       {/* Dynamic Background Glows */}
       <AnimatePresence>
         {isQuotaExceeded ? (
@@ -117,11 +117,11 @@ const TokenAnalyticsBar: React.FC = () => {
             >
               <div className="flex items-center justify-between gap-3 border-b border-white/[0.04] pb-2.5">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-[#3ABEF9]">
+                  <div className="w-7 h-7 rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/10 flex items-center justify-center shrink-0 text-[#3ABEF9]">
                     <Cpu size={14} />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-[9px] font-black uppercase tracking-wider text-white">AI Neural Engine</span>
+                    <span className="text-[9px] font-black uppercase tracking-wider text-slate-900 dark:text-white">AI Neural Engine</span>
                     <div className="flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                       <span className="text-[7.5px] font-bold uppercase tracking-wider text-emerald-400">Gateway Active</span>
@@ -129,19 +129,19 @@ const TokenAnalyticsBar: React.FC = () => {
                   </div>
                 </div>
                 <div className="text-right flex flex-col">
-                  <span className="text-[10px] font-black text-white">{(remaining / 1000).toFixed(1)}k</span>
-                  <span className="text-[6.5px] font-bold text-white/40 uppercase tracking-widest">Credits Free</span>
+                  <span className="text-[10px] font-black text-slate-900 dark:text-white">{(remaining / 1000).toFixed(1)}k</span>
+                  <span className="text-[6.5px] font-bold text-slate-900 dark:text-white/40 uppercase tracking-widest">Credits Free</span>
                 </div>
               </div>
 
               {/* Progress & Token Usage Stats */}
               <div className="space-y-1.5">
-                <div className="flex justify-between items-center text-[7.5px] font-black uppercase tracking-widest text-white/40">
+                <div className="flex justify-between items-center text-[7.5px] font-black uppercase tracking-widest text-slate-900 dark:text-white/40">
                   <div className="flex items-center gap-1">
                     <Activity size={10} className="text-[#3ABEF9]" />
                     <span>Telemetry Stream</span>
                   </div>
-                  <span className="tabular-nums text-white/50">
+                  <span className="tabular-nums text-slate-900 dark:text-white/50">
                     {used.toLocaleString()} / {total.toLocaleString()} TKN
                   </span>
                 </div>
@@ -157,12 +157,12 @@ const TokenAnalyticsBar: React.FC = () => {
 
               {/* Last Action details */}
               {lastUsage > 0 && secondsAgo !== null && (
-                <div className="flex items-center justify-between text-[8px] font-bold uppercase pt-1.5 border-t border-white/[0.04] text-white/40">
+                <div className="flex items-center justify-between text-[8px] font-bold uppercase pt-1.5 border-t border-white/[0.04] text-slate-900 dark:text-white/40">
                   <span>Last Charge:</span>
-                  <div className="flex items-center gap-1 text-white/60">
+                  <div className="flex items-center gap-1 text-slate-900 dark:text-white/60">
                     <Zap size={9} className="text-amber-400 fill-amber-400/20 shrink-0" />
                     <span>+{lastUsage.toLocaleString()} TKN</span>
-                    <span className="text-white/30 font-normal">({secondsAgo}s ago)</span>
+                    <span className="text-slate-900 dark:text-white/30 font-normal">({secondsAgo}s ago)</span>
                   </div>
                 </div>
               )}
