@@ -363,7 +363,15 @@ export default function Dashboard() {
 
         {/* Recent Assets Table */}
         <div className="bg-white dark:bg-[#11151D] border border-slate-200 dark:border-white/5 rounded-2xl p-6">
-          <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-700 dark:text-gray-300 mb-6">Recent Strategic Assets</h3>
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-700 dark:text-gray-300">Recent Strategic Assets</h3>
+            <button 
+              onClick={() => navigate('/saved')}
+              className="text-[10px] font-bold text-[#99CB48] uppercase tracking-wider hover:text-[#7ba936] transition-colors"
+            >
+              View All Assets →
+            </button>
+          </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
@@ -381,7 +389,7 @@ export default function Dashboard() {
                   <tr>
                     <td colSpan={6} className="py-8 text-center text-sm text-slate-500">No proposals found.</td>
                   </tr>
-                ) : filteredProposals.map((p, i) => {
+                ) : filteredProposals.slice(0, 3).map((p, i) => {
                   const isDraft = (p.client?.status || 'Draft') === 'Draft';
                   return (
                     <tr key={p.id} className="group hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors">

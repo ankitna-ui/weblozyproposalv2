@@ -14,6 +14,7 @@ import {
 import { auth, db } from "@/lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { AnimatedBackground } from "@/components/ui/AnimatedBackground";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -132,7 +133,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-slate-50 dark:bg-[#07090C] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-slate-200 dark:from-[#0B101A] dark:via-[#07090C] dark:to-[#040507] font-sans selection:bg-[#99CB48]/30 overflow-hidden relative transition-colors duration-500">
-      
+      <AnimatedBackground />
       {/* CSS FIX FOR BROWSER AUTOFILL BACKGROUND */}
       <style dangerouslySetInnerHTML={{__html: `
         input:-webkit-autofill,
@@ -142,66 +143,7 @@ export default function LoginPage() {
             transition: background-color 5000s ease-in-out 0s;
             -webkit-text-fill-color: currentColor !important;
         }
-        @keyframes moveGrid {
-           0% { background-position-y: 0px; }
-           100% { background-position-y: 100px; }
-        }
-        .animate-grid {
-           animation: moveGrid 3s linear infinite;
-        }
       `}} />
-      {/* AMBIENT GLOWING ORBS */}
-      <motion.div 
-         animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.25, 0.15] }}
-         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-         className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-[#99CB48]/20 dark:bg-[#99CB48]/10 blur-[120px] pointer-events-none"
-      />
-      <motion.div 
-         animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
-         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-         className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-blue-500/15 dark:bg-blue-600/10 blur-[120px] pointer-events-none"
-      />
-
-      {/* NOISE TEXTURE */}
-      <div 
-         className="absolute inset-0 opacity-[0.025] dark:opacity-[0.015] pointer-events-none mix-blend-overlay" 
-         style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} 
-      />
-
-
-      {/* GLOBAL 3D GRID BACKGROUND (Dark Mode) */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden hidden dark:flex justify-center items-end opacity-40 transition-opacity duration-500">
-         <div 
-            className="w-[200vw] h-[60vh] animate-grid"
-            style={{
-               background: `
-                  linear-gradient(transparent 0%, #99CB48 2%, transparent 4%),
-                  linear-gradient(90deg, transparent 0%, #99CB48 1%, transparent 2%)
-               `,
-               backgroundSize: '100px 40px, 40px 100px',
-               transform: 'perspective(500px) rotateX(60deg) translateY(100px) translateZ(-200px)',
-               maskImage: 'linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%)'
-            }}
-         />
-      </div>
-
-      {/* GLOBAL 3D GRID BACKGROUND (Light Mode) */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden flex dark:hidden justify-center items-end opacity-100 transition-opacity duration-500">
-         <div 
-            className="w-[200vw] h-[60vh] animate-grid"
-            style={{
-               background: `
-                  linear-gradient(transparent 0%, #7AA82B 3%, transparent 5%),
-                  linear-gradient(90deg, transparent 0%, #7AA82B 2%, transparent 3%)
-               `,
-               backgroundSize: '100px 40px, 40px 100px',
-               transform: 'perspective(500px) rotateX(60deg) translateY(100px) translateZ(-200px)',
-               maskImage: 'linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%)'
-            }}
-         />
-      </div>
-
-      {/* Main Container - Adjusted max-w to bring panels closer to center */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -319,7 +261,7 @@ export default function LoginPage() {
           <motion.div 
             initial="hidden"
             animate="visible"
-            className="w-full max-w-[460px] h-[650px] overflow-y-auto custom-scrollbar flex flex-col bg-white dark:bg-[#0E1218] border border-slate-200 dark:border-white/[0.06] rounded-[2rem] p-8 sm:p-10 shadow-2xl dark:shadow-2xl relative z-10"
+            className="w-full max-w-[460px] h-[650px] overflow-y-auto custom-scrollbar flex flex-col bg-white/70 dark:bg-[#0A0F16]/40 backdrop-blur-3xl border border-slate-200 dark:border-white/[0.05] shadow-2xl dark:shadow-[0_0_80px_rgba(0,0,0,0.5)] rounded-[2.5rem] p-8 sm:p-10 relative z-10"
           >
             
             <motion.div variants={itemVariants} className="mb-8">
@@ -333,7 +275,7 @@ export default function LoginPage() {
 
             {/* Segmented Control / Tab Switcher */}
             {(authMode === "login" || authMode === "signup") && (
-              <motion.div variants={itemVariants} className="flex bg-slate-100 dark:bg-[#161B23] rounded-xl mb-8 p-1">
+              <motion.div variants={itemVariants} className="flex bg-slate-100/50 dark:bg-white/[0.03] border border-transparent dark:border-white/[0.05] rounded-xl mb-8 p-1 backdrop-blur-sm">
                 {(['login', 'signup'] as const).map((mode) => (
                   <button
                     key={mode}
