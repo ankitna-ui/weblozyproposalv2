@@ -52,7 +52,7 @@ export default function StrategicEcosystemPanel({ proposal, currentStep, updateS
           <LabelPremium className="mb-0">Implementation Pillars</LabelPremium>
           <button type="button" onClick={() => updateSolution({ approachPoints: [...(proposal.solution.approachPoints || []), ""] })} className="text-[10px] font-black uppercase text-primary hover:text-primary/80 transition-colors bg-primary/5 px-4 py-1.5 rounded-full">+ Add Pillar</button>
         </div>
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {(proposal.solution.approachPoints || []).map((point: string, i: number) => (
             <div key={i} className="flex gap-3 items-center bg-white dark:bg-white/5 p-2 pr-4 rounded-[1.25rem] border border-slate-100 dark:border-white/5 shadow-sm group transition-all">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0 font-black italic text-[11px]">

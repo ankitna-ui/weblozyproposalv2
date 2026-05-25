@@ -306,7 +306,7 @@ export default function ProposalPreview() {
           width: 794,
           height: 1123,
           pixelRatio: PDF_EXPORT_CONFIG.pixelRatio,
-          cacheBust: true,
+          cacheBust: false,
           backgroundColor: "#ffffff"
         });
 

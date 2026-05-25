@@ -5,7 +5,7 @@ export default function CorporateLegacyPanel({ proposal, currentStep, updateExpe
     <div className="space-y-10">
       <SectionHeader title="Operational Authority" subtitle="Display your track record and market authority" stepNumber={currentStep + 1} />
       
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
         <div className="space-y-2">
           <LabelPremium>Target Industry</LabelPremium>
           <ModernInput placeholder="e.g. Retail Automation" value={proposal.client.industryTitle} onChange={(e) => updateClient({ industryTitle: e.target.value })} />
@@ -16,7 +16,7 @@ export default function CorporateLegacyPanel({ proposal, currentStep, updateExpe
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
         <div className="space-y-2">
           <LabelPremium>Years Experience</LabelPremium>
           <ModernInput placeholder="15+" value={proposal.experience.yearsOfExperience} onChange={(e) => updateExperience({ yearsOfExperience: e.target.value })} />

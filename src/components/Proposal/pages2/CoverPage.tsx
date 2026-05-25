@@ -141,6 +141,7 @@ const CoverPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
                <img 
                  src={proposal?.client?.clientLogoUrl || weblozyLogo} 
                  alt={proposal?.client?.clientLogoUrl ? "Client Logo" : "Weblozy Default Logo"} 
+                 crossOrigin="anonymous"
                  className="w-full h-full max-w-full max-h-[220px] object-contain drop-shadow-sm transition-transform duration-700 group-hover:scale-105" 
                />
              </div>

@@ -148,11 +148,11 @@ export default function LoginPage() {
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-[1100px] mx-auto flex flex-col lg:flex-row h-screen lg:h-[750px] lg:max-h-[90vh] relative z-10 p-4 sm:p-8 lg:gap-12"
+        className="w-full max-w-[1100px] mx-auto flex flex-col lg:flex-row h-auto min-h-screen lg:min-h-0 lg:h-[750px] lg:max-h-[90vh] relative z-10 p-4 sm:p-8 lg:gap-12 overflow-y-auto lg:overflow-visible"
       >
         
         {/* === LEFT PANEL (BRANDING) === */}
-        <div className="w-full lg:w-[50%] flex flex-col justify-between py-8 lg:py-12 relative">
+        <div className="w-full lg:w-[50%] flex flex-col justify-center lg:justify-between py-8 sm:py-12 relative mb-8 lg:mb-0">
           
           {/* Header */}
           <motion.div 
@@ -256,7 +256,7 @@ export default function LoginPage() {
         </div>
 
         {/* === RIGHT PANEL (FORM CARD) === */}
-        <div className="w-full lg:w-[50%] flex items-center justify-center relative h-full">
+        <div className="w-full lg:w-[50%] flex items-center justify-center relative h-auto lg:h-full pb-8 lg:pb-0">
           
           <motion.div 
             initial="hidden"

@@ -3,20 +3,46 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
+    // Function to check if user is a Super Admin
+    function isSuperAdmin() {
+      return request.auth != null && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'Super Admin';
+    }
+
     // Proposal Security Rules
     match /proposals/{proposalId} {
-      // Allow creation if the user is authenticated
       allow create: if request.auth != null;
-      
-      // BOLA Protection: Allow read/update/delete only if the user owns the document
-      allow read, update, delete: if request.auth != null && 
-        (resource.data.userId == request.auth.uid || proposalId == 'sample-1' || proposalId == 'sample-2');
+      allow read, update, delete: if isSuperAdmin() || (request.auth != null && 
+        (resource.data.userId == request.auth.uid || proposalId == 'sample-1' || proposalId == 'sample-2'));
     }
 
     // User Profile Security Rules
     match /users/{userId} {
-      // Allow read, write (create/update) only if the user is authenticated and owns the document (matches their own UID)
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read, write: if isSuperAdmin() || (request.auth != null && request.auth.uid == userId);
+    }
+
+    // Drafts Security Rules
+    match /drafts/{draftId} {
+      allow create: if request.auth != null;
+      allow read, update, delete: if isSuperAdmin() || (request.auth != null && resource.data.userId == request.auth.uid);
+    }
+    
+    // System-wide Collections (Super Admin Only)
+    match /templates/{docId} {
+      allow read: if request.auth != null; // Everyone can read templates
+      allow write: if isSuperAdmin();
+    }
+    match /globalAssets/{docId} {
+      allow read: if request.auth != null; // Everyone can read assets
+      allow write: if isSuperAdmin();
+    }
+    match /auditLogs/{docId} {
+      allow create: if request.auth != null; // Users might trigger logs
+      allow read, update, delete: if isSuperAdmin();
+    }
+    match /systemSettings/{docId} {
+      allow read: if request.auth != null;
+      allow write: if isSuperAdmin();
     }
     
     // Default deny for everything else

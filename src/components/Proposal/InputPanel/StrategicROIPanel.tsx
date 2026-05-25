@@ -187,7 +187,7 @@ export default function StrategicROIPanel({ proposal, currentStep, updateROI }: 
             Select all that apply
           </span>
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {PROBLEMS_LIST.map((problem) => {
             const selected = (proposal.roi.businessProblems || []).includes(problem);
             return (

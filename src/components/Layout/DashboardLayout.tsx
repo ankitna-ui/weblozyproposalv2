@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
   Plus, FileText, Users, LogOut, Search, Settings,
-  Home, FileEdit, Database, UserCog, ToyBrick, Sun, Moon, Download
+  Home, FileEdit, Database, UserCog, ToyBrick, Sun, Moon, Download, Menu, X
 } from "lucide-react";
 import { useTheme } from "@/components/ThemeProvider";
 import { auth, db } from "@/lib/firebase";
@@ -23,6 +23,8 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
   const location = useLocation();
   const { theme, setTheme } = useTheme();
   const [proposals, setProposals] = useState<(Proposal & { id: string })[]>([]);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -61,7 +63,25 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
     <div className="flex h-screen bg-slate-50 dark:bg-[#0B0E14] text-slate-900 dark:text-white overflow-hidden font-sans transition-colors">
       
       {/* ─── LEFT SIDEBAR ─── */}
-      <aside className="w-64 bg-white dark:bg-[#11151D] border-r border-slate-200 dark:border-white/5 flex flex-col justify-between hidden lg:flex h-full shrink-0 transition-colors">
+      
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden" 
+          onClick={() => setIsMobileMenuOpen(false)} 
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={`fixed lg:relative z-50 w-64 bg-white dark:bg-[#11151D] border-r border-slate-200 dark:border-white/5 flex flex-col justify-between h-full shrink-0 transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
+        {/* Mobile Close Button */}
+        <button 
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="absolute top-6 right-4 p-2 text-slate-500 lg:hidden"
+        >
+          <X size={20} />
+        </button>
+
         <div className="p-6 overflow-y-auto custom-scrollbar">
           {/* Logo Area */}
           <div className="mb-10 pl-2">
@@ -152,7 +172,23 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
         <div className="absolute top-0 left-1/4 w-[40%] h-[20%] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
         {/* ─── TOP HEADER ─── */}
-        <header className="h-20 border-b border-slate-200 dark:border-white/5 flex items-center justify-between px-8 bg-white/80 dark:bg-[#0B0E14]/80 backdrop-blur-xl shrink-0 z-10 transition-colors">
+        <header className="h-20 border-b border-slate-200 dark:border-white/5 flex items-center justify-between px-4 sm:px-8 bg-white/80 dark:bg-[#0B0E14]/80 backdrop-blur-xl shrink-0 z-10 transition-colors">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="p-2 -ml-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 rounded-lg lg:hidden"
+            >
+              <Menu size={24} />
+            </button>
+            <div className="hidden sm:block">
+              <h2 className="text-[11px] font-black uppercase tracking-[0.4em] text-[#99CB48]">Automation OS</h2>
+              <p className="text-[9px] text-slate-500 dark:text-gray-500 uppercase tracking-widest mt-0.5">Strategic Command Center</p>
+            </div>
+            <div className="sm:hidden flex items-center gap-2">
+               <img src={banner2Logo} alt="Weblozy" className="hidden dark:block h-6 w-auto object-contain" />
+               <img src={bannerLogo} alt="Weblozy" className="block dark:hidden h-6 w-auto object-contain" />
+            </div>
+          </div>
           <div className="hidden md:block">
             <h2 className="text-[11px] font-black uppercase tracking-[0.4em] text-[#99CB48]">Automation OS</h2>
             <p className="text-[9px] text-slate-500 dark:text-gray-500 uppercase tracking-widest mt-0.5">Strategic Command Center</p>
@@ -171,7 +207,7 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
             </div>
           </div>
 
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-2 sm:gap-5">
             <button 
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               className="text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors"
@@ -182,11 +218,11 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
 
             
             <button onClick={handleLogout} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-red-500 hover:text-red-600 dark:hover:text-red-400 transition-colors ml-2">
-              <LogOut size={16} /> Logout
+              <LogOut size={16} /> <span className="hidden sm:inline">Logout</span>
             </button>
             
-            <Button onClick={() => navigate('/create')} className="bg-[#99CB48] text-black hover:bg-[#88B540] h-11 px-6 rounded-full font-black uppercase text-[10px] tracking-[0.2em] shadow-lg shadow-[#99CB48]/20 gap-2 ml-2 transition-transform active:scale-95">
-              <Plus className="w-4 h-4" /> New Strategy
+            <Button onClick={() => navigate('/create')} className="bg-[#99CB48] text-black hover:bg-[#88B540] h-9 sm:h-11 px-3 sm:px-6 rounded-full font-black uppercase text-[10px] tracking-widest sm:tracking-[0.2em] shadow-lg shadow-[#99CB48]/20 gap-1 sm:gap-2 ml-1 sm:ml-2 transition-transform active:scale-95">
+              <Plus className="w-4 h-4" /> <span className="hidden sm:inline">New Strategy</span><span className="sm:hidden">New</span>
             </Button>
           </div>
         </header>

@@ -99,7 +99,7 @@ export default function CoverIdentityPanel({ proposal, currentStep, updateClient
         <ModernInput placeholder="e.g. Acme Corporation" value={proposal.client.titleHighlight || ""} onChange={(e) => updateClient({ titleHighlight: e.target.value })} />
       </div>
 
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
         <div className="space-y-2">
           <LabelPremium>Framework Title</LabelPremium>
           <ModernInput placeholder="Executive Protocol" value={proposal.client.frameworkTitle} onChange={(e) => updateClient({ frameworkTitle: e.target.value })} />
@@ -115,7 +115,7 @@ export default function CoverIdentityPanel({ proposal, currentStep, updateClient
         <ModernInput placeholder="E-Commerce & Logistics" value={proposal.client.industryTitle} onChange={(e) => updateClient({ industryTitle: e.target.value })} />
       </div>
 
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
         <div className="space-y-2">
           <LabelPremium>Filing Date</LabelPremium>
           <ModernInput value={proposal.client.filingDate} onChange={(e) => updateClient({ filingDate: e.target.value })} />

@@ -10,7 +10,7 @@ export default function OperationalAuditPanel({ proposal, currentStep, updateSit
         <ModernTextArea placeholder="Describe current workflow friction and operational gaps..." value={proposal.situation.currentWorkflow} onChange={(e) => updateSituation({ currentWorkflow: e.target.value })} />
       </div>
 
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
         <div className="space-y-2">
           <LabelPremium>Revenue Leakage</LabelPremium>
           <ModernInput placeholder="₹10k+ / Mo" value={proposal.situation.revenueLeakage} onChange={(e) => updateSituation({ revenueLeakage: e.target.value })} />

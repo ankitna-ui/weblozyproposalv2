@@ -8,6 +8,8 @@ import LoadingScreen from '@/components/ui/LoadingScreen';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import SuperAdminRoute from '@/components/Navigation/SuperAdminRoute';
+
 // Lazy load route pages for maximum initial load performance
 const LoginPage = lazy(() => import('@/pages/Auth/LoginPage'));
 const Dashboard = lazy(() => import('@/pages/Dashboard/Dashboard'));
@@ -21,6 +23,10 @@ const UserProfile = lazy(() => import('@/pages/Users/UserProfile'));
 const ActiveDrafts = lazy(() => import('@/pages/Strategic/ActiveDrafts'));
 const InstitutionalAssets = lazy(() => import('@/pages/Strategic/InstitutionalAssets'));
 const ClientNetwork = lazy(() => import('@/pages/Strategic/ClientNetwork'));
+const SuperAdminLayout = lazy(() => import('@/components/Layout/SuperAdminLayout'));
+const SuperAdminDashboard = lazy(() => import('@/pages/SuperAdmin/SuperAdminDashboard'));
+const SuperAdminUsers = lazy(() => import('@/pages/SuperAdmin/SuperAdminUsers'));
+const SuperAdminProposals = lazy(() => import('@/pages/SuperAdmin/SuperAdminProposals'));
 const ErrorPage = lazy(() => import('@/pages/Error/ErrorPage'));
 
 function App() {
@@ -114,6 +120,15 @@ function App() {
             element={user ? <UserProfile /> : <Navigate to="/login" />} 
           />
 
+          {/* SUPER ADMIN ROUTES */}
+          <Route path="/super-admin" element={<SuperAdminRoute><SuperAdminLayout /></SuperAdminRoute>}>
+            <Route index element={<Navigate to="/super-admin/dashboard" replace />} />
+            <Route path="dashboard" element={<SuperAdminDashboard />} />
+            <Route path="users" element={<SuperAdminUsers />} />
+            <Route path="proposals" element={<SuperAdminProposals />} />
+            <Route path="*" element={<div className="p-8 text-white">Module Under Construction</div>} />
+          </Route>
+          
           <Route path="*" element={<ErrorPage type="404" />} />
         </Routes>
       </Suspense>
