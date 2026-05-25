@@ -279,7 +279,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F4F7F9] dark:bg-[#06080A] font-sans transition-all duration-500 ease-in-out overflow-y-auto p-4 sm:p-8">
+    <div className="min-h-[100dvh] flex items-center justify-center bg-[#F4F7F9] dark:bg-[#06080A] font-sans transition-all duration-500 ease-in-out overflow-y-auto p-4 sm:p-8">
       <AnimatePresence mode="wait">
         {authMode === "loading" ? (
           <motion.div

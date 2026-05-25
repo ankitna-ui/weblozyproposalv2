@@ -84,7 +84,7 @@ export default function ErrorPage({ type: propType }: ErrorPageProps) {
   const IconComponent = content.icon;
 
   return (
-    <div className="min-h-screen w-full flex flex-col justify-between bg-[#F8FAFC] relative overflow-hidden select-none" style={{
+    <div className="min-h-[100dvh] w-full flex flex-col justify-between bg-[#F8FAFC] relative overflow-hidden select-none" style={{
       backgroundImage: 'radial-gradient(#e2e8f0 1.5px, transparent 1.5px)',
       backgroundSize: '24px 24px'
     }}>

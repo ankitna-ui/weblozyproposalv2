@@ -59,8 +59,14 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
 
   const isActive = (path: string) => location.pathname === path;
 
+  // Auto-close sidebar on mobile when navigating
+  const mobileNavigate = (path: string) => {
+    setIsMobileMenuOpen(false);
+    navigate(path);
+  };
+
   return (
-    <div className="flex h-screen bg-slate-50 dark:bg-[#0B0E14] text-slate-900 dark:text-white overflow-hidden font-sans transition-colors">
+    <div className="flex h-[100dvh] bg-slate-50 dark:bg-[#0B0E14] text-slate-900 dark:text-white overflow-hidden font-sans transition-colors">
       
       {/* ─── LEFT SIDEBAR ─── */}
       
@@ -93,7 +99,7 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
           <div className="space-y-8">
             <div>
               <div 
-                onClick={() => navigate('/dashboard')} 
+                onClick={() => mobileNavigate('/dashboard')} 
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${isActive('/dashboard') || isActive('/') ? 'bg-[#99CB48]/10 text-[#99CB48] border border-[#99CB48]/20' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/5'}`}
               >
                 <Home size={16} />
@@ -105,7 +111,7 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
               <div className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-gray-500 mb-3 px-4">Strategic Management</div>
               <div className="space-y-1">
                 <div 
-                  onClick={() => navigate('/saved')} 
+                  onClick={() => mobileNavigate('/saved')} 
                   className={`flex items-center justify-between px-4 py-2.5 rounded-xl cursor-pointer transition-colors ${isActive('/saved') ? 'bg-blue-500/10 text-blue-500' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/5'}`}
                 >
                   <div className="flex items-center gap-3">
@@ -116,7 +122,7 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
                 </div>
                 
                 <div 
-                  onClick={() => navigate('/drafts')} 
+                  onClick={() => mobileNavigate('/drafts')} 
                   className={`flex items-center justify-between px-4 py-2.5 rounded-xl cursor-pointer transition-colors ${isActive('/drafts') ? 'bg-[#99CB48]/10 text-[#99CB48]' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/5'}`}
                 >
                   <div className="flex items-center gap-3">
@@ -127,7 +133,7 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
                 </div>
                 
                 <div 
-                  onClick={() => navigate('/saved')} 
+                  onClick={() => mobileNavigate('/saved')} 
                   className={`flex items-center justify-between px-4 py-2.5 rounded-xl cursor-pointer transition-colors ${!isActive('/drafts') && !isActive('/saved') && !isActive('/dashboard') && !isActive('/') ? 'bg-orange-500/10 text-orange-500' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/5'}`}
                 >
                   <div className="flex items-center gap-3">
@@ -143,7 +149,7 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
               <div className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-gray-500 mb-3 px-4">Settings</div>
               <div className="space-y-1">
                 <div 
-                  onClick={() => navigate('/profile')} 
+                  onClick={() => mobileNavigate('/profile')} 
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${isActive('/profile') ? 'bg-[#99CB48]/10 text-[#99CB48] border border-[#99CB48]/20' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/5'}`}
                 >
                   <UserCog size={16} />
@@ -189,10 +195,6 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
                <img src={bannerLogo} alt="Weblozy" className="block dark:hidden h-6 w-auto object-contain" />
             </div>
           </div>
-          <div className="hidden md:block">
-            <h2 className="text-[11px] font-black uppercase tracking-[0.4em] text-[#99CB48]">Automation OS</h2>
-            <p className="text-[9px] text-slate-500 dark:text-gray-500 uppercase tracking-widest mt-0.5">Strategic Command Center</p>
-          </div>
 
           <div className="flex-1 max-w-xl mx-8 hidden lg:block">
             <div className="flex items-center bg-slate-50 dark:bg-[#11151D] border border-slate-200 dark:border-white/5 rounded-full px-5 h-11 w-full focus-within:border-slate-300 dark:focus-within:border-white/20 transition-colors">
@@ -228,7 +230,7 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
         </header>
 
         {/* ─── SCROLLABLE PAGE CONTENT ─── */}
-        <main className="flex-1 overflow-y-auto p-8 custom-scrollbar relative z-10">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 custom-scrollbar relative z-10">
           {children}
         </main>
       </div>

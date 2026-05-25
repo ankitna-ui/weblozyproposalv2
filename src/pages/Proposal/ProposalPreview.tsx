@@ -98,7 +98,7 @@ export default function ProposalPreview() {
 
   if (!proposal) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0B0E14]">
+      <div className="min-h-[100dvh] flex items-center justify-center bg-[#0B0E14]">
         <div className="text-center space-y-4">
           <h2 className="text-2xl font-black text-white uppercase tracking-wider">No proposal data found</h2>
           <Button onClick={() => navigate('/create')} className="bg-[#99CB48] text-black">Go to Create</Button>
@@ -419,7 +419,7 @@ export default function ProposalPreview() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]" style={{
+    <div className="min-h-[100dvh] bg-[#F8FAFC]" style={{
       backgroundImage: 'radial-gradient(#e2e8f0 1.5px, transparent 1.5px)',
       backgroundSize: '24px 24px'
     }}>

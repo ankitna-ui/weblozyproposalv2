@@ -389,8 +389,8 @@ export default function CreateProposal() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="flex h-screen overflow-hidden">
+    <div className="min-h-[100dvh] bg-white">
+      <div className="flex h-[100dvh] overflow-hidden">
         {/* Modernized Input Panel */}
         <div className="w-full md:w-1/2 lg:w-[42%] xl:w-[40%] flex flex-col border-r border-slate-100 dark:border-white/5 bg-[#F8FAFC] dark:bg-[#11151D] shadow-[20px_0_40px_-15px_rgba(0,0,0,0.03)] z-30 overflow-hidden relative transition-colors">
           

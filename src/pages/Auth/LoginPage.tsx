@@ -132,7 +132,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-slate-50 dark:bg-[#07090C] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-slate-200 dark:from-[#0B101A] dark:via-[#07090C] dark:to-[#040507] font-sans selection:bg-[#99CB48]/30 overflow-hidden relative transition-colors duration-500">
+    <div className="min-h-[100dvh] w-full flex items-center justify-center bg-slate-50 dark:bg-[#07090C] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-slate-200 dark:from-[#0B101A] dark:via-[#07090C] dark:to-[#040507] font-sans selection:bg-[#99CB48]/30 overflow-hidden relative transition-colors duration-500">
       <AnimatedBackground />
       {/* CSS FIX FOR BROWSER AUTOFILL BACKGROUND */}
       <style dangerouslySetInnerHTML={{__html: `
@@ -148,7 +148,7 @@ export default function LoginPage() {
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-[1100px] mx-auto flex flex-col lg:flex-row h-auto min-h-screen lg:min-h-0 lg:h-[750px] lg:max-h-[90vh] relative z-10 p-4 sm:p-8 lg:gap-12 overflow-y-auto lg:overflow-visible"
+        className="w-full max-w-[1100px] mx-auto flex flex-col lg:flex-row h-auto min-h-[100dvh] lg:min-h-0 lg:h-[750px] lg:max-h-[90vh] relative z-10 p-4 sm:p-8 lg:gap-12 overflow-y-auto lg:overflow-visible"
       >
         
         {/* === LEFT PANEL (BRANDING) === */}

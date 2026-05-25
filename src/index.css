@@ -79,8 +79,34 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Outfit', sans-serif !important;
+    /* Prevent iOS bounce scroll on body */
+    overscroll-behavior: none;
+    /* Safe area for notched phones */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+  html, body {
+    /* Fix iOS Safari 100vh bug */
+    height: 100%;
+    overflow: hidden;
+  }
+  #root {
+    height: 100%;
+    overflow: hidden;
   }
 }
+
+/* Mobile touch scrolling fix */
+.custom-scrollbar,
+main,
+[class*="overflow-y-auto"],
+[class*="overflow-x-auto"] {
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+/* Hide scrollbar utility (for mobile step tabs etc) */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* Premium Shadows */
 .shadow-premium {

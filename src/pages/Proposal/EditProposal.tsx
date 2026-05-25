@@ -337,7 +337,7 @@ export default function EditProposal() {
 
   if (isLoading) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center bg-slate-50 dark:bg-[#0B0E14]">
+      <div className="h-[100dvh] w-screen flex items-center justify-center bg-slate-50 dark:bg-[#0B0E14]">
         <div className="flex flex-col items-center gap-6">
           <Loader2 className="w-12 h-12 text-primary animate-spin" />
           <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-900 dark:text-white/40">Loading Protocol...</p>
@@ -367,8 +367,8 @@ export default function EditProposal() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#07090C] transition-colors duration-500">
-      <div className="flex h-screen overflow-hidden">
+    <div className="min-h-[100dvh] bg-slate-50 dark:bg-[#07090C] transition-colors duration-500">
+      <div className="flex h-[100dvh] overflow-hidden">
         {/* Modernized Input Panel with Glassmorphism */}
         <div className="w-full md:w-1/2 lg:w-[42%] xl:w-[40%] flex flex-col border-r border-slate-100 bg-white dark:bg-[#0B0E14] z-30 overflow-hidden relative shadow-[20px_0_60px_-15px_rgba(0,0,0,0.05)] dark:shadow-none transition-colors duration-500">
            
