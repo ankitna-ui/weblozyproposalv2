@@ -46,18 +46,26 @@ const CoverPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
   return (
     <section className="a4-page relative overflow-hidden bg-[#FAFCFF] shadow-2xl p-0">
        
-       {/* Light Ambient Background Designs for White Section */}
+       {/* Static Ambient Background Designs for White Section */}
        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
          {/* Top-right subtle curves */}
-         <div className="absolute right-[-10%] top-[-5%] w-[700px] h-[700px] rounded-[40%] border-[2px] border-slate-100/80 rotate-12" />
-         <div className="absolute right-[5%] top-[10%] w-[500px] h-[500px] rounded-[45%] border-[1.5px] border-slate-100/80 -rotate-12" />
+         <div className="absolute right-[-10%] top-[-5%] w-[700px] h-[700px] rounded-[40%] border-[2px] border-[#99CB48]/20 rotate-12" />
+         <div className="absolute right-[5%] top-[10%] w-[500px] h-[500px] rounded-[45%] border-[1.5px] border-[#1AA6E1]/15 -rotate-12" />
          
          {/* Center-left subtle curves behind text */}
          <div className="absolute left-[-20%] top-[20%] w-[900px] h-[900px] rounded-[35%] border-[2px] border-[#f0f4f8] rotate-[24deg]" />
          <div className="absolute left-[-10%] top-[30%] w-[700px] h-[700px] rounded-[40%] border-[1.5px] border-[#f0f4f8] rotate-[-15deg]" />
          
+         {/* Static Lines for modern feel */}
+         <div className="absolute right-[25%] top-0 w-[1px] h-full bg-gradient-to-b from-transparent via-[#99CB48]/30 to-transparent opacity-60" />
+         <div className="absolute right-[35%] top-[15%] w-[1px] h-[70%] bg-gradient-to-b from-transparent via-[#1AA6E1]/30 to-transparent opacity-40" />
+         
+         {/* Subtle static dots */}
+         <div className="absolute right-[18%] top-[35%] w-3 h-3 rounded-full bg-[#99CB48]/30" />
+         <div className="absolute right-[38%] top-[65%] w-4 h-4 rounded-full bg-[#1AA6E1]/20" />
+
          {/* Faint Grid Texture */}
-         <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#0A1629_1px,transparent_1px)] bg-[size:32px_32px]" />
+         <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#0A1629_1px,transparent_1px)] bg-[size:32px_32px]" />
        </div>
        
        {/* Navy Diagonal Background */}
@@ -104,7 +112,7 @@ const CoverPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
        </div>
 
        {/* CENTER LEFT: Typography */}
-       <div className="absolute top-[18%] left-14 w-[48%] max-w-[420px] space-y-6 z-20">
+       <div className="absolute top-[20%] left-14 w-[42%] max-w-[340px] space-y-6 z-20">
           <div className="flex items-center gap-4">
              <div className="w-6 h-[2.5px] bg-[#99CB48]" />
              <div className="text-[10.5px] font-black tracking-[0.25em] text-[#99CB48] uppercase">
@@ -129,20 +137,25 @@ const CoverPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
 
        {/* CENTER RIGHT: Adaptive Logo Container */}
        <div className="absolute right-16 top-[48%] transform -translate-y-1/2 flex justify-center items-center z-30">
+          
+          {/* Faded Background Logo */}
+          <div className="absolute inset-[-50px] z-0 pointer-events-none flex items-center justify-center opacity-[0.04]">
+             <img src={proposal?.client?.clientLogoUrl || weblozyLogo} className="w-[450px] h-[450px] object-contain scale-[1.15] blur-[2px]" />
+          </div>
+
           <div 
-            className="relative flex items-center justify-center shadow-[0_40px_100px_-10px_rgba(0,0,0,0.6)] border-none overflow-visible group transition-all duration-500 ease-in-out w-fit h-fit aspect-square min-w-[240px] min-h-[240px] max-w-[360px] max-h-[360px] rounded-full p-12"
+            className="relative flex items-center justify-center transition-all duration-500 ease-in-out z-10 group w-fit h-fit min-w-[240px] min-h-[240px] max-w-[360px] max-h-[360px] p-10 shadow-[0_40px_100px_-10px_rgba(0,0,0,0.5)] rounded-[2.5rem]"
             style={{ backgroundColor: isTransparent ? "#ffffff" : bgColor }}
           >
-             {/* Adaptive Green Framing Line */}
-             <div className="absolute -inset-4 border-l-[10px] border-b-[10px] border-[#99CB48] pointer-events-none drop-shadow-[0_0_15px_rgba(153,203,72,0.4)] rounded-full" />
+             {/* Adaptive Green Framing Line (Always Visible) */}
+             <div className="absolute -inset-4 border-l-[10px] border-b-[10px] border-[#99CB48] pointer-events-none drop-shadow-[0_0_15px_rgba(153,203,72,0.4)] rounded-[3rem]" />
              
-             {/* The Image (Adaptive Scaling) */}
-             <div className="relative z-10 flex items-center justify-center w-full h-full rounded-full overflow-hidden">
+             {/* The Image */}
+             <div className="relative z-10 flex items-center justify-center w-full h-full overflow-hidden rounded-[1.5rem]">
                <img 
                  src={proposal?.client?.clientLogoUrl || weblozyLogo} 
                  alt={proposal?.client?.clientLogoUrl ? "Client Logo" : "Weblozy Default Logo"} 
-                 crossOrigin="anonymous"
-                 className="w-full h-full max-w-full max-h-[220px] object-contain drop-shadow-sm transition-transform duration-700 group-hover:scale-105" 
+                 className="w-full h-full max-w-full max-h-[280px] object-contain transition-transform duration-700 group-hover:scale-105 drop-shadow-sm" 
                />
              </div>
           </div>
