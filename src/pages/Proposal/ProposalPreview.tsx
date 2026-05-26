@@ -18,6 +18,7 @@ import {
   ThumbsUp,
   FileText,
   ArrowLeft,
+  ArrowRight,
   Home
 } from "lucide-react";
 import { Proposal } from "@/types/proposal";
@@ -61,7 +62,25 @@ export default function ProposalPreview() {
     { id: "commercial", name: "Commercial Framework", visible: true },
     { id: "portfolio", name: "Portfolio Protocol", visible: true },
     { id: "closing", name: "CTA & Closing", visible: true }
-  ]).filter(p => p.visible);
+  ]).filter(p => {
+    if (!p.visible) return false;
+    
+    // Skip Commercial Framework Page if pricing logic is empty
+    if (p.id === "commercial") {
+      const hasModulePrices = (proposal?.solution?.selectedModules || []).some(
+        m => m.price && String(m.price).trim() !== "" && parseFloat(String(m.price).replace(/[^0-9.]/g, "")) > 0
+      );
+      const hasCoreValuation = proposal?.pricing?.coreValuation && 
+        String(proposal.pricing.coreValuation).trim() !== "" && 
+        parseFloat(String(proposal.pricing.coreValuation).replace(/[^0-9.]/g, "")) > 0;
+      
+      if (!hasModulePrices && !hasCoreValuation) {
+        return false;
+      }
+    }
+    
+    return true;
+  });
 
   // Active scroll-spy tracking using modern IntersectionObserver API (immune to CSS zoom & layout offsets)
   useEffect(() => {
@@ -419,7 +438,7 @@ export default function ProposalPreview() {
   };
 
   return (
-    <div className="min-h-[100dvh] bg-[#F8FAFC]" style={{
+    <div className="h-[100dvh] overflow-y-auto bg-[#F8FAFC]" style={{
       backgroundImage: 'radial-gradient(#e2e8f0 1.5px, transparent 1.5px)',
       backgroundSize: '24px 24px'
     }}>

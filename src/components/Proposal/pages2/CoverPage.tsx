@@ -44,7 +44,7 @@ const CoverPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
   };
 
   return (
-    <section className="a4-page relative overflow-hidden bg-[#FAFCFF] shadow-2xl p-0">
+    <section className="a4-page relative overflow-auto bg-[#FAFCFF] shadow-2xl p-0">
        
        {/* Static Ambient Background Designs for White Section */}
        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
@@ -135,28 +135,86 @@ const CoverPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
           </p>
        </div>
 
-       {/* CENTER RIGHT: Adaptive Logo Container */}
-       <div className="absolute right-16 top-[48%] transform -translate-y-1/2 flex justify-center items-center z-30">
+       {/* CENTER RIGHT: Exact Replica Glassmorphism Logo Showcase */}
+       <div className="absolute right-12 top-[48%] transform -translate-y-1/2 flex justify-center items-center z-30 w-[380px] h-[380px]">
           
-          {/* Faded Background Logo */}
-          <div className="absolute inset-[-50px] z-0 pointer-events-none flex items-center justify-center opacity-[0.04]">
-             <img src={proposal?.client?.clientLogoUrl || weblozyLogo} className="w-[450px] h-[450px] object-contain scale-[1.15] blur-[2px]" />
-          </div>
-
+          {/* Glass Card Container */}
           <div 
-            className="relative flex items-center justify-center transition-all duration-500 ease-in-out z-10 group w-fit h-fit min-w-[240px] min-h-[240px] max-w-[360px] max-h-[360px] p-10 shadow-[0_40px_100px_-10px_rgba(0,0,0,0.5)] rounded-[2.5rem]"
-            style={{ backgroundColor: isTransparent ? "#ffffff" : bgColor }}
+            className="relative flex items-center justify-center w-[320px] h-[320px] rounded-[2rem] z-10 overflow-visible transition-all duration-700 ease-out group"
+            style={{
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              boxShadow: '0 35px 70px rgba(0,0,0,0.45), inset 0px 2px 4px rgba(255,255,255,0.4)',
+            }}
           >
-             {/* Adaptive Green Framing Line (Always Visible) */}
-             <div className="absolute -inset-4 border-l-[10px] border-b-[10px] border-[#99CB48] pointer-events-none drop-shadow-[0_0_15px_rgba(153,203,72,0.4)] rounded-[3rem]" />
+             {/* Neon Edge Glows (Green Left, Blue Bottom/Right) */}
+             <div className="absolute inset-0 rounded-[2rem] pointer-events-none" 
+                  style={{ 
+                    boxShadow: '-3px 0px 16px rgba(153, 203, 72, 0.35), 3px 0px 16px rgba(26, 166, 225, 0.35), 0px 3px 16px rgba(26, 166, 225, 0.35)',
+                    border: '1.5px solid rgba(255,255,255,0.2)'
+                  }} 
+             />
              
-             {/* The Image */}
-             <div className="relative z-10 flex items-center justify-center w-full h-full overflow-hidden rounded-[1.5rem]">
-               <img 
-                 src={proposal?.client?.clientLogoUrl || weblozyLogo} 
-                 alt={proposal?.client?.clientLogoUrl ? "Client Logo" : "Weblozy Default Logo"} 
-                 className="w-full h-full max-w-full max-h-[280px] object-contain transition-transform duration-700 group-hover:scale-105 drop-shadow-sm" 
-               />
+             {/* Strong Top Specular Highlight */}
+             <div className="absolute top-[2px] left-[12%] right-[12%] h-[5px] bg-gradient-to-b from-white/80 to-transparent rounded-full blur-[1px] opacity-80" />
+             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[35%] h-[2px] bg-white rounded-full shadow-[0_0_8px_white]" />
+
+             {/* Top-Left Dots Pattern */}
+             <div className="absolute top-5 left-5 grid grid-cols-3 gap-1.5 opacity-50">
+               {[...Array(9)].map((_, i) => (
+                 <div key={`tl-${i}`} className="w-1 h-1 rounded-full bg-white/60" />
+               ))}
+             </div>
+
+             {/* Bottom-Right Dots Pattern */}
+             <div className="absolute bottom-5 right-5 grid grid-cols-3 gap-1.5 opacity-50">
+               {[...Array(9)].map((_, i) => (
+                 <div key={`br-${i}`} className="w-1 h-1 rounded-full bg-[#1AA6E1]/60" />
+               ))}
+             </div>
+
+             {/* Bottom-Left Green Sphere */}
+             <div className="absolute bottom-7 left-7 w-6 h-6 rounded-full z-20"
+                  style={{
+                    background: 'radial-gradient(circle at 30% 30%, #ffffff, #99CB48 40%, #3a5214)',
+                    boxShadow: '0 8px 16px rgba(0,0,0,0.3), 0 0 12px rgba(153,203,72,0.6)'
+                  }} 
+             />
+
+             {/* Top-Right Blue Sphere */}
+             <div className="absolute top-7 right-7 w-4 h-4 rounded-full z-20"
+                  style={{
+                    background: 'radial-gradient(circle at 30% 30%, #ffffff, #1AA6E1 40%, #083c54)',
+                    boxShadow: '0 6px 12px rgba(0,0,0,0.3), 0 0 10px rgba(26,166,225,0.6)'
+                  }} 
+             />
+
+             {/* Orbital Thin Curves */}
+             <div className="absolute top-8 left-1/2 -translate-x-1/2 w-[190px] h-[190px] rounded-full border-t border-l border-[#99CB48] opacity-70 rotate-12" />
+             <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[210px] h-[210px] rounded-full border-t border-[#99CB48] opacity-35 -rotate-12" />
+             
+             <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[190px] h-[190px] rounded-full border-b border-r border-[#1AA6E1] opacity-70 -rotate-12" />
+             <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[210px] h-[210px] rounded-full border-b border-[#1AA6E1] opacity-35 rotate-12" />
+
+             {/* Center White Logo Badge (3D Look) */}
+             <div className="relative z-30 flex items-center justify-center w-[200px] h-[200px] rounded-full bg-white p-5"
+                  style={{
+                    boxShadow: '0 15px 35px rgba(0,0,0,0.3), inset 0 -6px 12px rgba(0,0,0,0.08), inset 0 4px 8px rgba(255,255,255,1)',
+                    border: '1px solid rgba(220,230,240,0.8)'
+                  }}
+             >
+                {/* Secondary inner ring */}
+                <div className="absolute inset-2 rounded-full border-[1px] border-slate-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] pointer-events-none" />
+                
+                {/* The Logo Image */}
+                <div className="relative z-10 w-full h-full flex items-center justify-center p-2">
+                  <img 
+                    src={proposal?.client?.clientLogoUrl || weblozyLogo} 
+                    alt={proposal?.client?.clientLogoUrl ? "Client Logo" : "Weblozy Default Logo"} 
+                    className="max-w-full max-h-[150px] w-auto h-auto object-contain transition-transform duration-700 group-hover:scale-105" 
+                  />
+                </div>
              </div>
           </div>
        </div>

@@ -297,7 +297,7 @@ export default function EditProposal() {
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = async (exit: boolean = false) => {
     if (!id) return;
 
     if (!proposal.client.proposalTitle?.trim()) {
@@ -328,6 +328,9 @@ export default function EditProposal() {
 
     try {
       await updatePromise;
+      if (exit) {
+        navigate("/dashboard");
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -465,19 +468,10 @@ export default function EditProposal() {
               </Button>
               
               <div className="flex gap-2 sm:gap-4 items-center">
-                 {currentStep < dynamicSteps.length - 1 ? (
-                    <Button onClick={nextStep} className="h-12 sm:h-16 px-6 sm:px-12 rounded-xl sm:rounded-[1.25rem] bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-primary dark:hover:bg-primary hover:text-slate-900 dark:hover:text-slate-900 shadow-2xl shadow-slate-900/20 dark:shadow-white/10 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.3em] group transition-all duration-500">
-                       <span className="hidden sm:inline">Proceed</span>
-                       <span className="inline sm:hidden">Next</span>
-                       <ChevronRight size={20} className="text-[#99CB48] group-hover:text-slate-900 ml-1.5 sm:ml-3 group-hover:translate-x-2 transition-all" />
-                    </Button>
-                 ) : (
-                    <Button onClick={handleSave} disabled={isSaving} className="h-12 sm:h-16 px-6 sm:px-12 rounded-xl sm:rounded-[1.25rem] bg-primary hover:bg-[#88B540] text-slate-900 dark:text-white shadow-2xl shadow-primary/30 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.3em] transition-all duration-500 scale-105 active:scale-95">
-                       {isSaving ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} className="mr-1.5 sm:mr-3" />}
-                       <span className="hidden sm:inline">Finalize Protocol</span>
-                       <span className="inline sm:hidden">Finalize</span>
-                    </Button>
-                 )}
+                 <Button onClick={() => handleSave(true)} disabled={isSaving} className="h-12 sm:h-16 px-6 sm:px-12 rounded-xl sm:rounded-[1.25rem] bg-primary hover:bg-[#88B540] text-slate-900 dark:text-white shadow-2xl shadow-primary/30 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.3em] transition-all duration-500 scale-105 active:scale-95">
+                    {isSaving ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} className="mr-1.5 sm:mr-3" />}
+                    <span className="hidden sm:inline">Save & Exit</span>
+                 </Button>
               </div>
            </div>
         </div>
