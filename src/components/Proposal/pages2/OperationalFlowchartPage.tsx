@@ -22,7 +22,7 @@ const OperationalFlowchartPage: React.FC<PageProps> = ({ proposal, pageNum }) =>
         <div className="flex justify-between items-end">
           <div>
             <h2 className="text-5xl font-black tracking-tighter text-[#0B0E14] leading-none mb-2">
-              Operational <span className="text-[#99CB48]">Flowchart.</span>
+              Operational <span className="text-[#99CB48]">Flowchart</span>
             </h2>
             <div className="text-[11px] font-bold text-slate-400 tracking-wide">Architectural Mapping of the Automation Ecosystem</div>
           </div>

@@ -135,7 +135,7 @@ const ProposalPDF = forwardRef<HTMLDivElement, ProposalPDFProps>(({ proposal, ac
           
           return (
             <React.Fragment key="modules">
-              {modulePages.map((pageModules, pageIdx) => {
+              {modulePages.map((pageSegments, pageIdx) => {
                 return (
                   <div 
                     key={`modules-page-${pageIdx}`} 
@@ -145,7 +145,7 @@ const ProposalPDF = forwardRef<HTMLDivElement, ProposalPDFProps>(({ proposal, ac
                     <ModuleArchitecturePage 
                       proposal={proposal} 
                       pageNum={startPageNum + pageIdx} 
-                      pageModules={pageModules} 
+                      pageSegments={pageSegments} 
                       pageIdx={pageIdx} 
                       totalPages={modulePagesCount}
                     />
@@ -155,6 +155,7 @@ const ProposalPDF = forwardRef<HTMLDivElement, ProposalPDFProps>(({ proposal, ac
             </React.Fragment>
           );
         }
+
 
         const renderer = pageRenderers[page.id];
         if (!renderer) return null;

@@ -48,7 +48,7 @@ const CorporateAuthorityPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
           </div>
           <div className="flex justify-between items-end">
             <h2 className="text-5xl font-black tracking-tighter text-[#0B0E14] leading-none">
-              Project <span className="text-[#3ABEF9]">Portfolio.</span>
+              Project <span className="text-[#3ABEF9]">Portfolio</span>
             </h2>
             <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-full border border-slate-100">
                <div className="flex -space-x-2">
@@ -106,7 +106,7 @@ const CorporateAuthorityPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
                 </div>
                 {/* Overlay Number */}
                 <div className="absolute top-6 right-6 text-6xl font-black text-black/5 select-none italic">
-                  {project.id}
+                   Portfolio
                 </div>
               </div>
 

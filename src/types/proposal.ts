@@ -95,6 +95,7 @@ export interface PricingDetail {
   supportCost: string;
   taxes: string;
   roiLogic?: string;
+  deliveryTime?: string;
 }
 
 export interface Policies {
@@ -143,6 +144,11 @@ export interface ClosingCTA {
   facebookLink?: string;
   linkedinLink?: string;
   youtubeLink?: string;
+  showInstagram?: boolean;
+  showX?: boolean;
+  showFacebook?: boolean;
+  showLinkedin?: boolean;
+  showYoutube?: boolean;
 }
 
 export interface PageConfig {

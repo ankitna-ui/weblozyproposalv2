@@ -86,7 +86,7 @@ const StrategicEcosystemPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
                 <span className="text-[10px] font-black tracking-[0.15em] text-[#3ABEF9]">Phase 02: Architecture</span>
              </div>
              <h2 className="text-5xl font-black tracking-tighter text-[#0B0E14] leading-none mb-1">
-                Strategic <span className="text-[#3ABEF9]">Ecosystem.</span>
+                Strategic <span className="text-[#3ABEF9]">Ecosystem</span>
              </h2>
              <div className="text-[10px] font-bold text-slate-400 tracking-wide leading-none">Engineering Scalable Solutions for Digital Excellence</div>
           </div>
@@ -144,14 +144,16 @@ const StrategicEcosystemPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
                       {useIntGrid ? (
                          <div className="grid grid-cols-2 gap-3">
                             {integrations.map((item, i) => {
-                               const [label, link] = item.includes('|') ? item.split('|') : [item, item];
-                               const isLink = link.startsWith('http') || link.includes('.');
-                               const href = link.startsWith('http') ? link : `https://${link}`;
+                               const hasPipe = item.includes('|');
+                               const [label, rawVal] = hasPipe ? item.split('|') : [item, ""];
+                               const isLink = hasPipe && (rawVal.startsWith('http') || rawVal.includes('.'));
+                               const subtitle = (hasPipe && !isLink) ? rawVal : getIntegrationSub(isLink, label);
+                               const href = isLink ? (rawVal.startsWith('http') ? rawVal : `https://${rawVal}`) : undefined;
                                
                                return (
                                   <a 
                                      key={i} 
-                                     href={isLink ? href : undefined}
+                                     href={href}
                                      target="_blank" 
                                      rel="noopener noreferrer"
                                      className={`flex items-center gap-3 bg-[#0B0E14] rounded-2xl border border-slate-800 shadow-lg ${intPad} ${isLink ? 'hover:border-[#3ABEF9]/50 hover:bg-slate-900/80 transition-all cursor-pointer' : ''}`}
@@ -161,7 +163,7 @@ const StrategicEcosystemPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
                                      </div>
                                      <div className="space-y-0.5 min-w-0">
                                         <span className={`font-extrabold text-white/95 leading-tight block ${intText}`}>{label}</span>
-                                        <span className="text-[9.5px] font-semibold text-slate-400 block leading-tight">{getIntegrationSub(isLink, label)}</span>
+                                        <span className="text-[9.5px] font-semibold text-slate-400 block leading-tight">{subtitle}</span>
                                      </div>
                                   </a>
                                );
@@ -170,14 +172,15 @@ const StrategicEcosystemPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
                       ) : (
                          <div className="flex flex-wrap gap-1.5">
                             {integrations.map((item, i) => {
-                               const [label, link] = item.includes('|') ? item.split('|') : [item, item];
-                               const isLink = link.startsWith('http') || link.includes('.');
-                               const href = link.startsWith('http') ? link : `https://${link}`;
+                               const hasPipe = item.includes('|');
+                               const [label, rawVal] = hasPipe ? item.split('|') : [item, ""];
+                               const isLink = hasPipe && (rawVal.startsWith('http') || rawVal.includes('.'));
+                               const href = isLink ? (rawVal.startsWith('http') ? rawVal : `https://${rawVal}`) : undefined;
                                
                                return (
                                   <a 
                                      key={i} 
-                                     href={isLink ? href : undefined}
+                                     href={href}
                                      target="_blank" 
                                      rel="noopener noreferrer"
                                      className={`flex items-center gap-1.5 bg-[#0B0E14] rounded-lg border border-slate-800 shadow-lg ${intPad} ${isLink ? 'hover:border-[#3ABEF9]/50 hover:bg-slate-900/80 transition-all cursor-pointer' : ''}`}

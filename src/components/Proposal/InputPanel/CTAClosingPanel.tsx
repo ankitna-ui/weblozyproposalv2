@@ -126,56 +126,116 @@ export default function CTAClosingPanel({ proposal, currentStep, updateClosing }
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Instagram */}
           <div className="space-y-2">
-            <LabelPremium className="text-[9px] text-slate-500">Instagram Link</LabelPremium>
+            <div className="flex items-center justify-between">
+              <LabelPremium className="text-[9px] text-slate-500 mb-0">Instagram Link</LabelPremium>
+              <label className="flex items-center gap-1.5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="w-3.5 h-3.5 accent-primary rounded-sm"
+                  checked={proposal.closing.showInstagram !== false}
+                  onChange={(e) => updateClosing({ showInstagram: e.target.checked })}
+                />
+                <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Show</span>
+              </label>
+            </div>
             <ModernInput 
-              className="font-medium text-xs text-slate-700 dark:text-gray-300" 
+              className={`font-medium text-xs text-slate-700 dark:text-gray-300 transition-opacity ${proposal.closing.showInstagram === false ? 'opacity-40' : ''}`}
               placeholder="e.g. https://instagram.com/yourcompany"
               value={proposal.closing.instagramLink || ""} 
               onChange={(e) => updateClosing({ instagramLink: e.target.value })} 
+              disabled={proposal.closing.showInstagram === false}
             />
           </div>
 
           {/* X / Twitter */}
           <div className="space-y-2">
-            <LabelPremium className="text-[9px] text-slate-500">X (Twitter) Link</LabelPremium>
+            <div className="flex items-center justify-between">
+              <LabelPremium className="text-[9px] text-slate-500 mb-0">X (Twitter) Link</LabelPremium>
+              <label className="flex items-center gap-1.5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="w-3.5 h-3.5 accent-primary rounded-sm"
+                  checked={proposal.closing.showX !== false}
+                  onChange={(e) => updateClosing({ showX: e.target.checked })}
+                />
+                <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Show</span>
+              </label>
+            </div>
             <ModernInput 
-              className="font-medium text-xs text-slate-700 dark:text-gray-300" 
+              className={`font-medium text-xs text-slate-700 dark:text-gray-300 transition-opacity ${proposal.closing.showX === false ? 'opacity-40' : ''}`}
               placeholder="e.g. https://x.com/yourcompany"
               value={proposal.closing.xLink || ""} 
               onChange={(e) => updateClosing({ xLink: e.target.value })} 
+              disabled={proposal.closing.showX === false}
             />
           </div>
 
           {/* Facebook */}
           <div className="space-y-2">
-            <LabelPremium className="text-[9px] text-slate-500">Facebook Link</LabelPremium>
+            <div className="flex items-center justify-between">
+              <LabelPremium className="text-[9px] text-slate-500 mb-0">Facebook Link</LabelPremium>
+              <label className="flex items-center gap-1.5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="w-3.5 h-3.5 accent-primary rounded-sm"
+                  checked={proposal.closing.showFacebook !== false}
+                  onChange={(e) => updateClosing({ showFacebook: e.target.checked })}
+                />
+                <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Show</span>
+              </label>
+            </div>
             <ModernInput 
-              className="font-medium text-xs text-slate-700 dark:text-gray-300" 
+              className={`font-medium text-xs text-slate-700 dark:text-gray-300 transition-opacity ${proposal.closing.showFacebook === false ? 'opacity-40' : ''}`}
               placeholder="e.g. https://facebook.com/yourcompany"
               value={proposal.closing.facebookLink || ""} 
               onChange={(e) => updateClosing({ facebookLink: e.target.value })} 
+              disabled={proposal.closing.showFacebook === false}
             />
           </div>
 
           {/* LinkedIn */}
           <div className="space-y-2">
-            <LabelPremium className="text-[9px] text-slate-500">LinkedIn Link</LabelPremium>
+            <div className="flex items-center justify-between">
+              <LabelPremium className="text-[9px] text-slate-500 mb-0">LinkedIn Link</LabelPremium>
+              <label className="flex items-center gap-1.5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="w-3.5 h-3.5 accent-primary rounded-sm"
+                  checked={proposal.closing.showLinkedin !== false}
+                  onChange={(e) => updateClosing({ showLinkedin: e.target.checked })}
+                />
+                <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Show</span>
+              </label>
+            </div>
             <ModernInput 
-              className="font-medium text-xs text-slate-700 dark:text-gray-300" 
+              className={`font-medium text-xs text-slate-700 dark:text-gray-300 transition-opacity ${proposal.closing.showLinkedin === false ? 'opacity-40' : ''}`}
               placeholder="e.g. https://linkedin.com/company/yourcompany"
               value={proposal.closing.linkedinLink || ""} 
               onChange={(e) => updateClosing({ linkedinLink: e.target.value })} 
+              disabled={proposal.closing.showLinkedin === false}
             />
           </div>
 
           {/* YouTube - full row */}
           <div className="col-span-1 md:col-span-2 space-y-2">
-            <LabelPremium className="text-[9px] text-slate-500">YouTube Link</LabelPremium>
+            <div className="flex items-center justify-between">
+              <LabelPremium className="text-[9px] text-slate-500 mb-0">YouTube Link</LabelPremium>
+              <label className="flex items-center gap-1.5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="w-3.5 h-3.5 accent-primary rounded-sm"
+                  checked={proposal.closing.showYoutube !== false}
+                  onChange={(e) => updateClosing({ showYoutube: e.target.checked })}
+                />
+                <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Show</span>
+              </label>
+            </div>
             <ModernInput 
-              className="font-medium text-xs text-slate-700 dark:text-gray-300" 
+              className={`font-medium text-xs text-slate-700 dark:text-gray-300 transition-opacity ${proposal.closing.showYoutube === false ? 'opacity-40' : ''}`}
               placeholder="e.g. https://youtube.com/@yourcompany"
               value={proposal.closing.youtubeLink || ""} 
               onChange={(e) => updateClosing({ youtubeLink: e.target.value })} 
+              disabled={proposal.closing.showYoutube === false}
             />
           </div>
         </div>

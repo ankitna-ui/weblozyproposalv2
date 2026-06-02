@@ -161,7 +161,7 @@ const ClosingPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
                </div>
                <h1 className="text-[60px] font-black leading-[0.82] tracking-[-0.04em] pb-3">
                   <span className="text-white/95 font-light italic">Let's</span><br />
-                  <span className="text-[#99CB48] tracking-[-0.05em] uppercase">Collaborate.</span>
+                  <span className="text-[#99CB48] tracking-[-0.05em] uppercase">Collaborate</span>
                </h1>
                <div className="h-[3.5px] w-40 bg-gradient-to-r from-[#99CB48] to-[#1AA6E1] mt-4 rounded-full" />
             </div>
@@ -219,12 +219,12 @@ const ClosingPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
                      <span className="text-[8.5px] font-bold tracking-[0.15em] text-[#99CB48]">SUPPORT PROTOCOL</span>
                   </div>
                   
-                  <h3 className="text-[14.5px] font-extrabold tracking-tight leading-[1.1] text-white">24/7 Technical Liaison</h3>
+                  <h3 className="text-[14.5px] font-extrabold tracking-tight leading-[1.1] text-white">Dedicated Technical Support</h3>
                   
                   <div className="h-[1px] w-full bg-white/10" />
                   
                   <div className="text-[10px] font-medium text-white/60 leading-relaxed font-sans">
-                     Integrated support systems ensuring zero downtime and continuous operational evolution.
+                     Standard technical support available from 10:00 AM to 7:00 PM ensuring stable and reliable operational efficiency.
                   </div>
                </div>
             </div>
@@ -290,82 +290,94 @@ const ClosingPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
                </div>
 
                {/* Socials Block */}
-               <div className="space-y-3.5">
-                  {/* Social Divider */}
-                  <div className="flex items-center gap-4">
-                     <div className="h-[1px] flex-1 bg-white/10" />
-                     <span className="text-[7.5px] font-bold text-[#99CB48] tracking-[0.2em]">DIGITAL EXPANSION</span>
-                     <div className="h-[1px] flex-1 bg-white/10" />
+               {(proposal?.closing?.showX !== false || proposal?.closing?.showInstagram !== false || proposal?.closing?.showFacebook !== false || proposal?.closing?.showLinkedin !== false || proposal?.closing?.showYoutube !== false) && (
+                  <div className="space-y-3.5">
+                     {/* Social Divider */}
+                     <div className="flex items-center gap-4">
+                        <div className="h-[1px] flex-1 bg-white/10" />
+                        <span className="text-[7.5px] font-bold text-[#99CB48] tracking-[0.2em]">DIGITAL EXPANSION</span>
+                        <div className="h-[1px] flex-1 bg-white/10" />
+                     </div>
+
+                     {/* Social Row */}
+                     <div className="flex justify-around items-center px-1">
+                        {proposal?.closing?.showX !== false && (
+                           <div className="flex flex-col items-center gap-1">
+                              <a 
+                                 href={proposal?.closing?.xLink || "https://x.com/weblozy"} 
+                                 target="_blank" 
+                                 rel="noopener noreferrer" 
+                                 className="w-10 h-10 rounded-full bg-white/[0.02] border border-white/[0.06] flex items-center justify-center hover:bg-white/10 hover:border-[#1AA6E1]/40 hover:text-[#1AA6E1] text-white/40 transition-all cursor-pointer"
+                                 title="X"
+                              >
+                                 <XIcon className="w-4 h-4 text-white/40 hover:text-[#1AA6E1] transition-colors" />
+                              </a>
+                              <span className="text-[6px] font-bold tracking-widest text-white/30 uppercase mt-0.5">X</span>
+                           </div>
+                        )}
+                        
+                        {proposal?.closing?.showInstagram !== false && (
+                           <div className="flex flex-col items-center gap-1">
+                              <a 
+                                 href={proposal?.closing?.instagramLink || "https://www.instagram.com/weblozy/"} 
+                                 target="_blank" 
+                                 rel="noopener noreferrer" 
+                                 className="w-10 h-10 rounded-full bg-white/[0.02] border border-white/[0.06] flex items-center justify-center hover:bg-white/10 hover:border-pink-500/40 hover:text-pink-500 text-white/40 transition-all cursor-pointer"
+                                 title="Instagram"
+                              >
+                                 <InstagramIcon className="w-4 h-4 text-white/40 hover:text-pink-500 transition-colors" />
+                              </a>
+                              <span className="text-[6px] font-bold tracking-widest text-white/30 uppercase mt-0.5">Instagram</span>
+                           </div>
+                        )}
+
+                        {proposal?.closing?.showFacebook !== false && (
+                           <div className="flex flex-col items-center gap-1">
+                              <a 
+                                 href={proposal?.closing?.facebookLink || "https://www.facebook.com/weblozy/"} 
+                                 target="_blank" 
+                                 rel="noopener noreferrer" 
+                                 className="w-10 h-10 rounded-full bg-white/[0.02] border border-white/[0.06] flex items-center justify-center hover:bg-white/10 hover:border-blue-600/40 hover:text-blue-600 text-white/40 transition-all cursor-pointer"
+                                 title="Facebook"
+                              >
+                                 <FacebookIcon className="w-4 h-4 text-white/40 hover:text-blue-600 transition-colors" />
+                              </a>
+                              <span className="text-[6px] font-bold tracking-widest text-white/30 uppercase mt-0.5">Facebook</span>
+                           </div>
+                        )}
+
+                        {proposal?.closing?.showLinkedin !== false && (
+                           <div className="flex flex-col items-center gap-1">
+                              <a 
+                                 href={proposal?.closing?.linkedinLink || "https://www.linkedin.com/company/weblozy/"} 
+                                 target="_blank" 
+                                 rel="noopener noreferrer" 
+                                 className="w-10 h-10 rounded-full bg-white/[0.02] border border-white/[0.06] flex items-center justify-center hover:bg-white/10 hover:border-blue-500/40 hover:text-blue-500 text-white/40 transition-all cursor-pointer"
+                                 title="LinkedIn"
+                              >
+                                 <LinkedinIcon className="w-4 h-4 text-white/40 hover:text-blue-500 transition-colors" />
+                              </a>
+                              <span className="text-[6px] font-bold tracking-widest text-white/40 uppercase mt-0.5">LinkedIn</span>
+                           </div>
+                        )}
+
+                        {proposal?.closing?.showYoutube !== false && (
+                           <div className="flex flex-col items-center gap-1">
+                              <a 
+                                 href={proposal?.closing?.youtubeLink || "https://www.youtube.com/@weblozy"} 
+                                 target="_blank" 
+                                 rel="noopener noreferrer" 
+                                 className="w-10 h-10 rounded-full bg-white/[0.02] border border-white/[0.06] flex items-center justify-center hover:bg-white/10 hover:border-red-600/40 hover:text-red-600 text-white/40 transition-all cursor-pointer"
+                                 title="YouTube"
+                              >
+                                 <YoutubeIcon className="w-4 h-4 text-white/40 hover:text-red-600 transition-colors" />
+                              </a>
+                              <span className="text-[6px] font-bold tracking-widest text-white/30 uppercase mt-0.5">YouTube</span>
+                           </div>
+                        )}
+                     </div>
                   </div>
-
-                  {/* Social Row with 5 icons (X, Instagram, Facebook, LinkedIn, YouTube) */}
-                  <div className="flex justify-around items-center px-1">
-                     <div className="flex flex-col items-center gap-1">
-                        <a 
-                           href={proposal?.closing?.xLink || "https://x.com/weblozy"} 
-                           target="_blank" 
-                           rel="noopener noreferrer" 
-                           className="w-10 h-10 rounded-full bg-white/[0.02] border border-white/[0.06] flex items-center justify-center hover:bg-white/10 hover:border-[#1AA6E1]/40 hover:text-[#1AA6E1] text-white/40 transition-all cursor-pointer"
-                           title="X"
-                        >
-                           <XIcon className="w-4 h-4 text-white/40 hover:text-[#1AA6E1] transition-colors" />
-                        </a>
-                        <span className="text-[6px] font-bold tracking-widest text-white/30 uppercase mt-0.5">X</span>
-                     </div>
-                     
-                     <div className="flex flex-col items-center gap-1">
-                        <a 
-                           href={proposal?.closing?.instagramLink || "https://www.instagram.com/weblozy/"} 
-                           target="_blank" 
-                           rel="noopener noreferrer" 
-                           className="w-10 h-10 rounded-full bg-white/[0.02] border border-white/[0.06] flex items-center justify-center hover:bg-white/10 hover:border-pink-500/40 hover:text-pink-500 text-white/40 transition-all cursor-pointer"
-                           title="Instagram"
-                        >
-                           <InstagramIcon className="w-4 h-4 text-white/40 hover:text-pink-500 transition-colors" />
-                        </a>
-                        <span className="text-[6px] font-bold tracking-widest text-white/30 uppercase mt-0.5">Instagram</span>
-                     </div>
-
-                     <div className="flex flex-col items-center gap-1">
-                        <a 
-                           href={proposal?.closing?.facebookLink || "https://www.facebook.com/weblozy/"} 
-                           target="_blank" 
-                           rel="noopener noreferrer" 
-                           className="w-10 h-10 rounded-full bg-white/[0.02] border border-white/[0.06] flex items-center justify-center hover:bg-white/10 hover:border-blue-600/40 hover:text-blue-600 text-white/40 transition-all cursor-pointer"
-                           title="Facebook"
-                        >
-                           <FacebookIcon className="w-4 h-4 text-white/40 hover:text-blue-600 transition-colors" />
-                        </a>
-                        <span className="text-[6px] font-bold tracking-widest text-white/30 uppercase mt-0.5">Facebook</span>
-                     </div>
-
-                     <div className="flex flex-col items-center gap-1">
-                        <a 
-                           href={proposal?.closing?.linkedinLink || "https://www.linkedin.com/company/weblozy/"} 
-                           target="_blank" 
-                           rel="noopener noreferrer" 
-                           className="w-10 h-10 rounded-full bg-white/[0.02] border border-white/[0.06] flex items-center justify-center hover:bg-white/10 hover:border-blue-500/40 hover:text-blue-500 text-white/40 transition-all cursor-pointer"
-                           title="LinkedIn"
-                        >
-                           <LinkedinIcon className="w-4 h-4 text-white/40 hover:text-blue-500 transition-colors" />
-                        </a>
-                        <span className="text-[6px] font-bold tracking-widest text-white/40 uppercase mt-0.5">LinkedIn</span>
-                     </div>
-
-                     <div className="flex flex-col items-center gap-1">
-                        <a 
-                           href={proposal?.closing?.youtubeLink || "https://www.youtube.com/@weblozy"} 
-                           target="_blank" 
-                           rel="noopener noreferrer" 
-                           className="w-10 h-10 rounded-full bg-white/[0.02] border border-white/[0.06] flex items-center justify-center hover:bg-white/10 hover:border-red-600/40 hover:text-red-600 text-white/40 transition-all cursor-pointer"
-                           title="YouTube"
-                        >
-                           <YoutubeIcon className="w-4 h-4 text-white/40 hover:text-red-600 transition-colors" />
-                        </a>
-                        <span className="text-[6px] font-bold tracking-widest text-white/30 uppercase mt-0.5">YouTube</span>
-                     </div>
-                  </div>
-               </div>
+               )}
             </div>
          </div>
 

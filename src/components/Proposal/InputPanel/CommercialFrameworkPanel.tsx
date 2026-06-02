@@ -141,7 +141,7 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
       </div>
 
       {/* ──── SUPPORTING OVERHEADS ──── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="space-y-2 group">
           <div className="flex items-center justify-between px-1">
             <LabelPremium className="mb-0 text-slate-800 text-[10px]">Infrastructure (Cloud)</LabelPremium>
@@ -149,7 +149,7 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
           </div>
           <ModernInput 
             className="h-11 px-3.5 text-sm font-semibold text-slate-800 border-slate-200 dark:border-white/10 focus-visible:ring-primary rounded-xl" 
-            placeholder="e.g. Billed at Actuals / Monthly"
+            placeholder="e.g. Billed at Actuals"
             value={proposal.pricing.hostingCost} 
             onChange={(e) => updatePricing({ hostingCost: e.target.value })} 
           />
@@ -161,9 +161,21 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
           </div>
           <ModernInput 
             className="h-11 px-3.5 text-sm font-semibold text-slate-800 border-slate-200 dark:border-white/10 focus-visible:ring-primary rounded-xl" 
-            placeholder="e.g. 15% Annual Post-Warranty"
+            placeholder="e.g. 15% Annual"
             value={proposal.pricing.maintenanceCost} 
             onChange={(e) => updatePricing({ maintenanceCost: e.target.value })} 
+          />
+        </div>
+        <div className="space-y-2 group">
+          <div className="flex items-center justify-between px-1">
+            <LabelPremium className="mb-0 text-slate-800 text-[10px]">Delivery Time</LabelPremium>
+            <Calculator size={14} className="text-slate-300 group-hover:text-primary transition-colors" />
+          </div>
+          <ModernInput 
+            className="h-11 px-3.5 text-sm font-semibold text-slate-800 border-slate-200 dark:border-white/10 focus-visible:ring-primary rounded-xl" 
+            placeholder="e.g. 30 Days"
+            value={proposal.pricing.deliveryTime || ""} 
+            onChange={(e) => updatePricing({ deliveryTime: e.target.value })} 
           />
         </div>
       </div>

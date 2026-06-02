@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { 
+import {
   Plus, FileText, Users, LogOut, Search, Settings,
   Home, FileEdit, Database, UserCog, ToyBrick, Sun, Moon, Download, Menu, X
 } from "lucide-react";
@@ -67,21 +67,21 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
 
   return (
     <div className="flex h-[100dvh] bg-slate-50 dark:bg-[#0B0E14] text-slate-900 dark:text-white overflow-hidden font-sans transition-colors">
-      
+
       {/* ─── LEFT SIDEBAR ─── */}
-      
+
       {/* Mobile Overlay */}
       {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden" 
-          onClick={() => setIsMobileMenuOpen(false)} 
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <aside className={`fixed lg:relative z-50 w-64 bg-white dark:bg-[#11151D] border-r border-slate-200 dark:border-white/5 flex flex-col justify-between h-full shrink-0 transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
         {/* Mobile Close Button */}
-        <button 
+        <button
           onClick={() => setIsMobileMenuOpen(false)}
           className="absolute top-6 right-4 p-2 text-slate-500 lg:hidden"
         >
@@ -98,8 +98,8 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
           {/* Navigation Links */}
           <div className="space-y-8">
             <div>
-              <div 
-                onClick={() => mobileNavigate('/dashboard')} 
+              <div
+                onClick={() => mobileNavigate('/dashboard')}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${isActive('/dashboard') || isActive('/') ? 'bg-[#99CB48]/10 text-[#99CB48] border border-[#99CB48]/20' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/5'}`}
               >
                 <Home size={16} />
@@ -110,8 +110,8 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
             <div>
               <div className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-gray-500 mb-3 px-4">Strategic Management</div>
               <div className="space-y-1">
-                <div 
-                  onClick={() => mobileNavigate('/saved')} 
+                <div
+                  onClick={() => mobileNavigate('/saved')}
                   className={`flex items-center justify-between px-4 py-2.5 rounded-xl cursor-pointer transition-colors ${isActive('/saved') ? 'bg-blue-500/10 text-blue-500' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/5'}`}
                 >
                   <div className="flex items-center gap-3">
@@ -120,9 +120,9 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
                   </div>
                   <span className="text-[9px] bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-full">{stats.proposals}</span>
                 </div>
-                
-                <div 
-                  onClick={() => mobileNavigate('/drafts')} 
+
+                <div
+                  onClick={() => mobileNavigate('/drafts')}
                   className={`flex items-center justify-between px-4 py-2.5 rounded-xl cursor-pointer transition-colors ${isActive('/drafts') ? 'bg-[#99CB48]/10 text-[#99CB48]' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/5'}`}
                 >
                   <div className="flex items-center gap-3">
@@ -131,9 +131,9 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
                   </div>
                   <span className="text-[9px] bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-full">{stats.drafts}</span>
                 </div>
-                
-                <div 
-                  onClick={() => mobileNavigate('/saved')} 
+
+                <div
+                  onClick={() => mobileNavigate('/saved')}
                   className={`flex items-center justify-between px-4 py-2.5 rounded-xl cursor-pointer transition-colors ${!isActive('/drafts') && !isActive('/saved') && !isActive('/dashboard') && !isActive('/') ? 'bg-orange-500/10 text-orange-500' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/5'}`}
                 >
                   <div className="flex items-center gap-3">
@@ -148,8 +148,8 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
             <div>
               <div className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-gray-500 mb-3 px-4">Settings</div>
               <div className="space-y-1">
-                <div 
-                  onClick={() => mobileNavigate('/profile')} 
+                <div
+                  onClick={() => mobileNavigate('/profile')}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${isActive('/profile') ? 'bg-[#99CB48]/10 text-[#99CB48] border border-[#99CB48]/20' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/5'}`}
                 >
                   <UserCog size={16} />
@@ -173,14 +173,14 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
 
       {/* ─── MAIN CONTENT AREA ─── */}
       <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-        
+
         {/* Background Glow */}
         <div className="absolute top-0 left-1/4 w-[40%] h-[20%] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
         {/* ─── TOP HEADER ─── */}
         <header className="h-20 border-b border-slate-200 dark:border-white/5 flex items-center justify-between px-4 sm:px-8 bg-white/80 dark:bg-[#0B0E14]/80 backdrop-blur-xl shrink-0 z-10 transition-colors">
           <div className="flex items-center gap-4">
-            <button 
+            <button
               onClick={() => setIsMobileMenuOpen(true)}
               className="p-2 -ml-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 rounded-lg lg:hidden"
             >
@@ -191,26 +191,26 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
               <p className="text-[9px] text-slate-500 dark:text-gray-500 uppercase tracking-widest mt-0.5">Strategic Command Center</p>
             </div>
             <div className="sm:hidden flex items-center gap-2">
-               <img src={banner2Logo} alt="Weblozy" className="hidden dark:block h-6 w-auto object-contain" />
-               <img src={bannerLogo} alt="Weblozy" className="block dark:hidden h-6 w-auto object-contain" />
+              <img src={banner2Logo} alt="Weblozy" className="hidden dark:block h-6 w-auto object-contain" />
+              <img src={bannerLogo} alt="Weblozy" className="block dark:hidden h-6 w-auto object-contain" />
             </div>
           </div>
 
           <div className="flex-1 max-w-xl mx-8 hidden lg:block">
             <div className="flex items-center bg-slate-50 dark:bg-[#11151D] border border-slate-200 dark:border-white/5 rounded-full px-5 h-11 w-full focus-within:border-slate-300 dark:focus-within:border-white/20 transition-colors">
               <Search className="w-4 h-4 text-slate-500 dark:text-gray-500 mr-3" />
-              <input 
-                type="text" 
-                placeholder="Search assets, proposals, clients..." 
+              <input
+                type="text"
+                placeholder="Search assets, proposals, clients..."
                 value={searchQuery !== undefined ? searchQuery : ""}
                 onChange={(e) => setSearchQuery && setSearchQuery(e.target.value)}
-                className="bg-transparent border-none text-[11px] font-bold tracking-wider text-slate-900 dark:text-white focus:ring-0 placeholder:text-slate-400 dark:placeholder:text-gray-600 w-full" 
+                className="bg-transparent border-none text-[11px] font-bold tracking-wider text-slate-900 dark:text-white focus:ring-0 placeholder:text-slate-400 dark:placeholder:text-gray-600 w-full"
               />
             </div>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-5">
-            <button 
+            <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               className="text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors"
             >
@@ -218,13 +218,13 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
             </button>
 
 
-            
+
             <button onClick={handleLogout} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-red-500 hover:text-red-600 dark:hover:text-red-400 transition-colors ml-2">
               <LogOut size={16} /> <span className="hidden sm:inline">Logout</span>
             </button>
-            
+
             <Button onClick={() => navigate('/create')} className="bg-[#99CB48] text-black hover:bg-[#88B540] h-9 sm:h-11 px-3 sm:px-6 rounded-full font-black uppercase text-[10px] tracking-widest sm:tracking-[0.2em] shadow-lg shadow-[#99CB48]/20 gap-1 sm:gap-2 ml-1 sm:ml-2 transition-transform active:scale-95">
-              <Plus className="w-4 h-4" /> <span className="hidden sm:inline">New Strategy</span><span className="sm:hidden">New</span>
+              <Plus className="w-4 h-4" /> <span className="hidden sm:inline">Create Proposal</span><span className="sm:hidden">New</span>
             </Button>
           </div>
         </header>

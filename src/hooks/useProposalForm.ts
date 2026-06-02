@@ -40,7 +40,7 @@ const initialProposal: Proposal = {
   situation: {
     currentWorkflow: "Current operations rely heavily on manual coordination between departments, utilizing fragmented spreadsheets and legacy communication channels which delay decision-making cycles.",
     existingSoftware: "Legacy ERP / Google Sheets",
-    challenges: ["Manual Data Reconciliation", "Delayed Communication Loops", "Fragmented Inventory Tracking", "High Dependency on Human Recall"],
+    challenges: ["Manual Data Reconciliation", "Delayed Communication Loops", "Rework from incorrect assumptions", "High Dependency on Human Recall"],
     revenueLeakage: "₹15k+ / Mo",
     inefficiencies: "High Manual Overhead",
     limitations: "Limited Scalability in Current Architecture",
@@ -54,16 +54,21 @@ const initialProposal: Proposal = {
     customModules: [],
     demoLinks: [],
     timeline: "8-12 Weeks Implementation",
-    integrations: ["Custom CRM Connect", "ERP Data Bridge", "Cloud Logistics Sync", "Automated Billing API"],
+    integrations: [
+      "Custom CRM Connect|Seamless Real-time Customer Data Synchronization",
+      "Dashboard Features|Advanced Analytics & Performance Insights",
+      "Task & Team Management|Streamlined Collaboration & Workflow Tracking",
+      "Project Management|End-to-End Project Planning & Execution"
+    ],
     userRoles: ["Executive Admin", "Departmental Manager", "Operations Specialist", "External Auditor"],
     flowchartImageUrl: "",
     demoLink: "",
   },
   techArchitecture: {
-    frontendStack: ["React.js", "Next.js", "Tailwind CSS"],
-    backendStack: ["Node.js", "Express", "Python"],
-    database: "PostgreSQL / MongoDB",
-    hosting: "AWS / Google Cloud",
+    frontendStack: ["Tailwind CSS/Bootstrap", "HTML5", "CSS3", "JavaScript", "Livewire"],
+    backendStack: ["Laravel Framework", "Livewire Backend Integration", "Laravel Scheduler", "PHP", "Laravel Breeze / Jetstream"],
+    database: "MySQL",
+    hosting: "Cloud File Storage Integration",
     securityFeatures: ["256-bit AES Encryption", "SOC2 Compliance", "Multi-factor Authentication"],
   },
   roi: {

@@ -9,12 +9,12 @@ interface PageProps {
 }
 
 const TechnicalArchitecturePage: React.FC<PageProps> = ({ proposal, pageNum }) => {
-  const stack = proposal?.techArchitecture || {
-    frontendStack: ["React", "Next.js", "Tailwind CSS"],
-    backendStack: ["Node.js", "Express", "PostgreSQL"],
-    database: "Managed Cloud SQL",
-    hosting: "AWS / Vercel Edge",
-    securityFeatures: ["AES-256 Encryption", "SSL/TLS Protocol", "OAuth 2.0 Auth"]
+  const stack = {
+    frontendStack: ["Tailwind CSS/Bootstrap", "HTML5", "CSS3", "JavaScript", "Livewire"],
+    backendStack: ["Laravel Framework", "Livewire Backend Integration", "Laravel Scheduler", "PHP", "Laravel Breeze / Jetstream"],
+    database: "MySQL",
+    hosting: "Cloud File Storage Integration",
+    securityFeatures: ["256-bit AES Encryption", "SOC2 Compliance", "Multi-factor Authentication"]
   };
 
   return (
@@ -25,7 +25,7 @@ const TechnicalArchitecturePage: React.FC<PageProps> = ({ proposal, pageNum }) =
              <span className="text-[10px] font-black tracking-[0.15em] text-[#99CB48]">Technology Ecosystem</span>
           </div>
           <h2 className="text-5xl font-black tracking-tighter text-[#0B0E14] leading-none mb-2">
-             Technical <span className="text-[#99CB48]">Protocol.</span>
+             Technical <span className="text-[#99CB48]">Protocol</span>
           </h2>
           <div className="text-[10px] font-bold text-slate-400 tracking-wide">Enterprise Architecture & Security Standards</div>
        </div>
@@ -43,7 +43,7 @@ const TechnicalArchitecturePage: React.FC<PageProps> = ({ proposal, pageNum }) =
                    </div>
                    <div className="flex flex-wrap gap-2.5">
                       {stack.frontendStack.map((tech, i) => (
-                         <div key={i} className="px-5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-[11px] font-bold text-slate-700 shadow-sm border-l-4 border-l-[#99CB48]">
+                         <div key={i} className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-[10.5px] font-bold text-slate-700 shadow-sm border-l-4 border-l-[#99CB48]">
                             {tech}
                          </div>
                       ))}
@@ -59,7 +59,7 @@ const TechnicalArchitecturePage: React.FC<PageProps> = ({ proposal, pageNum }) =
                    </div>
                    <div className="flex flex-wrap gap-2.5">
                       {stack.backendStack.map((tech, i) => (
-                         <div key={i} className="px-5 py-2.5 bg-slate-900 text-white rounded-xl text-[11px] font-bold shadow-xl border-b-4 border-b-[#99CB48]">
+                         <div key={i} className="px-4 py-2 bg-slate-900 text-white rounded-xl text-[10.5px] font-bold shadow-xl border-b-4 border-b-[#99CB48]">
                             {tech}
                          </div>
                       ))}
