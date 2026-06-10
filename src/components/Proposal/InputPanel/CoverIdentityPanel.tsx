@@ -1,20 +1,20 @@
-import { InputPanelProps, LabelPremium, SectionHeader, ModernInput } from "./shared";
-import { ImagePlus } from "lucide-react";
-import React, { useRef } from "react";
+import { InputPanelProps, LabelPremium, SectionHeader, ModernInput, InputGroupCard } from "./shared";
+import { ImagePlus, Hash, User, FileText, Settings, Calendar, Globe } from "lucide-react";
+import React from "react";
 
 export default function CoverIdentityPanel({ proposal, currentStep, updateClient }: InputPanelProps) {
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
       <SectionHeader title="Brand Identity" subtitle="Configure the high-level strategic markers for this document" stepNumber={currentStep + 1} />
       
-      
-      <div className="space-y-4 p-6 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5">
-        <div>
-          <LabelPremium>Client Corporate Logo</LabelPremium>
-          <p className="text-[10px] text-slate-400 font-bold mb-3 uppercase tracking-wider">Upload or provide a URL for the client's logo to be featured on the cover page.</p>
-        </div>
-        
-        <div className="space-y-3">
+      {/* Logo Card */}
+      <InputGroupCard
+        icon={<ImagePlus className="w-[18px] h-[18px]" />}
+        title="Client Corporate Logo"
+        description="Upload or provide a URL for the client's logo"
+        accentColor="primary"
+      >
+        <div className="space-y-4">
           <ModernInput 
             placeholder="https://example.com/logo.png" 
             value={proposal.client.clientLogoUrl || ""} 
@@ -26,7 +26,7 @@ export default function CoverIdentityPanel({ proposal, currentStep, updateClient
               <span className="w-full border-t border-slate-200 dark:border-white/10" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-slate-50 dark:bg-[#131720] px-2 text-slate-400 font-black tracking-widest text-[9px]">Or Upload from Device</span>
+              <span className="bg-white dark:bg-[#131720] px-2 text-slate-400 font-black tracking-widest text-[9px]">Or Upload from Device</span>
             </div>
           </div>
           
@@ -73,58 +73,95 @@ export default function CoverIdentityPanel({ proposal, currentStep, updateClient
             </div>
           )}
         </div>
-      </div>
+      </InputGroupCard>
 
-      <div className="space-y-2">
-        <LabelPremium>Proposal Reference ID</LabelPremium>
-        <div className="relative group">
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-black group-focus-within:text-primary transition-colors">#</span>
-          <ModernInput className="pl-10" placeholder="e.g. 2026-001" value={proposal.client.referenceId} onChange={(e) => updateClient({ referenceId: e.target.value })} />
+      {/* Identity Card */}
+      <InputGroupCard
+        icon={<User className="w-[18px] h-[18px]" />}
+        title="Document Identity"
+        description="Filing reference and client configuration"
+        accentColor="blue"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <LabelPremium>Proposal Reference ID</LabelPremium>
+            <div className="relative group">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-black group-focus-within:text-primary transition-colors">#</span>
+              <ModernInput className="pl-10" placeholder="e.g. 2026-001" value={proposal.client.referenceId} onChange={(e) => updateClient({ referenceId: e.target.value })} />
+            </div>
+          </div>
+          
+          <div className="space-y-2">
+            <LabelPremium>Prepared For (Client Name)</LabelPremium>
+            <ModernInput placeholder="e.g. Acme Corporation" value={proposal.client.clientName || ""} onChange={(e) => updateClient({ clientName: e.target.value })} />
+          </div>
         </div>
-      </div>
+      </InputGroupCard>
 
-      
-      <div className="space-y-2">
-        <LabelPremium>Prepared For (Client Name)</LabelPremium>
-        <ModernInput placeholder="e.g. Acme Corporation" value={proposal.client.clientName || ""} onChange={(e) => updateClient({ clientName: e.target.value })} />
-      </div>
-
-      <div className="space-y-2">
-        <LabelPremium>Main Proposal Title</LabelPremium>
-        <ModernInput className="text-lg" placeholder="Strategic Digital Transformation" value={proposal.client.proposalTitle} onChange={(e) => updateClient({ proposalTitle: e.target.value })} />
-      </div>
-
-      <div className="space-y-2">
-        <LabelPremium>Title Highlight (Optional Company Name)</LabelPremium>
-        <ModernInput placeholder="e.g. Acme Corporation" value={proposal.client.titleHighlight || ""} onChange={(e) => updateClient({ titleHighlight: e.target.value })} />
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-        <div className="space-y-2">
-          <LabelPremium>Framework Title</LabelPremium>
-          <ModernInput placeholder="Executive Protocol" value={proposal.client.frameworkTitle} onChange={(e) => updateClient({ frameworkTitle: e.target.value })} />
+      {/* Titles Card */}
+      <InputGroupCard
+        icon={<FileText className="w-[18px] h-[18px]" />}
+        title="Document Title & Highlights"
+        description="Core headings on the cover page"
+        accentColor="purple"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <LabelPremium>Main Proposal Title</LabelPremium>
+            <ModernInput placeholder="Strategic Digital Transformation" value={proposal.client.proposalTitle} onChange={(e) => updateClient({ proposalTitle: e.target.value })} />
+          </div>
+          
+          <div className="space-y-2">
+            <LabelPremium>Title Highlight (Optional)</LabelPremium>
+            <ModernInput placeholder="e.g. Acme Corporation" value={proposal.client.titleHighlight || ""} onChange={(e) => updateClient({ titleHighlight: e.target.value })} />
+          </div>
         </div>
-        <div className="space-y-2">
-          <LabelPremium>Corporate Tagline</LabelPremium>
-          <ModernInput placeholder="Innovation at Scale" value={proposal.client.tagline} onChange={(e) => updateClient({ tagline: e.target.value })} />
-        </div>
-      </div>
+      </InputGroupCard>
 
-      <div className="space-y-2">
-        <LabelPremium>Strategic Domain (Industry)</LabelPremium>
-        <ModernInput placeholder="E-Commerce & Logistics" value={proposal.client.industryTitle} onChange={(e) => updateClient({ industryTitle: e.target.value })} />
-      </div>
+      {/* Protocol & Metadata Card */}
+      <InputGroupCard
+        icon={<Settings className="w-[18px] h-[18px]" />}
+        title="Metadata & Taglines"
+        description="Framework ordering and branding tags"
+        accentColor="emerald"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <LabelPremium>Framework Title</LabelPremium>
+            <ModernInput placeholder="Executive Protocol" value={proposal.client.frameworkTitle} onChange={(e) => updateClient({ frameworkTitle: e.target.value })} />
+          </div>
+          
+          <div className="space-y-2">
+            <LabelPremium>Corporate Tagline</LabelPremium>
+            <ModernInput placeholder="Innovation at Scale" value={proposal.client.tagline} onChange={(e) => updateClient({ tagline: e.target.value })} />
+          </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-        <div className="space-y-2">
-          <LabelPremium>Filing Date</LabelPremium>
-          <ModernInput value={proposal.client.filingDate} onChange={(e) => updateClient({ filingDate: e.target.value })} />
+          <div className="space-y-2 sm:col-span-2">
+            <LabelPremium>Strategic Domain (Industry)</LabelPremium>
+            <ModernInput placeholder="E-Commerce & Logistics" value={proposal.client.industryTitle} onChange={(e) => updateClient({ industryTitle: e.target.value })} />
+          </div>
         </div>
-        <div className="space-y-2">
-          <LabelPremium>Footer Protocol</LabelPremium>
-          <ModernInput placeholder="e.g. © 2026 Your Company Name" value={proposal.client.footerMessage} onChange={(e) => updateClient({ footerMessage: e.target.value })} />
+      </InputGroupCard>
+
+      {/* Date & Footer Card */}
+      <InputGroupCard
+        icon={<Calendar className="w-[18px] h-[18px]" />}
+        title="Filing & Verification Dates"
+        description="Footer details and signing metrics"
+        accentColor="orange"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <LabelPremium>Filing Date</LabelPremium>
+            <ModernInput value={proposal.client.filingDate} onChange={(e) => updateClient({ filingDate: e.target.value })} />
+          </div>
+          
+          <div className="space-y-2">
+            <LabelPremium>Footer Protocol</LabelPremium>
+            <ModernInput placeholder="e.g. © 2026 Your Company Name" value={proposal.client.footerMessage} onChange={(e) => updateClient({ footerMessage: e.target.value })} />
+          </div>
         </div>
-      </div>
+      </InputGroupCard>
     </div>
   );
 }

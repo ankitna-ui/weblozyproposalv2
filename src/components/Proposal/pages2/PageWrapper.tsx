@@ -21,7 +21,7 @@ const PageWrapper = ({ children, pageNum, className = "", title = "" }: PageWrap
           <div className="h-4 w-[1.5px] bg-slate-200" />
           <div className="text-[9.5px] font-black tracking-[0.15em] text-slate-400 uppercase mt-0.5">{title}</div>
       </div>
-      <div className="text-[8.5px] font-black tracking-[0.2em] text-slate-300 uppercase mt-0.5">Corporate / Strategic</div>
+      <div className="text-[8.5px] font-black tracking-[0.2em] text-slate-300 uppercase mt-0.5">CORPORATE | STRATEGIC</div>
     </div>
 
     <div className="relative z-10 flex-1 flex flex-col min-h-0 proposal-content">

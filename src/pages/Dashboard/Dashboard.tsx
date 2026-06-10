@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 import { 
   FileText, Users, Clock, Eye, Trash2, Pencil, 
-  AlertOctagon, ArrowRight, Download, CreditCard
+  AlertOctagon, ArrowRight, Download, CreditCard,
+  Send, TrendingUp
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -31,6 +32,40 @@ function getTimeAgo(dateString: string | number) {
   const months = Math.floor(days / 30);
   return `${months}mo ago`;
 }
+
+const CustomAreaTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="bg-white dark:bg-[#11151D] border border-slate-200 dark:border-white/10 p-3 rounded-xl shadow-xl">
+        <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-gray-500 mb-1">{label}</p>
+        <div className="space-y-0.5">
+          <p className="text-xs font-black text-slate-900 dark:text-white">
+            Total Protocols: <span className="text-blue-500">{data.total}</span>
+          </p>
+          <p className="text-[10px] font-bold text-slate-500 dark:text-gray-400">
+            Created today: <span className="text-emerald-500">+{data.created}</span>
+          </p>
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
+const CustomPieTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="bg-white dark:bg-[#11151D] border border-slate-200 dark:border-white/10 p-3 rounded-xl shadow-xl flex items-center gap-2">
+        <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: data.color }} />
+        <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">{data.name}:</span>
+        <span className="text-xs font-black text-[#99CB48]">{data.value}</span>
+      </div>
+    );
+  }
+  return null;
+};
 
 export default function Dashboard() {
   const [proposals, setProposals] = useState<(Proposal & { id: string })[]>([]);
@@ -99,31 +134,59 @@ export default function Dashboard() {
     if (!searchQuery) return proposals;
     return proposals.filter(p => 
       p.client?.proposalTitle?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.client?.referenceId?.toLowerCase().includes(searchQuery.toLowerCase())
+      p.client?.referenceId?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.client?.companyName?.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [proposals, searchQuery]);
 
+  const getProposalValuation = (p: Proposal) => {
+    const baseVal = p.pricing?.coreValuation ? parseFloat(String(p.pricing.coreValuation).replace(/[^0-9.]/g, "")) : 0;
+    const moduleSum = (p.solution?.selectedModules || []).reduce((acc, m) => {
+      const priceStr = String(m.price || "0").replace(/[^0-9.]/g, "");
+      const price = parseFloat(priceStr);
+      return acc + (isNaN(price) ? 0 : price);
+    }, 0);
+    const base = baseVal || moduleSum || 0;
+    const discountPctStr = String(p.pricing?.discountPercentage || "0").replace(/[^0-9.]/g, "");
+    const discountPct = parseFloat(discountPctStr) || 0;
+    const discountAmount = base * (discountPct / 100);
+    return base - discountAmount;
+  };
+
+  const formatCurrency = (val: number) => {
+    return `₹${Math.round(val).toLocaleString("en-IN")}`;
+  };
+
   const stats = useMemo(() => {
-    const total = filteredProposals.length;
-    const drafts = filteredProposals.filter(p => (p.client?.status || 'Draft') === 'Draft').length;
-    const downloaded = filteredProposals.filter(p => (p as any).isDownloaded || p.client?.status === 'Sent' || p.client?.status === 'Accepted' || p.client?.status === 'Declined').length;
+    const total = proposals.length;
+    const drafts = proposals.filter(p => (p.client?.status || 'Draft') === 'Draft').length;
+    const sent = proposals.filter(p => p.client?.status === 'Sent').length;
+    const accepted = proposals.filter(p => p.client?.status === 'Accepted').length;
+    const declined = proposals.filter(p => p.client?.status === 'Declined').length;
+    const finalized = sent + accepted + declined;
+    const valuation = proposals.reduce((sum, p) => sum + getProposalValuation(p), 0);
 
     return {
       proposals: total,
-      drafts: drafts,
-      downloaded: downloaded
+      drafts,
+      sent,
+      accepted,
+      declined,
+      finalized,
+      valuation
     };
-  }, [filteredProposals]);
+  }, [proposals]);
 
   const distributionData = useMemo(() => [
-    { name: 'Total Proposals', value: stats.proposals || 0, color: '#3b82f6' },
-    { name: 'Active Drafts', value: stats.drafts || 0, color: '#84cc16' },
-    { name: 'Downloaded', value: stats.downloaded || 0, color: '#f97316' },
+    { name: 'Drafts', value: stats.drafts || 0, color: '#f59e0b' },
+    { name: 'Sent', value: stats.sent || 0, color: '#3b82f6' },
+    { name: 'Accepted', value: stats.accepted || 0, color: '#10b981' },
+    { name: 'Declined', value: stats.declined || 0, color: '#ef4444' },
   ].filter(d => d.value > 0), [stats]);
 
   const totalDistributionValue = useMemo(() => distributionData.reduce((acc, curr) => acc + curr.value, 0), [distributionData]);
 
-  // Dynamic Chart Data (Last 7 Days Cumulative)
+  // Dynamic Chart Data (Last 7 Days Cumulative and daily count)
   const areaChartData = useMemo(() => {
     const last7Days = Array.from({length: 7}).map((_, i) => {
       const d = new Date();
@@ -153,7 +216,7 @@ export default function Dashboard() {
     
     return last7Days.map(d => {
       cumulative += d.count;
-      return { name: d.name, total: cumulative };
+      return { name: d.name, created: d.count, total: cumulative };
     });
   }, [proposals]);
 
@@ -182,70 +245,87 @@ export default function Dashboard() {
         {/* Welcome & Profile */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
-            <h1 className="text-3xl font-black tracking-tight mb-2">Welcome back, {employeeProfile?.fullName?.split(' ')[0] || "Operator"} 👋</h1>
-            <p className="text-sm text-slate-500 dark:text-gray-400">Here's what's happening with your strategic ecosystem today.</p>
+            <h1 className="text-3xl font-black tracking-tight mb-1 text-slate-900 dark:text-white">Welcome back, {employeeProfile?.fullName?.split(' ')[0] || "Operator"} 👋</h1>
+            <p className="text-xs text-slate-500 dark:text-gray-400 font-medium tracking-wide">Here's what's happening with your strategic ecosystem today.</p>
           </div>
 
           {employeeProfile && (
-            <div className="flex items-center gap-6 bg-white dark:bg-[#11151D] border border-slate-200 dark:border-white/5 px-6 py-4 rounded-2xl shadow-lg shadow-black/20">
-              <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/10 flex items-center justify-center text-slate-500 dark:text-gray-400 overflow-hidden">
+            <div className="flex items-center gap-4 bg-white/40 dark:bg-[#11151D]/40 backdrop-blur-md border border-slate-200 dark:border-white/5 px-5 py-3 rounded-2xl shadow-sm transition-all hover:border-slate-300 dark:hover:border-white/10">
+              <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 dark:text-gray-400 overflow-hidden shrink-0">
                 {employeeProfile.profileImageUrl ? (
                   <img src={employeeProfile.profileImageUrl} alt="Profile" className="w-full h-full object-cover" />
                 ) : (
-                  <UserCog size={20} />
+                  <UserCog size={18} />
                 )}
               </div>
               <div className="flex flex-col">
-                <span className="text-[9px] text-slate-500 dark:text-gray-400 font-black uppercase tracking-[0.3em] mb-1">{employeeProfile.position || "Corporate Operator"}</span>
-                <span className="text-sm font-black uppercase tracking-wider text-slate-900 dark:text-white">{employeeProfile.fullName}</span>
+                <span className="text-[8px] text-slate-400 dark:text-gray-500 font-bold uppercase tracking-[0.2em]">{employeeProfile.position || "Corporate Operator"}</span>
+                <span className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white leading-tight">{employeeProfile.fullName}</span>
               </div>
-              <div className="h-10 w-[1px] bg-slate-200 dark:bg-white/10 mx-2" />
+              <div className="h-8 w-[1px] bg-slate-200 dark:bg-white/10 mx-1" />
               <div className="flex flex-col">
-                <span className="text-[9px] text-slate-500 dark:text-gray-400 font-black uppercase tracking-[0.3em] mb-1">Employee ID</span>
-                <span className="text-sm font-black uppercase tracking-wider text-[#99CB48]">{employeeProfile.employeeId}</span>
+                <span className="text-[8px] text-slate-400 dark:text-gray-500 font-bold uppercase tracking-[0.2em]">Employee ID</span>
+                <span className="text-xs font-black uppercase tracking-wider text-[#99CB48] leading-tight">{employeeProfile.employeeId}</span>
               </div>
             </div>
           )}
         </div>
 
         {/* Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Card 1: Total Proposals */}
-          <div onClick={() => navigate('/saved')} className="cursor-pointer transition-all hover:scale-[1.02] bg-white dark:bg-[#11151D] border-t-2 border-t-blue-500 border-x border-b border-slate-200 dark:border-white/5 rounded-2xl p-6 relative overflow-hidden group">
-            <div className="absolute -right-4 -bottom-4 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity"><FileText size={120} /></div>
-            <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center mb-6">
-              <FileText size={18} />
+          <div onClick={() => navigate('/saved')} className="cursor-pointer transition-all hover:scale-[1.02] bg-white dark:bg-[#11151D] border-t-2 border-t-blue-500 border-x border-b border-slate-200 dark:border-white/5 rounded-2xl p-6 relative overflow-hidden group shadow-sm hover:shadow-md">
+            <div className="absolute -right-4 -bottom-4 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity text-slate-900 dark:text-white"><FileText size={100} /></div>
+            <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center mb-5 border border-blue-500/20">
+              <FileText size={16} />
             </div>
-            <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-gray-400 mb-2">Total Proposals</div>
-            <div className="text-4xl font-black mb-6 truncate">{stats.proposals}</div>
-            <div className="flex items-center text-[11px] font-bold text-blue-400 group-hover:text-blue-300">
-              View all proposals <ArrowRight size={14} className="ml-1" />
+            <div className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-gray-500 mb-1">Total Proposals</div>
+            <div className="text-3xl font-black mb-1 truncate text-slate-900 dark:text-white">{stats.proposals}</div>
+            <p className="text-[10px] text-slate-500 dark:text-gray-400 mb-4 font-medium">All enterprise assets built</p>
+            <div className="flex items-center text-[10px] font-black uppercase tracking-widest text-blue-500 dark:text-blue-400 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
+              View strategic index <ArrowRight size={12} className="ml-1" />
             </div>
           </div>
 
           {/* Card 2: Active Drafts */}
-          <div onClick={() => navigate('/drafts')} className="cursor-pointer transition-all hover:scale-[1.02] bg-white dark:bg-[#11151D] border-t-2 border-t-[#99CB48] border-x border-b border-slate-200 dark:border-white/5 rounded-2xl p-6 relative overflow-hidden group">
-            <div className="absolute -right-4 -bottom-4 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity"><Clock size={120} /></div>
-            <div className="w-10 h-10 rounded-xl bg-[#99CB48]/10 text-[#99CB48] flex items-center justify-center mb-6">
-              <Clock size={18} />
+          <div onClick={() => navigate('/drafts')} className="cursor-pointer transition-all hover:scale-[1.02] bg-white dark:bg-[#11151D] border-t-2 border-t-amber-500 border-x border-b border-slate-200 dark:border-white/5 rounded-2xl p-6 relative overflow-hidden group shadow-sm hover:shadow-md">
+            <div className="absolute -right-4 -bottom-4 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity text-slate-900 dark:text-white"><Clock size={100} /></div>
+            <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mb-5 border border-amber-500/20">
+              <Clock size={16} />
             </div>
-            <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-gray-400 mb-2">Active Drafts</div>
-            <div className="text-4xl font-black mb-6 truncate">{stats.drafts}</div>
-            <div className="flex items-center text-[11px] font-bold text-[#99CB48] group-hover:text-[#aee056]">
-              Continue drafting <ArrowRight size={14} className="ml-1" />
+            <div className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-gray-500 mb-1">Active Drafts</div>
+            <div className="text-3xl font-black mb-1 truncate text-slate-900 dark:text-white">{stats.drafts}</div>
+            <p className="text-[10px] text-slate-500 dark:text-gray-400 mb-4 font-medium">Work-in-progress protocols</p>
+            <div className="flex items-center text-[10px] font-black uppercase tracking-widest text-amber-500 dark:text-amber-400 group-hover:text-amber-600 dark:group-hover:text-amber-300 transition-colors">
+              Resume drafting <ArrowRight size={12} className="ml-1" />
             </div>
           </div>
 
-          {/* Card 3: Downloaded Proposals */}
-          <div onClick={() => navigate('/saved')} className="cursor-pointer transition-all hover:scale-[1.02] bg-white dark:bg-[#11151D] border-t-2 border-t-orange-500 border-x border-b border-slate-200 dark:border-white/5 rounded-2xl p-6 relative overflow-hidden group">
-            <div className="absolute -right-4 -bottom-4 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity"><Download size={120} /></div>
-            <div className="w-10 h-10 rounded-xl bg-orange-500/10 text-orange-500 flex items-center justify-center mb-6">
-              <Download size={18} />
+          {/* Card 3: Finalized Protocols */}
+          <div onClick={() => navigate('/saved')} className="cursor-pointer transition-all hover:scale-[1.02] bg-white dark:bg-[#11151D] border-t-2 border-t-purple-500 border-x border-b border-slate-200 dark:border-white/5 rounded-2xl p-6 relative overflow-hidden group shadow-sm hover:shadow-md">
+            <div className="absolute -right-4 -bottom-4 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity text-slate-900 dark:text-white"><Send size={100} /></div>
+            <div className="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center mb-5 border border-purple-500/20">
+              <Send size={16} />
             </div>
-            <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-gray-400 mb-2">Downloaded Proposals</div>
-            <div className="text-4xl font-black mb-6 truncate">{stats.downloaded}</div>
-            <div className="flex items-center text-[11px] font-bold text-orange-400 group-hover:text-orange-300">
-              View downloaded <ArrowRight size={14} className="ml-1" />
+            <div className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-gray-500 mb-1">Finalized Protocols</div>
+            <div className="text-3xl font-black mb-1 truncate text-slate-900 dark:text-white">{stats.finalized}</div>
+            <p className="text-[10px] text-slate-500 dark:text-gray-400 mb-4 font-medium">Delivered to clients</p>
+            <div className="flex items-center text-[10px] font-black uppercase tracking-widest text-purple-500 dark:text-purple-400 group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors">
+              Track delivery <ArrowRight size={12} className="ml-1" />
+            </div>
+          </div>
+
+          {/* Card 4: Pipeline Valuation */}
+          <div onClick={() => navigate('/saved')} className="cursor-pointer transition-all hover:scale-[1.02] bg-white dark:bg-[#11151D] border-t-2 border-t-emerald-500 border-x border-b border-slate-200 dark:border-white/5 rounded-2xl p-6 relative overflow-hidden group shadow-sm hover:shadow-md">
+            <div className="absolute -right-4 -bottom-4 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity text-slate-900 dark:text-white"><TrendingUp size={100} /></div>
+            <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-5 border border-emerald-500/20">
+              <TrendingUp size={16} />
+            </div>
+            <div className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-gray-500 mb-1">Pipeline Valuation</div>
+            <div className="text-3xl font-black mb-1 truncate text-emerald-600 dark:text-[#99CB48]">{formatCurrency(stats.valuation)}</div>
+            <p className="text-[10px] text-slate-500 dark:text-gray-400 mb-4 font-medium">Total value of ecosystem</p>
+            <div className="flex items-center text-[10px] font-black uppercase tracking-widest text-emerald-500 dark:text-emerald-400 group-hover:text-emerald-600 dark:group-hover:text-[#aee056] transition-colors">
+              Analyze financials <ArrowRight size={12} className="ml-1" />
             </div>
           </div>
         </div>
@@ -259,8 +339,8 @@ export default function Dashboard() {
               <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-700 dark:text-gray-300">Proposal Generation Overview</h3>
               <div className="text-[10px] bg-slate-100 dark:bg-white/5 px-3 py-1.5 rounded-lg text-slate-500 dark:text-gray-400 border border-slate-200 dark:border-white/5">Last 7 Days</div>
             </div>
-            <div className="flex-1 w-full min-h-[200px]">
-              <ResponsiveContainer width="100%" height="100%" minWidth={10} minHeight={10}>
+            <div className="flex-1 w-full h-[220px]">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                 <AreaChart data={areaChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorAssets" x1="0" y1="0" x2="0" y2="1">
@@ -269,10 +349,7 @@ export default function Dashboard() {
                     </linearGradient>
                   </defs>
                   <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#6b7280' }} dy={10} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#11151D', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', fontSize: '12px', color: '#fff' }}
-                    itemStyle={{ color: '#99CB48', fontWeight: 'bold' }}
-                  />
+                  <Tooltip content={<CustomAreaTooltip />} />
                   <Area type="monotone" dataKey="total" stroke="#99CB48" strokeWidth={3} fillOpacity={1} fill="url(#colorAssets)" />
                 </AreaChart>
               </ResponsiveContainer>
@@ -281,36 +358,29 @@ export default function Dashboard() {
 
           {/* Donut Chart */}
           <div className="lg:col-span-4 bg-white dark:bg-[#11151D] border border-slate-200 dark:border-white/5 rounded-2xl p-6 flex flex-col">
-            <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-700 dark:text-gray-300 mb-6">Asset Distribution</h3>
+            <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-700 dark:text-gray-300 mb-6">Asset Distribution by Status</h3>
             <div className="flex-1 flex flex-col sm:flex-row items-center justify-center gap-6">
-              <div className="w-[120px] h-[120px] shrink-0 relative">
-                {/* Center overlay text (optional but adds premium feel) */}
+              <div className="w-[120px] h-[120px] shrink-0 relative flex items-center justify-center">
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                  <span className="text-xl font-black text-slate-900 dark:text-white leading-none">{totalDistributionValue}</span>
-                  <span className="text-[7px] font-black uppercase tracking-[0.2em] text-slate-400 mt-0.5">Total</span>
+                  <span className="text-2xl font-black text-slate-900 dark:text-white leading-none">{stats.proposals}</span>
+                  <span className="text-[7px] font-black uppercase tracking-[0.2em] text-slate-400 mt-1">Proposals</span>
                 </div>
-                <ResponsiveContainer width="100%" height="100%" minWidth={10} minHeight={10}>
-                  <PieChart>
-                    <Pie
-                      data={distributionData}
-                      innerRadius={45}
-                      outerRadius={60}
-                      paddingAngle={4}
-                      cornerRadius={4}
-                      dataKey="value"
-                      stroke="none"
-                    >
-                      {distributionData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} className="drop-shadow-sm hover:opacity-80 transition-opacity outline-none" />
-                      ))}
-                    </Pie>
-                    <Tooltip 
-                      cursor={{fill: 'transparent'}}
-                      contentStyle={{ backgroundColor: '#11151D', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', fontSize: '12px', color: '#fff', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.5)' }}
-                      itemStyle={{ fontWeight: 'bold' }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
+                <PieChart width={120} height={120}>
+                  <Pie
+                    data={distributionData}
+                    innerRadius={45}
+                    outerRadius={60}
+                    paddingAngle={4}
+                    cornerRadius={4}
+                    dataKey="value"
+                    stroke="none"
+                  >
+                    {distributionData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} className="drop-shadow-sm hover:opacity-80 transition-opacity outline-none" />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<CustomPieTooltip />} />
+                </PieChart>
               </div>
               {/* Legend side */}
               <div className="flex flex-col gap-4 w-full flex-1 min-w-[200px]">
@@ -324,7 +394,7 @@ export default function Dashboard() {
                     </div>
                     <div className="flex items-center gap-2.5 ml-2">
                       <span className="text-[11px] font-black text-slate-900 dark:text-white">
-                        {Math.round((item.value / totalDistributionValue) * 100)}%
+                        {stats.proposals > 0 ? Math.round((item.value / stats.proposals) * 100) : 0}%
                       </span>
                       <span className="text-[9px] font-bold text-slate-400 dark:text-gray-500 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-md border border-slate-200 dark:border-white/5">
                         {item.value}
@@ -376,9 +446,9 @@ export default function Dashboard() {
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
                 <tr className="border-b border-slate-200 dark:border-white/5">
-                  <th className="pb-4 text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-gray-600">Client Profile</th>
-                  <th className="pb-4 text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-gray-600">Strategic Title</th>
-                  <th className="pb-4 text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-gray-600">Prepared By</th>
+                  <th className="pb-4 text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-gray-600">Client / Reference</th>
+                  <th className="pb-4 text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-gray-600">Proposal Title</th>
+                  <th className="pb-4 text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-gray-600">Valuation</th>
                   <th className="pb-4 text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-gray-600">Status</th>
                   <th className="pb-4 text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-gray-600">Updated</th>
                   <th className="pb-4 text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-gray-600 text-right pr-2">Actions</th>
@@ -390,38 +460,43 @@ export default function Dashboard() {
                     <td colSpan={6} className="py-8 text-center text-sm text-slate-500">No proposals found.</td>
                   </tr>
                 ) : filteredProposals.slice(0, 3).map((p, i) => {
-                  const isDraft = (p.client?.status || 'Draft') === 'Draft';
+                  const status = p.client?.status || 'Draft';
+                  const valuation = getProposalValuation(p);
                   return (
                     <tr key={p.id} className="group hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors">
                       <td className="py-4 pr-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/5 flex items-center justify-center text-[#99CB48]">
+                          <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/5 flex items-center justify-center text-[#99CB48] shrink-0 border border-slate-200 dark:border-white/10 group-hover:border-[#99CB48]/30 transition-colors">
                             <FileText size={18} />
                           </div>
                           <div className="flex flex-col">
-                            <span className="font-black text-slate-900 dark:text-white uppercase tracking-wider text-xs">{p.client?.referenceId || "WBL-000"}</span>
-                            <span className="text-[9px] text-slate-500 dark:text-gray-400 uppercase tracking-widest mt-0.5">{p.client?.companyName || "VALUED CLIENT"}</span>
+                            <span className="font-black text-slate-900 dark:text-white uppercase tracking-wider text-xs">{p.client?.companyName || "VALUED CLIENT"}</span>
+                            <span className="text-[9px] text-slate-400 dark:text-gray-500 uppercase tracking-widest mt-0.5">{p.client?.referenceId || "WBL-000"}</span>
                           </div>
                         </div>
                       </td>
                       <td className="py-4 pr-4">
-                        <div className="text-slate-500 dark:text-gray-400 text-xs font-bold uppercase tracking-tight max-w-[200px] truncate">{p.client?.proposalTitle || "Bespoke Solution"}</div>
+                        <div className="text-slate-600 dark:text-slate-300 text-xs font-black uppercase tracking-wider max-w-[240px] truncate">{p.client?.proposalTitle || "Bespoke Solution"}</div>
                       </td>
                       <td className="py-4 pr-4">
-                        <div className="text-slate-500 dark:text-gray-400 text-[10px] font-black uppercase tracking-wider flex flex-col">
-                          <span>{p.creatorName || p.client?.preparedBy || "Weblozy Labs"}</span>
-                          <span className="text-slate-400 dark:text-gray-600 mt-0.5">({p.creatorEmployeeId || "WL-000000"})</span>
+                        <div className="text-slate-900 dark:text-white text-xs font-black uppercase tracking-wider">
+                          {valuation > 0 ? formatCurrency(valuation) : "—"}
                         </div>
                       </td>
                       <td className="py-4 pr-4">
-                        <Badge variant="outline" className={`rounded-md px-3 py-1 text-[9px] font-black uppercase tracking-wider border-none ${isDraft ? 'bg-orange-500/10 text-orange-500' : 'bg-[#99CB48]/10 text-[#99CB48]'}`}>
-                          {p.client?.status || 'Draft'}
+                        <Badge variant="outline" className={`rounded-md px-3 py-1 text-[8px] font-black uppercase tracking-wider border ${
+                          status === 'Accepted' ? 'bg-[#99CB48]/10 text-emerald-600 dark:text-[#99CB48] border-emerald-500/20' :
+                          status === 'Sent' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
+                          status === 'Declined' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' :
+                          'bg-amber-500/10 text-amber-500 border-amber-500/20'
+                        }`}>
+                          {status}
                         </Badge>
                       </td>
                       <td className="py-4 pr-4">
                         <div className="text-slate-500 dark:text-gray-400 text-[10px] font-medium flex flex-col">
-                          <span>{new Date(p.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                          <span className="text-slate-400 dark:text-gray-600 mt-0.5">{new Date(p.updatedAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
+                          <span>{new Date(p.updatedAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                          <span className="text-slate-400 dark:text-gray-600 mt-0.5">{new Date(p.updatedAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
                       </td>
                       <td className="py-4 text-right">

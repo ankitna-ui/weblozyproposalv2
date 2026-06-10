@@ -3,7 +3,7 @@
 ## Official Authorship Claim
 **App Name:** Weblozy Proposal OS V2 (Strategic Editor)
 **Sole Creator, Lead Architect & Developer:** Ankit Nishad
-**Development Period:** May 2024 – Present
+**Development Period:** May 2025 – Present
 
 ---
 

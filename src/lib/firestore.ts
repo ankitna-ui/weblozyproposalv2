@@ -7,33 +7,104 @@ const PROPOSALS_COLLECTION = "proposals";
 /**
  * Recursively sanitize an object for Firestore:
  * - Removes keys with `undefined` values from plain objects
- * - Replaces `undefined` with `null` inside arrays (Firestore requires defined array items)
- * - Converts NaN to null
+ * - Replaces `undefined` with `null` inside arrays
+ * - Converts non-plain class instances to plain objects
+ * The most robust way to do this is a JSON roundtrip.
  */
 function sanitizeForFirestore(value: unknown): unknown {
-  if (value === undefined) return null;
-  if (value === null) return null;
-  if (typeof value === "number") return isNaN(value) ? null : value;
-  if (typeof value !== "object") return value;
-
-  if (Array.isArray(value)) {
-    return value.map((item) => sanitizeForFirestore(item));
+  try {
+    if (value === undefined) return null;
+    return JSON.parse(JSON.stringify(value));
+  } catch (e) {
+    console.error("Sanitization error", e);
+    return null;
   }
+}
 
-  const sanitized: Record<string, unknown> = {};
-  for (const [key, val] of Object.entries(value as Record<string, unknown>)) {
-    if (val === undefined) continue; // drop undefined keys
-    sanitized[key] = sanitizeForFirestore(val);
+/**
+ * Compresses base64 images if they exceed maximum bounds.
+ * Returns the original string if not a base64 image or if compression fails or times out.
+ */
+function compressImageIfNeeded(base64Str: string | undefined): Promise<string | undefined> {
+  if (!base64Str || !base64Str.startsWith("data:image/")) {
+    return Promise.resolve(base64Str);
   }
-  return sanitized;
+  return new Promise((resolve) => {
+    let resolved = false;
+    const timeout = setTimeout(() => {
+      if (!resolved) {
+        resolved = true;
+        resolve(base64Str);
+      }
+    }, 1500);
+
+    const img = new Image();
+    img.onload = () => {
+      if (resolved) return;
+      const maxWidth = 800;
+      const maxHeight = 800;
+      let width = img.width;
+      let height = img.height;
+
+      if (width > height) {
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+      } else {
+        if (height > maxHeight) {
+          width = Math.round((width * maxHeight) / height);
+          height = maxHeight;
+        }
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        clearTimeout(timeout);
+        resolved = true;
+        resolve(base64Str);
+        return;
+      }
+
+      ctx.drawImage(img, 0, 0, width, height);
+      // Compress to JPEG with 0.7 quality to reduce file size drastically
+      const compressed = canvas.toDataURL("image/jpeg", 0.7);
+      clearTimeout(timeout);
+      resolved = true;
+      resolve(compressed);
+    };
+    img.onerror = () => {
+      if (resolved) return;
+      clearTimeout(timeout);
+      resolved = true;
+      resolve(base64Str);
+    };
+    img.src = base64Str;
+  });
 }
 
 export async function saveProposal(proposal: Proposal) {
   try {
     const customId = proposal.client?.referenceId?.trim()?.replace(/[\s/]+/g, '-') || `WBZ-${Date.now()}`;
     const docRef = doc(db, PROPOSALS_COLLECTION, customId);
+
+    // Compress base64 images to keep document size under Firestore's 1MB limit
+    const compressedClientLogo = await compressImageIfNeeded(proposal.client?.clientLogoUrl);
+    const compressedFlowchart = await compressImageIfNeeded(proposal.solution?.flowchartImageUrl);
+
     const clean = sanitizeForFirestore({
       ...proposal,
+      client: {
+        ...proposal.client,
+        clientLogoUrl: compressedClientLogo || null
+      },
+      solution: {
+        ...proposal.solution,
+        flowchartImageUrl: compressedFlowchart || null
+      },
       id: customId,
       updatedAt: Date.now()
     }) as Record<string, unknown>;
@@ -48,8 +119,25 @@ export async function saveProposal(proposal: Proposal) {
 export async function updateProposal(id: string, proposal: Partial<Proposal>) {
   try {
     const docRef = doc(db, PROPOSALS_COLLECTION, id);
+
+    // Compress base64 images if they exist in the update
+    const compressedClientLogo = await compressImageIfNeeded(proposal.client?.clientLogoUrl);
+    const compressedFlowchart = await compressImageIfNeeded(proposal.solution?.flowchartImageUrl);
+
     const clean = sanitizeForFirestore({
       ...proposal,
+      ...(proposal.client ? {
+        client: {
+          ...proposal.client,
+          clientLogoUrl: compressedClientLogo || null
+        }
+      } : {}),
+      ...(proposal.solution ? {
+        solution: {
+          ...proposal.solution,
+          flowchartImageUrl: compressedFlowchart || null
+        }
+      } : {}),
       updatedAt: Date.now()
     }) as Record<string, unknown>;
     await updateDoc(docRef, clean);

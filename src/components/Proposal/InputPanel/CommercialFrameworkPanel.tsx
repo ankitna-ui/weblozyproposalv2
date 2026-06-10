@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { CreditCard, Percent, Receipt, ShieldCheck, Plus, Trash2, Calculator, Server } from "lucide-react";
-import { InputPanelProps, LabelPremium, SectionHeader, ModernInput, ModernTextArea } from "./shared";
+import { CreditCard, Percent, ShieldCheck, Plus, Trash2, Calculator, Server, Landmark } from "lucide-react";
+import { InputPanelProps, LabelPremium, SectionHeader, ModernInput, ModernTextArea, InputGroupCard } from "./shared";
 
 export default function CommercialFrameworkPanel({ proposal, currentStep, updatePricing }: InputPanelProps) {
   
@@ -37,7 +37,7 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
   const formatINR = (v: number) => `₹${Math.round(v).toLocaleString("en-IN")}`;
 
   return (
-    <div className="space-y-8 pb-10">
+    <div className="space-y-6 pb-10">
       <SectionHeader 
         title="Commercial Alignment" 
         subtitle="Configure the investment framework and structured financial roadmap" 
@@ -45,44 +45,45 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
       />
 
       {/* ──── VALUATION MATRIX ──── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2 group">
-          <div className="flex items-center justify-between px-1">
-            <LabelPremium className="mb-0 text-slate-800 text-[10px]">Project Valuation (Base)</LabelPremium>
-            <CreditCard size={14} className="text-slate-300 group-hover:text-primary transition-colors" />
+      <InputGroupCard
+        icon={<Landmark className="w-[18px] h-[18px]" />}
+        title="Valuation Matrix"
+        description="Gross base valuation and strategic discounting rate"
+        accentColor="blue"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <LabelPremium>Project Valuation (Base)</LabelPremium>
+            <div className="relative">
+               <ModernInput 
+                  type="number" 
+                  className="pl-9" 
+                  placeholder="e.g. 50,000"
+                  value={proposal.pricing.coreValuation} 
+                  onChange={(e) => updatePricing({ coreValuation: e.target.value })} 
+               />
+               <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">₹</span>
+            </div>
           </div>
-          <div className="relative">
-             <ModernInput 
-                type="number" 
-                className="h-11 pl-9 pr-3 text-base font-semibold text-slate-800 border-slate-200 dark:border-white/10 focus-visible:ring-primary rounded-xl" 
-                placeholder="e.g. 50,000"
-                value={proposal.pricing.coreValuation} 
-                onChange={(e) => updatePricing({ coreValuation: e.target.value })} 
-             />
-             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">₹</span>
-          </div>
-        </div>
 
-        <div className="space-y-2 group">
-          <div className="flex items-center justify-between px-1">
-            <LabelPremium className="mb-0 text-slate-800 text-[10px]">Strategic Discount</LabelPremium>
-            <Percent size={14} className="text-slate-300 group-hover:text-primary transition-colors" />
-          </div>
-          <div className="relative">
-             <ModernInput 
-                type="number" 
-                className="h-11 pl-4 pr-9 text-base font-semibold text-emerald-600 border-slate-200 dark:border-white/10 focus-visible:ring-primary rounded-xl" 
-                placeholder="e.g. 0"
-                value={proposal.pricing.discountPercentage} 
-                onChange={(e) => updatePricing({ discountPercentage: e.target.value })} 
-             />
-             <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-emerald-400 font-bold text-sm">%</span>
+          <div className="space-y-2">
+            <LabelPremium>Strategic Discount %</LabelPremium>
+            <div className="relative">
+               <ModernInput 
+                  type="number" 
+                  className="pr-9 text-emerald-600 dark:text-emerald-400 font-bold" 
+                  placeholder="e.g. 0"
+                  value={proposal.pricing.discountPercentage} 
+                  onChange={(e) => updatePricing({ discountPercentage: e.target.value })} 
+               />
+               <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-emerald-500 font-bold text-sm">%</span>
+            </div>
           </div>
         </div>
-      </div>
+      </InputGroupCard>
 
       {/* ──── CALCULATION ENGINE (PREMIUM DARK) ──── */}
-      <div className="p-6 sm:p-8 bg-slate-50 dark:bg-[#0B0E14] rounded-2xl text-slate-900 dark:text-white relative overflow-hidden shadow-xl border border-slate-200 dark:border-white/5">
+      <div className="p-6 sm:p-8 bg-slate-50 dark:bg-[#0B0E14] rounded-[2rem] text-slate-900 dark:text-white relative overflow-hidden shadow-xl border border-slate-200 dark:border-white/5">
          <div className="absolute top-0 right-0 p-8 opacity-[0.02] rotate-12 scale-150 pointer-events-none">
             <Calculator size={180} className="text-primary" />
          </div>
@@ -90,8 +91,8 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
          <div className="relative z-10 space-y-5">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/5 pb-3">
-               <div className="flex items-center gap-2 text-primary">
-                  <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+               <div className="flex items-center gap-2 text-[#99CB48]">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#99CB48] animate-pulse" />
                   <span className="text-[9px] font-black uppercase tracking-[0.3em]">Investment Synthesis</span>
                </div>
                <div className="text-[8px] font-black text-emerald-400 uppercase tracking-[0.2em] bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-md">
@@ -141,127 +142,130 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
       </div>
 
       {/* ──── SUPPORTING OVERHEADS ──── */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="space-y-2 group">
-          <div className="flex items-center justify-between px-1">
-            <LabelPremium className="mb-0 text-slate-800 text-[10px]">Infrastructure (Cloud)</LabelPremium>
-            <Server size={14} className="text-slate-300 group-hover:text-primary transition-colors" />
+      <InputGroupCard
+        icon={<Server className="w-[18px] h-[18px]" />}
+        title="Supporting Protocols"
+        description="Associated support and timeline metrics"
+        accentColor="purple"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="space-y-2">
+            <LabelPremium>Infrastructure (Cloud)</LabelPremium>
+            <ModernInput 
+              placeholder="e.g. Billed at Actuals"
+              value={proposal.pricing.hostingCost} 
+              onChange={(e) => updatePricing({ hostingCost: e.target.value })} 
+            />
           </div>
-          <ModernInput 
-            className="h-11 px-3.5 text-sm font-semibold text-slate-800 border-slate-200 dark:border-white/10 focus-visible:ring-primary rounded-xl" 
-            placeholder="e.g. Billed at Actuals"
-            value={proposal.pricing.hostingCost} 
-            onChange={(e) => updatePricing({ hostingCost: e.target.value })} 
-          />
-        </div>
-        <div className="space-y-2 group">
-          <div className="flex items-center justify-between px-1">
-            <LabelPremium className="mb-0 text-slate-800 text-[10px]">Maintenance Protocol</LabelPremium>
-            <ShieldCheck size={14} className="text-slate-300 group-hover:text-primary transition-colors" />
+          <div className="space-y-2">
+            <LabelPremium>Maintenance Protocol</LabelPremium>
+            <ModernInput 
+              placeholder="e.g. 15% Annual"
+              value={proposal.pricing.maintenanceCost} 
+              onChange={(e) => updatePricing({ maintenanceCost: e.target.value })} 
+            />
           </div>
-          <ModernInput 
-            className="h-11 px-3.5 text-sm font-semibold text-slate-800 border-slate-200 dark:border-white/10 focus-visible:ring-primary rounded-xl" 
-            placeholder="e.g. 15% Annual"
-            value={proposal.pricing.maintenanceCost} 
-            onChange={(e) => updatePricing({ maintenanceCost: e.target.value })} 
-          />
-        </div>
-        <div className="space-y-2 group">
-          <div className="flex items-center justify-between px-1">
-            <LabelPremium className="mb-0 text-slate-800 text-[10px]">Delivery Time</LabelPremium>
-            <Calculator size={14} className="text-slate-300 group-hover:text-primary transition-colors" />
+          <div className="space-y-2">
+            <LabelPremium>Delivery Time</LabelPremium>
+            <ModernInput 
+              placeholder="e.g. 30 Days"
+              value={proposal.pricing.deliveryTime || ""} 
+              onChange={(e) => updatePricing({ deliveryTime: e.target.value })} 
+            />
           </div>
-          <ModernInput 
-            className="h-11 px-3.5 text-sm font-semibold text-slate-800 border-slate-200 dark:border-white/10 focus-visible:ring-primary rounded-xl" 
-            placeholder="e.g. 30 Days"
-            value={proposal.pricing.deliveryTime || ""} 
-            onChange={(e) => updatePricing({ deliveryTime: e.target.value })} 
-          />
         </div>
-      </div>
+      </InputGroupCard>
 
       {/* ──── MILESTONE ROADMAP ──── */}
-      <div className="space-y-6 bg-slate-50 dark:bg-white/5 p-6 sm:p-8 rounded-2xl border border-slate-100 dark:border-white/5 shadow-sm">
-        <div className="flex justify-between items-center px-1">
-           <div className="space-y-0.5">
-              <LabelPremium className="mb-0 text-slate-800 text-[10px]">Investment Roadmap</LabelPremium>
-              <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Defined Payment Milestones & Deliverables</p>
-           </div>
-           <button 
-             onClick={addMilestone} 
-             className="text-[9px] font-bold uppercase text-primary hover:text-slate-900 dark:text-white hover:bg-primary px-4 py-2 border border-primary/20 rounded-xl transition-all shadow-sm bg-white dark:bg-white/5"
-           >
-             + Add Milestone
-           </button>
-        </div>
+      <InputGroupCard
+        icon={<CreditCard className="w-[18px] h-[18px]" />}
+        title="Investment Roadmap"
+        description="Defined payment milestones & deliverables"
+        accentColor="indigo"
+      >
+        <div className="space-y-4">
+          <div className="flex justify-between items-center border-b border-slate-100 dark:border-white/5 pb-2">
+            <LabelPremium className="mb-0">Payment Milestones</LabelPremium>
+            <button 
+              type="button"
+              onClick={addMilestone} 
+              className="text-[10px] font-black uppercase text-primary hover:text-primary/80 transition-all bg-primary/10 dark:bg-primary/5 px-4 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm"
+            >
+              <Plus size={10} /> Add Milestone
+            </button>
+          </div>
 
-        <div className="grid grid-cols-1 gap-4">
-           {proposal.pricing.milestones?.map((m: any, i: number) => (
-              <div key={i} className="relative group bg-white dark:bg-white/5 p-5 rounded-xl border border-slate-100 dark:border-white/5 hover:border-primary/20 transition-all duration-300 shadow-sm flex gap-4 items-start">
-                 <div className="w-10 h-10 bg-slate-50 dark:bg-[#0B0E14] rounded-xl flex items-center justify-center font-black text-slate-900 dark:text-white text-sm italic shrink-0 shadow-md -rotate-3 group-hover:rotate-0 transition-transform">
-                    {String(i + 1).padStart(2, '0')}
-                 </div>
-                 
-                 <div className="flex-1 space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-                       <div className="md:col-span-9 space-y-3">
-                          <div className="space-y-1">
-                             <p className="text-[8px] font-bold uppercase text-slate-300 tracking-widest pl-0.5">Milestone Phase</p>
-                             <ModernInput 
-                               className="bg-transparent border-b border-transparent focus:border-slate-200 dark:border-white/10 font-semibold text-slate-800 p-0 h-8 text-sm focus:bg-white dark:bg-white/5 focus:px-2 rounded transition-all" 
-                               placeholder="e.g. System Blueprint & Initiation"
-                               value={m.name} 
-                               onChange={(e) => updateMilestone(i, { name: e.target.value })} 
-                             />
-                          </div>
-                          <ModernTextArea 
-                            className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-xs font-medium text-slate-500 p-3 min-h-[60px] focus:bg-white dark:bg-white/5 focus:border-primary/20 rounded-lg transition-all" 
-                            placeholder="Describe the scope and delivery logic for this phase..."
-                            value={m.description} 
-                            onChange={(e) => updateMilestone(i, { description: e.target.value })} 
-                          />
-                       </div>
-                       <div className="md:col-span-3">
-                          <div className="space-y-1">
-                             <p className="text-[8px] font-bold uppercase text-slate-300 tracking-widest pl-0.5">Allocation (%)</p>
-                             <div className="relative">
-                                <ModernInput 
-                                  type="number"
-                                  className="h-10 pl-3 pr-8 font-semibold text-primary text-sm bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-lg focus-visible:ring-primary focus:bg-white dark:bg-white/5 text-center" 
-                                  value={m.percentage} 
-                                  onChange={(e) => updateMilestone(i, { percentage: e.target.value })} 
-                                />
-                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-primary/45 font-bold text-xs">%</span>
+          <div className="grid grid-cols-1 gap-4">
+             {proposal.pricing.milestones?.map((m: any, i: number) => (
+                <div key={i} className="relative group bg-white dark:bg-white/5 p-5 rounded-2xl border border-slate-100 dark:border-white/5 hover:border-[#99CB48]/20 transition-all duration-300 shadow-sm flex gap-4 items-start">
+                   <div className="w-10 h-10 bg-slate-50 dark:bg-[#0B0E14] rounded-xl flex items-center justify-center font-black text-slate-900 dark:text-white text-sm italic shrink-0 shadow-md -rotate-3 group-hover:rotate-0 transition-transform border border-slate-100 dark:border-white/5">
+                      {String(i + 1).padStart(2, '0')}
+                   </div>
+                   
+                   <div className="flex-1 space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+                         <div className="md:col-span-9 space-y-3">
+                            <div className="space-y-1">
+                               <p className="text-[8px] font-bold uppercase text-slate-400 tracking-widest pl-0.5">Milestone Phase</p>
+                               <ModernInput 
+                                 className="bg-transparent border-b border-transparent focus:border-slate-200 dark:border-white/10 font-semibold text-slate-800 dark:text-white p-0 h-8 text-sm focus:bg-white dark:focus:bg-white/5 focus:px-2 rounded transition-all" 
+                                 placeholder="e.g. System Blueprint & Initiation"
+                                 value={m.name} 
+                                 onChange={(e) => updateMilestone(i, { name: e.target.value })} 
+                               />
+                            </div>
+                            <ModernTextArea 
+                              className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-xs font-medium text-slate-500 p-3 min-h-[60px] focus:bg-white dark:focus:bg-white/5 focus:border-primary/20 rounded-lg transition-all" 
+                              placeholder="Describe the scope and delivery logic for this phase..."
+                              value={m.description} 
+                              onChange={(e) => updateMilestone(i, { description: e.target.value })} 
+                            />
+                         </div>
+                         <div className="md:col-span-3">
+                            <div className="space-y-1">
+                               <p className="text-[8px] font-bold uppercase text-slate-400 tracking-widest pl-0.5">Allocation (%)</p>
+                               <div className="relative">
+                                  <ModernInput 
+                                    type="number"
+                                    className="h-10 pl-3 pr-8 font-semibold text-primary text-sm bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-lg focus-visible:ring-primary focus:bg-white dark:focus:bg-white/5 text-center" 
+                                    value={m.percentage} 
+                                    onChange={(e) => updateMilestone(i, { percentage: e.target.value })} 
+                                  />
+                                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-primary/45 font-bold text-xs">%</span>
+                                </div>
                              </div>
                           </div>
                        </div>
                     </div>
+ 
+                    <button 
+                      onClick={() => removeMilestone(i)} 
+                      className="absolute top-4 right-4 p-1.5 bg-red-50 dark:bg-red-500/10 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-100 dark:hover:bg-red-500/20 transition-all opacity-0 group-hover:opacity-100 border border-red-100/50"
+                    >
+                       <Trash2 size={14} />
+                    </button>
                  </div>
-
-                 <button 
-                   onClick={() => removeMilestone(i)} 
-                   className="absolute top-4 right-4 p-1.5 bg-red-50 rounded-lg text-red-300 hover:text-red-500 hover:bg-red-100 transition-all opacity-0 group-hover:opacity-100 border border-red-100/50"
-                 >
-                    <Trash2 size={14} />
-                 </button>
-              </div>
-           ))}
-        </div>
-      </div>
-
-      {/* ──── ROI LOGIC ──── */}
-      <div className="space-y-3">
-        <div className="flex justify-between items-center px-2">
-           <LabelPremium className="mb-0 text-slate-800 text-[10px]">ROI Settlement Protocol</LabelPremium>
-           <span className="text-[8px] font-bold uppercase text-emerald-500 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">Financial Logic</span>
-        </div>
-        <ModernTextArea 
-          className="min-h-[120px] p-4 text-sm font-medium text-slate-700 dark:text-gray-300 leading-relaxed rounded-xl border border-slate-200 dark:border-white/10 focus-visible:ring-primary focus-visible:ring-offset-0 focus:border-primary/40 focus:bg-white dark:bg-white/5 transition-all bg-slate-50 dark:bg-white/5" 
-          placeholder="Clarify the settlement logic. E.g., 'Payment for each phase is due upon successful deployment to the staging environment and client protocol sign-off...'" 
-          value={proposal.pricing.roiLogic} 
-          onChange={(e) => updatePricing({ roiLogic: e.target.value })} 
-        />
-      </div>
-    </div>
-  );
-}
+              ))}
+           </div>
+         </div>
+       </InputGroupCard>
+ 
+       {/* ──── ROI LOGIC ──── */}
+       <InputGroupCard
+         icon={<ShieldCheck className="w-[18px] h-[18px]" />}
+         title="ROI Settlement Protocol"
+         description="Dynamic terms for payment release and sign-offs"
+         accentColor="rose"
+       >
+         <div className="space-y-2">
+           <LabelPremium>Settlement Logic & Terms</LabelPremium>
+           <ModernTextArea 
+             placeholder="Clarify the settlement logic. E.g., 'Payment for each phase is due upon successful deployment to the staging environment and client protocol sign-off...'" 
+             value={proposal.pricing.roiLogic} 
+             onChange={(e) => updatePricing({ roiLogic: e.target.value })} 
+           />
+         </div>
+       </InputGroupCard>
+     </div>
+   );
+ }

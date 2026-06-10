@@ -1,5 +1,5 @@
 import { Monitor, Link2, Tag, Layout } from "lucide-react";
-import { InputPanelProps, LabelPremium, SectionHeader, ModernInput } from "./shared";
+import { InputPanelProps, LabelPremium, SectionHeader, ModernInput, InputGroupCard } from "./shared";
 
 export default function PortfolioProtocolPanel({ proposal, currentStep, updateExperience }: InputPanelProps) {
   
@@ -21,8 +21,10 @@ export default function PortfolioProtocolPanel({ proposal, currentStep, updateEx
     return current.split('|')[partIdx] || "";
   };
 
+  const colors = ["blue", "purple", "emerald", "orange"];
+
   return (
-    <div className="space-y-12 pb-10">
+    <div className="space-y-8 pb-10">
       <SectionHeader 
         title="Success Protocol" 
         subtitle="Curate the high-impact project portfolio and active digital deployments" 
@@ -30,65 +32,64 @@ export default function PortfolioProtocolPanel({ proposal, currentStep, updateEx
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {[0, 1, 2, 3].map((idx) => (
-          <div key={idx} className="p-6 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-[2.5rem] shadow-sm space-y-5 hover:border-primary/20 hover:shadow-2xl transition-all duration-500 group relative overflow-hidden">
-            <div className="flex justify-between items-center pb-3 border-b border-slate-50">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-slate-50 dark:bg-[#0B0E14] rounded-xl flex items-center justify-center text-slate-900 dark:text-white text-[11px] font-black italic shadow-md rotate-3 group-hover:rotate-0 transition-transform">
-                  0{idx + 1}
+        {[0, 1, 2, 3].map((idx) => {
+          const color = colors[idx % colors.length];
+          return (
+            <InputGroupCard
+              key={idx}
+              icon={<Monitor className="w-[18px] h-[18px]" />}
+              title={`Deployment Node 0${idx + 1}`}
+              description="Project portfolio asset parameters"
+              accentColor={color}
+            >
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <LabelPremium>Project/Client Title</LabelPremium>
+                  <div className="relative">
+                    <ModernInput 
+                      className="pl-10" 
+                      placeholder="e.g. Enterprise Asset Management"
+                      value={getProjectValue(idx, 0)} 
+                      onChange={(e) => updateProject(idx, 'title', e.target.value)} 
+                    />
+                    <Layout className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                  </div>
                 </div>
-                <LabelPremium className="mb-0 text-slate-900 dark:text-white text-[8px]">Deployment Node</LabelPremium>
-              </div>
-              <Monitor size={16} className="text-slate-300 group-hover:text-primary transition-colors duration-300" />
-            </div>
 
-            <div className="space-y-4">
-              <div className="space-y-1">
-                <p className="text-[8px] font-black uppercase text-slate-300 tracking-widest pl-1">Project/Client Title</p>
-                <div className="relative">
-                  <ModernInput 
-                    className="h-12 pl-10 pr-3 font-bold text-slate-800 text-sm border-slate-100 dark:border-white/5 focus-visible:ring-primary rounded-xl" 
-                    placeholder="e.g. Enterprise Asset Management"
-                    value={getProjectValue(idx, 0)} 
-                    onChange={(e) => updateProject(idx, 'title', e.target.value)} 
-                  />
-                  <Layout className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                <div className="space-y-1">
+                  <LabelPremium>Live Asset URL</LabelPremium>
+                  <div className="relative">
+                    <ModernInput 
+                      className="pl-10 text-primary text-xs" 
+                      placeholder="e.g. app.domain.com"
+                      value={getProjectValue(idx, 1)} 
+                      onChange={(e) => updateProject(idx, 'url', e.target.value)} 
+                    />
+                    <Link2 className="absolute left-3.5 top-1/2 -translate-y-1/2 text-primary/50" size={14} />
+                  </div>
                 </div>
-              </div>
 
-              <div className="space-y-1">
-                <p className="text-[8px] font-black uppercase text-slate-300 tracking-widest pl-1">Live Asset URL</p>
-                <div className="relative">
-                  <ModernInput 
-                    className="h-12 pl-10 pr-3 font-bold text-primary text-xs border-slate-100 dark:border-white/5 focus-visible:ring-primary rounded-xl" 
-                    placeholder="e.g. app.domain.com"
-                    value={getProjectValue(idx, 1)} 
-                    onChange={(e) => updateProject(idx, 'url', e.target.value)} 
-                  />
-                  <Link2 className="absolute left-3.5 top-1/2 -translate-y-1/2 text-primary/50" size={14} />
+                <div className="space-y-1">
+                  <LabelPremium>Protocol / Sector Category</LabelPremium>
+                  <div className="relative">
+                    <ModernInput 
+                      className="pl-10 text-xs text-slate-600 dark:text-gray-400" 
+                      placeholder="e.g. Industrial Automation / Fintech"
+                      value={getProjectValue(idx, 2)} 
+                      onChange={(e) => updateProject(idx, 'category', e.target.value)} 
+                    />
+                    <Tag className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                  </div>
                 </div>
               </div>
-
-              <div className="space-y-1">
-                <p className="text-[8px] font-black uppercase text-slate-300 tracking-widest pl-1">Protocol / Sector Category</p>
-                <div className="relative">
-                  <ModernInput 
-                    className="h-12 pl-10 pr-3 font-bold text-slate-600 dark:text-gray-400 text-xs border-slate-100 dark:border-white/5 focus-visible:ring-primary rounded-xl" 
-                    placeholder="e.g. Industrial Automation / Fintech"
-                    value={getProjectValue(idx, 2)} 
-                    onChange={(e) => updateProject(idx, 'category', e.target.value)} 
-                  />
-                  <Tag className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
+            </InputGroupCard>
+          );
+        })}
       </div>
 
-      <div className="p-8 bg-slate-50 dark:bg-[#0B0E14] rounded-[2.5rem] text-slate-900 dark:text-white flex items-center justify-between overflow-hidden relative shadow-xl">
+      <div className="p-6 bg-slate-50 dark:bg-[#0B0E14] border border-slate-100 dark:border-white/5 rounded-3xl text-slate-900 dark:text-white flex items-center justify-between overflow-hidden relative shadow-sm">
         <div className="absolute top-0 right-0 p-8 opacity-5">
-          <Monitor size={100} className="text-primary" />
+          <Monitor size={100} className="text-[#99CB48]" />
         </div>
         <div className="relative z-10 flex items-center gap-4">
           <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse shadow-[0_0_12px_#99CB48]" />

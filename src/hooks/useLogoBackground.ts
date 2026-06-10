@@ -19,7 +19,7 @@ export function useLogoBackground(imageUrl: string | undefined) {
         const canvas = document.createElement('canvas');
         canvas.width = img.width;
         canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
         if (!ctx) return;
         
         ctx.drawImage(img, 0, 0);

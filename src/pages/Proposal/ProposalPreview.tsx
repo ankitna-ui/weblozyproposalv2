@@ -520,7 +520,7 @@ export default function ProposalPreview() {
         </div>
 
         {/* Right/Center Document Canvas */}
-        <div className="flex-1 flex flex-col items-center lg:items-start w-full min-w-0">
+        <div className="flex-1 flex flex-col items-center lg:items-start w-full min-w-0 preview-container-host">
           <div className="pdf-container overflow-visible py-0 flex flex-col items-center lg:items-start w-full bg-transparent shadow-none">
             <div
               id="proposal-pdf-content"

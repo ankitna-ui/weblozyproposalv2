@@ -10,4 +10,4 @@ export { default as CommercialFrameworkPanel } from "./CommercialFrameworkPanel"
 export { default as PortfolioProtocolPanel } from "./PortfolioProtocolPanel";
 export { default as CTAClosingPanel } from "./CTAClosingPanel";
 export type { InputPanelProps } from "./shared";
-export { LabelPremium, SectionHeader } from "./shared";
+export { LabelPremium, SectionHeader, InputGroupCard } from "./shared";

@@ -128,7 +128,7 @@ const ProposalPDF = forwardRef<HTMLDivElement, ProposalPDFProps>(({ proposal, ac
             return null;
           }
         }
-        
+
         if (page.id === "modules") {
           const startPageNum = currentPageNum;
           currentPageNum += modulePagesCount;
@@ -155,7 +155,6 @@ const ProposalPDF = forwardRef<HTMLDivElement, ProposalPDFProps>(({ proposal, ac
             </React.Fragment>
           );
         }
-
 
         const renderer = pageRenderers[page.id];
         if (!renderer) return null;

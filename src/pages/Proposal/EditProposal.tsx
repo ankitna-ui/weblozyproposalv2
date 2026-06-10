@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -113,6 +114,7 @@ export default function EditProposal() {
   const [isLoading, setIsLoading] = useState(true);
   const [employeeProfile, setEmployeeProfile] = useState<{ fullName: string, employeeId: string } | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -270,19 +272,28 @@ export default function EditProposal() {
   };
   */
 
+  const showValidationError = (msg: string) => {
+    setValidationError(msg);
+    toast.error(msg);
+    const container = document.querySelector(".flex-1.overflow-y-auto");
+    if (container) {
+      container.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   const validateStep = () => {
     const activeStep = dynamicSteps[currentStep];
     if (!activeStep) return true;
     switch (activeStep.id) {
       case "cover":
         if (!proposal.client.proposalTitle?.trim()) {
-          setValidationError("Validation Error: Main Proposal Title is required.");
+          showValidationError("Validation Error: Main Proposal Title is required.");
           return false;
         }
         break;
       case "modules":
         if (proposal.solution.selectedModules.length === 0) {
-          setValidationError("Validation Error: Add at least one module node to continue.");
+          showValidationError("Validation Error: Add at least one module node to continue.");
           return false;
         }
         break;
@@ -301,7 +312,7 @@ export default function EditProposal() {
     if (!id) return;
 
     if (!proposal.client.proposalTitle?.trim()) {
-      setValidationError("Pre-Flight Check Failed: Proposal Title is required.");
+      showValidationError("Pre-Flight Check Failed: Proposal Title is required.");
       return;
     }
 
@@ -323,7 +334,11 @@ export default function EditProposal() {
     toast.promise(updatePromise, {
       pending: 'Synchronizing Protocol Changes...',
       success: 'Strategic Protocol Updated Successfully! 🚀',
-      error: 'Failed to update protocol. Please try again.'
+      error: {
+        render({ data }) {
+          return `Failed to update protocol: ${(data as any)?.message || data || 'Please try again.'}`;
+        }
+      }
     });
 
     try {
@@ -331,8 +346,8 @@ export default function EditProposal() {
       if (exit) {
         navigate("/dashboard");
       }
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      console.error("Update error details:", error);
     } finally {
       setIsSaving(false);
     }
@@ -371,9 +386,12 @@ export default function EditProposal() {
 
   return (
     <div className="min-h-[100dvh] bg-slate-50 dark:bg-[#07090C] transition-colors duration-500">
-      <div className="flex h-[100dvh] overflow-hidden">
+      <div className="flex h-[100dvh] overflow-hidden relative">
         {/* Modernized Input Panel with Glassmorphism */}
-        <div className="w-full md:w-1/2 lg:w-[42%] xl:w-[40%] flex flex-col border-r border-slate-100 bg-white dark:bg-[#0B0E14] z-30 overflow-hidden relative shadow-[20px_0_60px_-15px_rgba(0,0,0,0.05)] dark:shadow-none transition-colors duration-500">
+        <div className={cn(
+          "flex flex-col border-r border-slate-100 bg-white dark:bg-[#0B0E14] z-30 overflow-hidden relative shadow-[20px_0_60px_-15px_rgba(0,0,0,0.05)] dark:shadow-none transition-all duration-500 ease-in-out shrink-0",
+          isSidebarVisible ? "w-full md:w-1/2 lg:w-[42%] xl:w-[40%] opacity-100" : "w-0 md:w-0 opacity-0 border-r-0 pointer-events-none"
+        )}>
            
            {/* High-End Header */}
            <div className="px-6 sm:px-10 py-6 sm:py-10 border-b border-slate-100/50 bg-white/80 dark:bg-[#0B0E14]/80 backdrop-blur-md flex justify-between items-center sticky top-0 z-40 border-b border-slate-200 dark:border-white/10 transition-colors duration-500">
@@ -402,7 +420,11 @@ export default function EditProposal() {
                  return (
                     <button 
                        key={step.id} 
-                       onClick={() => setCurrentStep(i)} 
+                       onClick={() => {
+                          if (i < currentStep || validateStep()) {
+                            setCurrentStep(i);
+                          }
+                        }} 
                        className={`flex-shrink-0 flex items-center gap-2 sm:gap-3.5 px-4 sm:px-6 py-2 sm:py-3 rounded-xl sm:rounded-2xl transition-all duration-500 relative group ${
                           isActive 
                              ? "bg-slate-50 dark:bg-[#0B0E14] text-slate-900 dark:text-white shadow-2xl shadow-black/20 scale-105" 
@@ -476,8 +498,21 @@ export default function EditProposal() {
            </div>
         </div>
 
+        {/* Floating Collapse Handle */}
+        <button
+          onClick={() => setIsSidebarVisible(!isSidebarVisible)}
+          className={cn(
+            "absolute z-50 top-1/2 -translate-y-1/2 hidden md:flex items-center justify-center w-5 h-20 bg-white dark:bg-[#0B0E14] text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-white/10 shadow-[5px_0_15px_rgba(0,0,0,0.05)] rounded-r-xl transition-all duration-500 hover:text-primary hover:bg-slate-50 dark:hover:bg-[#11151D] focus:outline-none focus:ring-0 cursor-pointer",
+            isSidebarVisible 
+              ? "md:left-[50%] lg:left-[42%] xl:left-[40%] -ml-[1px]" 
+              : "left-0"
+          )}
+        >
+          {isSidebarVisible ? <ChevronLeft size={14} /> : <ChevronRight size={14} />}
+        </button>
+
         {/* Cleaned Preview Panel (Dedicated Header & Soft Shadows) */}
-        <div className="hidden md:flex flex-col flex-1 bg-slate-100 border-l border-slate-200 overflow-hidden h-full relative">
+        <div className="hidden md:flex flex-col flex-1 bg-slate-100 border-l border-slate-200 overflow-hidden h-full relative preview-container-host">
            {/* Sticky Top Status Header */}
            <div className="sticky top-0 z-20 w-full bg-white/85 backdrop-blur-md border-b border-slate-100/80 px-6 py-4 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
@@ -490,10 +525,10 @@ export default function EditProposal() {
            </div>
 
            {/* Scrollable Document Area */}
-           <div className="flex-1 overflow-y-auto p-12 custom-scrollbar flex justify-center items-start bg-transparent bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:16px_16px]">
+           <div className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8 custom-scrollbar flex justify-center items-start bg-transparent bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:16px_16px]">
               <div className="relative z-10 flex justify-center h-fit w-full">
                  <div className="pdf-preview-scale transition-all duration-500 h-fit w-full flex justify-center">
-                    <ProposalPDF proposal={proposal} />
+                    <ProposalPDF proposal={proposal} activeStep={currentStep} />
                  </div>
               </div>
            </div>

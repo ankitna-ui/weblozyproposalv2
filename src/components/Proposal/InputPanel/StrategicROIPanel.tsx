@@ -1,162 +1,133 @@
-import { DollarSign, Users, Clock, TrendingUp, Link2, CheckCircle2, AlertTriangle } from "lucide-react";
-import { InputPanelProps, LabelPremium, SectionHeader, ModernInput } from "./shared";
-
-// Auto ROI calculation removed – users will manually input ROI values.
-const PROBLEMS_LIST = [
-  "Faster Operations",
-  "Reduced Manual Errors",
-  "Better Team Coordination",
-  "Centralized Data Management",
-  "Faster Client Response",
-  "Improved Revenue Visibility",
-];
+import { TrendingUp, Clock, Settings, Link2, CheckCircle2 } from "lucide-react";
+import { InputPanelProps, LabelPremium, SectionHeader, ModernInput, InputGroupCard } from "./shared";
 
 export default function StrategicROIPanel({ proposal, currentStep, updateROI }: InputPanelProps) {
-
-
-
-
-  const toggleProblem = (problem: string) => {
-    const current = proposal.roi.businessProblems || [];
-    updateROI({
-      businessProblems: current.includes(problem)
-        ? current.filter((p) => p !== problem)
-        : [...current, problem],
-    });
-  };
-
   return (
-    <div className="space-y-8 pb-8">
+    <div className="space-y-6 pb-8">
       <SectionHeader
         title="ROI Impact Calculator"
-        subtitle="Fill in 4 simple business numbers — we'll calculate the projected annual ROI automatically"
+        subtitle="Configure key business value metrics - we'll visualize the projected ROI automatically"
         stepNumber={currentStep + 1}
       />
 
-      {/* ── Business Problems (multi-select) ── */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <LabelPremium className="mb-0 text-[11px] font-extrabold text-slate-700 dark:text-gray-300 uppercase tracking-wider">
-            Business Problems to Solve
-          </LabelPremium>
-          <span className="text-[8.5px] font-bold text-slate-400 uppercase tracking-widest">
-            Select all that apply
-          </span>
+      {/* Expected Value Yield - Top Banner Box */}
+      <InputGroupCard
+        icon={<TrendingUp className="w-[18px] h-[18px]" />}
+        title="Expected Value Yield"
+        description="Maps to the dark Projected ROI Banner at the top of the page"
+        accentColor="primary"
+      >
+        <div className="space-y-2">
+          <LabelPremium>Expected Yield Value</LabelPremium>
+          <ModernInput
+            type="text"
+            placeholder="e.g. ₹15L / Year"
+            value={proposal.roi.expectedROI || ""}
+            onChange={(e) => updateROI({ expectedROI: e.target.value })}
+          />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {PROBLEMS_LIST.map((problem) => {
-            const selected = (proposal.roi.businessProblems || []).includes(problem);
-            return (
-              <button
-                key={problem}
-                type="button"
-                onClick={() => toggleProblem(problem)}
-                className={`p-3.5 rounded-xl border text-left text-xs font-bold flex items-center justify-between transition-all ${
-                  selected
-                    ? "bg-[#99CB48]/10 border-[#99CB48] text-[#0B0E14] shadow-sm"
-                    : "bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/5 hover:border-slate-300 dark:border-white/20 text-slate-600 dark:text-gray-400"
-                }`}
-              >
-                <span>{problem}</span>
-                {selected
-                  ? <CheckCircle2 size={15} className="text-[#99CB48] shrink-0" />
-                  : <AlertTriangle size={15} className="text-slate-300 shrink-0" />}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      </InputGroupCard>
 
-      {/* Editable ROI Outputs */}
-      <div className="space-y-4">
-        <LabelPremium className="mb-0 text-[11px] font-extrabold text-slate-700 dark:text-gray-300 uppercase tracking-wider">
-          Projected ROI Outputs (Edit Directly)
-        </LabelPremium>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-4 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-xl">
-            <LabelPremium>Projected ROI</LabelPremium>
+      {/* 4 Cards Inputs Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {/* Card 1: Revenue Growth */}
+        <InputGroupCard
+          icon={<TrendingUp className="w-[18px] h-[18px]" />}
+          title="Revenue Growth"
+          description="Maps to the green Revenue Growth card"
+          accentColor="emerald"
+        >
+          <div className="space-y-2">
+            <LabelPremium>Revenue Increase % / Value</LabelPremium>
             <ModernInput
               type="text"
-              placeholder="e.g. ₹25L / Year"
-              className="mt-2 w-full"
-              value={proposal.roi.expectedROI || ""}
-              onChange={(e) => updateROI({ expectedROI: e.target.value })}
-            />
-          </div>
-          <div className="p-4 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-xl">
-            <LabelPremium>Revenue Growth Range</LabelPremium>
-            <ModernInput
-              type="text"
-              placeholder="e.g. +15% to +25%"
-              className="mt-2 w-full"
+              placeholder="e.g. 25"
               value={proposal.roi.revenueIncrease || ""}
               onChange={(e) => updateROI({ revenueIncrease: e.target.value })}
             />
           </div>
-          <div className="p-4 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-xl">
-            <LabelPremium>Faster Operations</LabelPremium>
+        </InputGroupCard>
+
+        {/* Card 2: Manual Work Reduction */}
+        <InputGroupCard
+          icon={<Clock className="w-[18px] h-[18px]" />}
+          title="Manual Work Reduction"
+          description="Maps to the purple Manual Work card"
+          accentColor="purple"
+        >
+          <div className="space-y-2">
+            <LabelPremium>Work Hours Saved % / Value</LabelPremium>
             <ModernInput
               type="text"
-              placeholder="e.g. 40% Faster Operations"
-              className="mt-2 w-full"
+              placeholder="e.g. 40"
               value={proposal.roi.timeSaving || ""}
               onChange={(e) => updateROI({ timeSaving: e.target.value })}
             />
           </div>
-          <div className="p-4 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-xl">
-            <LabelPremium>Better Workflow</LabelPremium>
+        </InputGroupCard>
+
+        {/* Card 3: Operational Efficiency */}
+        <InputGroupCard
+          icon={<Settings className="w-[18px] h-[18px]" />}
+          title="Operational Efficiency"
+          description="Maps to the blue Operational Efficiency card"
+          accentColor="blue"
+        >
+          <div className="space-y-2">
+            <LabelPremium>Efficiency Gain % / Value</LabelPremium>
             <ModernInput
               type="text"
-              placeholder="e.g. 50% Better Workflow"
-              className="mt-2 w-full"
+              placeholder="e.g. 50"
               value={proposal.roi.productivityIncrease || ""}
               onChange={(e) => updateROI({ productivityIncrease: e.target.value })}
             />
           </div>
-          <div className="p-4 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-xl">
-            <LabelPremium>Payback Period</LabelPremium>
+        </InputGroupCard>
+
+        {/* Card 4: Payback Period */}
+        <InputGroupCard
+          icon={<TrendingUp className="w-[18px] h-[18px] rotate-90" />}
+          title="Payback Period"
+          description="Maps to the orange Payback Period card"
+          accentColor="orange"
+        >
+          <div className="space-y-2">
+            <LabelPremium>Estimated Payback Duration</LabelPremium>
             <ModernInput
               type="text"
-              placeholder="e.g. 4–6 Months"
-              className="mt-2 w-full"
+              placeholder="e.g. Significant Operational Lift"
               value={proposal.roi.profitImpact || ""}
               onChange={(e) => updateROI({ profitImpact: e.target.value })}
             />
           </div>
-        </div>
+        </InputGroupCard>
       </div>
 
-      {/* ── Optional Report Link ── */}
-      <div className="p-5 bg-white dark:bg-white/5 border border-dashed border-slate-200 dark:border-white/10 rounded-2xl space-y-3 hover:shadow-sm transition-all">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-500">
-            <Link2 size={16} />
-          </div>
-          <div>
-            <LabelPremium className="mb-0 text-[11px] font-extrabold text-slate-700 dark:text-gray-300 uppercase tracking-wider">
-              Company Health Report Link (Optional)
-            </LabelPremium>
-            <p className="text-[9px] text-slate-400 font-medium mt-0.5">
-              Paste a Google Drive / PDF link — a "Company Health Report" button will appear on the proposal page
-            </p>
-          </div>
+      {/* Optional Report Link */}
+      <InputGroupCard
+        icon={<Link2 className="w-[18px] h-[18px]" />}
+        title="Company Health Report Link (Optional)"
+        description="A 'Company Health Report' button will appear on the proposal page if filled"
+        accentColor="indigo"
+      >
+        <div className="space-y-3">
+          <LabelPremium>Report URL</LabelPremium>
+          <ModernInput
+            type="url"
+            placeholder="https://drive.google.com/file/..."
+            value={proposal.roi.roiReportLink || ""}
+            onChange={(e) => updateROI({ roiReportLink: e.target.value })}
+          />
+          {proposal.roi.roiReportLink && (
+            <div className="flex items-center gap-2 px-3 py-2 bg-[#99CB48]/15 dark:bg-[#99CB48]/10 rounded-xl border border-[#99CB48]/20">
+              <CheckCircle2 size={13} className="text-[#99CB48] shrink-0" />
+              <span className="text-[9.5px] font-bold text-[#99CB48] dark:text-[#99CB48]/90">
+                &quot;Company Health Report&quot; button will appear on the ROI page ✓
+              </span>
+            </div>
+          )}
         </div>
-        <ModernInput
-          type="url"
-          placeholder="https://drive.google.com/file/..."
-          className="h-10 px-3 text-sm font-semibold text-slate-700 dark:text-gray-300 bg-slate-50 dark:bg-white/5 border-none rounded-lg focus-visible:ring-indigo-400"
-          value={proposal.roi.roiReportLink || ""}
-          onChange={(e) => updateROI({ roiReportLink: e.target.value })}
-        />
-        {proposal.roi.roiReportLink && (
-          <div className="flex items-center gap-2 px-3 py-2 bg-indigo-50 rounded-lg border border-indigo-100">
-            <CheckCircle2 size={13} className="text-indigo-500 shrink-0" />
-            <span className="text-[9.5px] font-bold text-indigo-600">
-              "Company Health Report" button will appear on the ROI page ✓
-            </span>
-          </div>
-        )}
-      </div>
+      </InputGroupCard>
     </div>
   );
 }

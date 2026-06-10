@@ -1,74 +1,82 @@
 import { Monitor, Server, Database, Cloud, ShieldCheck } from "lucide-react";
-import { InputPanelProps, LabelPremium, SectionHeader, ModernInput } from "./shared";
+import { InputPanelProps, LabelPremium, SectionHeader, ModernInput, InputGroupCard } from "./shared";
 
 export default function TechnicalStackPanel({ proposal, currentStep, updateTechArchitecture }: InputPanelProps) {
   return (
-    <div className="space-y-10 pb-10">
+    <div className="space-y-8 pb-10">
       <SectionHeader 
         title="Technology Protocol" 
         subtitle="Define the high-performance architectural foundation of the proposed ecosystem" 
         stepNumber={currentStep + 1} 
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="space-y-4 group">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-500 dark:text-blue-400 group-hover:bg-blue-500 group-hover:text-white dark:group-hover:text-white transition-all duration-300 shadow-sm">
-               <Monitor size={18} />
-            </div>
-            <LabelPremium className="mb-0 text-slate-900 dark:text-white">Frontend Interface Stack</LabelPremium>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <InputGroupCard
+          icon={<Monitor className="w-[18px] h-[18px]" />}
+          title="Frontend Interface Stack"
+          description="Client interface technologies"
+          accentColor="blue"
+        >
+          <div className="space-y-2">
+            <LabelPremium>Frontend Frameworks & Libs</LabelPremium>
+            <ModernInput 
+              placeholder="React, Next.js, Tailwind CSS..." 
+              value={proposal.techArchitecture.frontendStack.join(", ")} 
+              onChange={(e) => updateTechArchitecture({ frontendStack: e.target.value.split(",").map((i: string) => i.trim()) })} 
+            />
           </div>
-          <ModernInput 
-            placeholder="React, Next.js, Tailwind CSS..." 
-            value={proposal.techArchitecture.frontendStack.join(", ")} 
-            onChange={(e) => updateTechArchitecture({ frontendStack: e.target.value.split(",").map((i: string) => i.trim()) })} 
-          />
-        </div>
+        </InputGroupCard>
 
-        <div className="space-y-4 group">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-500/10 flex items-center justify-center text-purple-500 dark:text-purple-400 group-hover:bg-purple-500 group-hover:text-white dark:group-hover:text-white transition-all duration-300 shadow-sm">
-               <Server size={18} />
-            </div>
-            <LabelPremium className="mb-0 text-slate-900 dark:text-white">Core Engine (Backend)</LabelPremium>
+        <InputGroupCard
+          icon={<Server className="w-[18px] h-[18px]" />}
+          title="Core Engine (Backend)"
+          description="Application logic & compute backend"
+          accentColor="purple"
+        >
+          <div className="space-y-2">
+            <LabelPremium>Backend Technologies</LabelPremium>
+            <ModernInput 
+              placeholder="Node.js, Python, Go..." 
+              value={proposal.techArchitecture.backendStack.join(", ")} 
+              onChange={(e) => updateTechArchitecture({ backendStack: e.target.value.split(",").map((i: string) => i.trim()) })} 
+            />
           </div>
-          <ModernInput 
-            placeholder="Node.js, Python, Go..." 
-            value={proposal.techArchitecture.backendStack.join(", ")} 
-            onChange={(e) => updateTechArchitecture({ backendStack: e.target.value.split(",").map((i: string) => i.trim()) })} 
-          />
-        </div>
+        </InputGroupCard>
 
-        <div className="space-y-4 group">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-500 dark:text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white dark:group-hover:text-white transition-all duration-300 shadow-sm">
-               <Database size={18} />
-            </div>
-            <LabelPremium className="mb-0 text-slate-900 dark:text-white">Data Architecture</LabelPremium>
+        <InputGroupCard
+          icon={<Database className="w-[18px] h-[18px]" />}
+          title="Data Architecture"
+          description="Databases, caching & message queues"
+          accentColor="emerald"
+        >
+          <div className="space-y-2">
+            <LabelPremium>Databases & Stores</LabelPremium>
+            <ModernInput 
+              placeholder="PostgreSQL, MongoDB, Redis..." 
+              value={proposal.techArchitecture.database} 
+              onChange={(e) => updateTechArchitecture({ database: e.target.value })} 
+            />
           </div>
-          <ModernInput 
-            placeholder="PostgreSQL, MongoDB, Redis..." 
-            value={proposal.techArchitecture.database} 
-            onChange={(e) => updateTechArchitecture({ database: e.target.value })} 
-          />
-        </div>
+        </InputGroupCard>
 
-        <div className="space-y-4 group">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center text-orange-500 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white dark:group-hover:text-white transition-all duration-300 shadow-sm">
-               <Cloud size={18} />
-            </div>
-            <LabelPremium className="mb-0 text-slate-900 dark:text-white">Infrastructure & Hosting</LabelPremium>
+        <InputGroupCard
+          icon={<Cloud className="w-[18px] h-[18px]" />}
+          title="Infrastructure & Hosting"
+          description="Cloud infrastructure & deployment vectors"
+          accentColor="orange"
+        >
+          <div className="space-y-2">
+            <LabelPremium>Cloud Providers & Platforms</LabelPremium>
+            <ModernInput 
+              placeholder="AWS, Azure, Vercel..." 
+              value={proposal.techArchitecture.hosting} 
+              onChange={(e) => updateTechArchitecture({ hosting: e.target.value })} 
+            />
           </div>
-          <ModernInput 
-            placeholder="AWS, Azure, Vercel..." 
-            value={proposal.techArchitecture.hosting} 
-            onChange={(e) => updateTechArchitecture({ hosting: e.target.value })} 
-          />
-        </div>
+        </InputGroupCard>
       </div>
 
-      <div className="p-8 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-[2.5rem] flex items-start gap-4 shadow-inner">
+      <div className="p-6 bg-slate-50/50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-3xl flex items-start gap-4 shadow-inner">
          <div className="w-10 h-10 rounded-xl bg-white dark:bg-white/5 shadow-sm flex items-center justify-center text-primary shrink-0">
             <ShieldCheck size={20} />
          </div>

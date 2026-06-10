@@ -331,45 +331,50 @@ main,
 }
 
 /* Premium Responsive Zoom Preview for A4 Documents without Layout Flow Gaps */
+.preview-container-host {
+  container-type: inline-size;
+  width: 100%;
+}
+
 .pdf-preview-scale {
   transform-origin: top center;
-  zoom: 0.48;
   width: 210mm;
+  zoom: 1;
 }
 
-@media (max-width: 480px) {
+@container (max-width: 400px) {
   .pdf-preview-scale {
-    zoom: 0.38;
+    zoom: 0.42;
   }
 }
-
-@media (max-width: 380px) {
+@container (min-width: 401px) and (max-width: 500px) {
   .pdf-preview-scale {
-    zoom: 0.34;
+    zoom: 0.52;
   }
 }
-
-@media (min-width: 640px) {
+@container (min-width: 501px) and (max-width: 650px) {
   .pdf-preview-scale {
-    zoom: 0.58;
+    zoom: 0.60;
   }
 }
-
-@media (min-width: 1024px) {
+@container (min-width: 651px) and (max-width: 800px) {
   .pdf-preview-scale {
-    zoom: 0.72;
+    zoom: 0.70;
   }
 }
-
-@media (min-width: 1280px) {
+@container (min-width: 801px) and (max-width: 950px) {
   .pdf-preview-scale {
-    zoom: 0.82;
+    zoom: 0.80;
   }
 }
-
-@media (min-width: 1536px) {
+@container (min-width: 951px) and (max-width: 1100px) {
   .pdf-preview-scale {
-    zoom: 0.92;
+    zoom: 0.90;
+  }
+}
+@container (min-width: 1101px) {
+  .pdf-preview-scale {
+    zoom: 1;
   }
 }
 
