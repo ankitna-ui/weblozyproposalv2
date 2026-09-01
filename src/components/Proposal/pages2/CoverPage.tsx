@@ -213,6 +213,10 @@ const CoverPage: React.FC<PageProps> = ({ proposal, pageNum }) => {
                     src={proposal?.client?.clientLogoUrl || weblozyLogo} 
                     alt={proposal?.client?.clientLogoUrl ? "Client Logo" : "Weblozy Default Logo"} 
                     className="max-w-full max-h-[150px] w-auto h-auto object-contain transition-transform duration-700 group-hover:scale-105" 
+                    data-fallback-src={weblozyLogo}
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = weblozyLogo;
+                    }}
                   />
                 </div>
              </div>

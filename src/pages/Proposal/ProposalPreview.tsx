@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { Proposal } from "@/types/proposal";
 import ProposalPDF from "@/components/Proposal/pages2";
+import weblozyLogo from "@/assets/weblozy-logo.png";
 
 const pageIconMap: Record<string, React.ComponentType<any>> = {
   cover: BookOpen,
@@ -134,6 +135,78 @@ export default function ProposalPreview() {
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+  };
+
+  const TRANSPARENT_PIXEL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+
+  const prepareImagesForExport = async (container: HTMLElement, defaultFallbackUrl: string) => {
+    const images = Array.from(container.querySelectorAll("img"));
+
+    await Promise.all(
+      images.map((img) => {
+        return new Promise<void>((resolve) => {
+          const fallback = img.getAttribute("data-fallback-src") || defaultFallbackUrl || TRANSPARENT_PIXEL;
+
+          // Attach defensive onError to prevent unhandled DOM error events in html-to-image
+          img.onerror = () => {
+            if (img.src !== fallback) {
+              img.src = fallback;
+            } else if (img.src !== TRANSPARENT_PIXEL) {
+              img.src = TRANSPARENT_PIXEL;
+            }
+            resolve();
+          };
+
+          const currentSrc = img.src || img.getAttribute("src") || "";
+
+          // If it's empty or already a Data URL, resolve immediately
+          if (!currentSrc || currentSrc.startsWith("data:")) {
+            resolve();
+            return;
+          }
+
+          // Pre-convert remote or external images via Image object into canvas Data URL
+          const tempImg = new Image();
+          tempImg.crossOrigin = "Anonymous";
+
+          const timer = setTimeout(() => {
+            console.warn("[PDF Debug] Image load timeout for:", currentSrc);
+            img.src = fallback;
+            resolve();
+          }, 3000);
+
+          tempImg.onload = () => {
+            clearTimeout(timer);
+            try {
+              const canvas = document.createElement("canvas");
+              canvas.width = tempImg.naturalWidth || tempImg.width || 100;
+              canvas.height = tempImg.naturalHeight || tempImg.height || 100;
+              const ctx = canvas.getContext("2d");
+              if (ctx) {
+                ctx.drawImage(tempImg, 0, 0);
+                const dataUrl = canvas.toDataURL("image/png");
+                img.src = dataUrl;
+                resolve();
+                return;
+              }
+            } catch (err) {
+              console.warn("[PDF Debug] Canvas CORS conversion failed for:", currentSrc, err);
+            }
+            img.src = fallback;
+            resolve();
+          };
+
+          tempImg.onerror = () => {
+            clearTimeout(timer);
+            console.warn("[PDF Debug] Failed to load remote image:", currentSrc);
+            img.src = fallback;
+            resolve();
+          };
+
+          tempImg.src = currentSrc;
+        });
+      })
+    );
   };
 
   const waitForAssets = async (container: HTMLElement) => {
@@ -263,20 +336,8 @@ export default function ProposalPreview() {
       `;
       exportContainer.appendChild(styleEl);
       
-      // Sanitize remote images to fix CSP blocking in html-to-image
-      const exportImages = Array.from(exportContainer.querySelectorAll("img"));
-      exportImages.forEach((img) => {
-        if (img.src.includes("api.microlink.io")) {
-          const fallback = img.getAttribute("data-fallback-src");
-          if (fallback) {
-            // Add a timestamp to bypass any browser cache that might hold the broken state
-            img.src = fallback;
-          } else {
-            // Invisible 1x1 pixel fallback if no placeholder exists
-            img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
-          }
-        }
-      });
+      // Sanitize remote images to fix CSP/CORS blocking in html-to-image
+      await prepareImagesForExport(exportContainer, weblozyLogo);
       
       // 1. Wait for web fonts and images to load completely inside cloned container
       await waitForAssets(exportContainer);
@@ -320,14 +381,36 @@ export default function ProposalPreview() {
         const progress = 30 + Math.round((i / validPages.length) * 65);
         updateProgress(progress);
 
-        // Use html-to-image to generate canvas first instead of direct PNG
-        const canvas = await toCanvas(pageEl, {
-          width: 794,
-          height: 1123,
-          pixelRatio: PDF_EXPORT_CONFIG.pixelRatio,
-          cacheBust: false,
-          backgroundColor: "#ffffff"
-        });
+        // Use html-to-image to generate canvas with robust fallback
+        let canvas: HTMLCanvasElement;
+        try {
+          canvas = await toCanvas(pageEl, {
+            width: 794,
+            height: 1123,
+            pixelRatio: PDF_EXPORT_CONFIG.pixelRatio,
+            cacheBust: false,
+            backgroundColor: "#ffffff",
+            imagePlaceholder: TRANSPARENT_PIXEL
+          });
+        } catch (pageErr) {
+          console.warn(`[PDF Debug] Primary capture failed for page ${i + 1}, retrying with image fallbacks:`, pageErr);
+          
+          // Force all non-data URL images on this page clone to TRANSPARENT_PIXEL
+          const pageImgs = Array.from(pageEl.querySelectorAll("img"));
+          pageImgs.forEach((img) => {
+            if (!img.src.startsWith("data:")) {
+              img.src = TRANSPARENT_PIXEL;
+            }
+          });
+
+          canvas = await toCanvas(pageEl, {
+            width: 794,
+            height: 1123,
+            pixelRatio: 1.5,
+            backgroundColor: "#ffffff",
+            imagePlaceholder: TRANSPARENT_PIXEL
+          });
+        }
 
         // Ensure transparent backgrounds are filled white before JPEG conversion
         const ctx = canvas.getContext('2d');

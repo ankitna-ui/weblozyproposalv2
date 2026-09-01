@@ -55,10 +55,14 @@ export function useLogoBackground(imageUrl: string | undefined) {
         // CORS error or other canvas exception
         console.warn("Could not read logo pixel data due to CORS or other error.", e);
         setIsTransparent(true);
-        setBgColor('#ffffff');
       }
     };
-    
+
+    img.onerror = () => {
+      setIsTransparent(true);
+      setBgColor('#ffffff');
+    };
+
     // Trigger load
     img.src = imageUrl;
   }, [imageUrl]);
