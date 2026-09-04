@@ -176,7 +176,14 @@ export default function CoverIdentityPanel({ proposal, currentStep, updateClient
           
           <div className="space-y-2">
             <LabelPremium>Prepared For (Client Name)</LabelPremium>
-            <ModernInput placeholder="e.g. Acme Corporation" value={proposal.client.clientName || ""} onChange={(e) => updateClient({ clientName: e.target.value })} />
+            <ModernInput 
+              placeholder="e.g. Acme Corporation" 
+              value={proposal.client.clientName || proposal.client.companyName || ""} 
+              onChange={(e) => {
+                const val = e.target.value;
+                updateClient({ clientName: val, companyName: val });
+              }} 
+            />
           </div>
         </div>
       </InputGroupCard>

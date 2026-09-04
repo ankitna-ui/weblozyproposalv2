@@ -470,8 +470,12 @@ export default function Dashboard() {
                             <FileText size={18} />
                           </div>
                           <div className="flex flex-col">
-                            <span className="font-black text-slate-900 dark:text-white uppercase tracking-wider text-xs">{p.client?.companyName || "VALUED CLIENT"}</span>
-                            <span className="text-[9px] text-slate-400 dark:text-gray-500 uppercase tracking-widest mt-0.5">{p.client?.referenceId || "WBL-000"}</span>
+                            <span className="font-black text-slate-900 dark:text-white uppercase tracking-wider text-xs">
+                              {(p.client?.clientName && p.client.clientName !== "VALUED CLIENT") ? p.client.clientName : (p.client?.companyName && p.client.companyName !== "VALUED CLIENT") ? p.client.companyName : "VALUED CLIENT"}
+                            </span>
+                            <span className="text-[9px] text-[#99CB48] font-bold uppercase tracking-widest mt-0.5">
+                              {p.client?.referenceId || "WBL-000"}
+                            </span>
                           </div>
                         </div>
                       </td>

@@ -130,7 +130,9 @@ export default function SavedProposals() {
                       <div className="space-y-3">
                         <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-gray-400">
                           <Building2 className="w-4 h-4 text-blue-500" />
-                          <span className="font-bold text-slate-700 dark:text-gray-300 truncate">{p.client.companyName}</span>
+                          <span className="font-bold text-slate-700 dark:text-gray-300 truncate">
+                            {(p.client?.clientName && p.client.clientName !== "VALUED CLIENT") ? p.client.clientName : (p.client?.companyName && p.client.companyName !== "VALUED CLIENT") ? p.client.companyName : "Valued Client"}
+                          </span>
                         </div>
                         <div className="flex items-center gap-3 text-[10px] text-slate-500 dark:text-gray-400">
                           <Users className="w-4 h-4 text-blue-500" />
