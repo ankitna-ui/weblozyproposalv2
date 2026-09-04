@@ -139,72 +139,100 @@ export default function ProposalPreview() {
 
   const TRANSPARENT_PIXEL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 
+  const urlToDataUrl = async (url: string): Promise<string> => {
+    if (!url || url.startsWith("data:")) return url;
+    
+    // Strategy 1: Attempt fetch + FileReader Data URL conversion (most reliable for local assets & CORS enabled images)
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const dataUrl = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string || "");
+        reader.onerror = () => resolve("");
+        reader.readAsDataURL(blob);
+      });
+      if (dataUrl && dataUrl.startsWith("data:")) {
+        return dataUrl;
+      }
+    } catch (fetchErr) {
+      console.warn("[PDF Debug] fetch blob failed for image URL:", url, fetchErr);
+    }
+
+    // Strategy 2: Canvas drawImage fallback
+    return new Promise<string>((resolve) => {
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.onload = () => {
+        try {
+          const canvas = document.createElement("canvas");
+          canvas.width = img.naturalWidth || img.width || 200;
+          canvas.height = img.naturalHeight || img.height || 200;
+          const ctx = canvas.getContext("2d");
+          if (ctx) {
+            ctx.drawImage(img, 0, 0);
+            resolve(canvas.toDataURL("image/png"));
+            return;
+          }
+        } catch (canvasErr) {
+          console.warn("[PDF Debug] Canvas drawImage failed:", canvasErr);
+        }
+        resolve(url);
+      };
+      img.onerror = () => resolve(url);
+      img.src = url;
+    });
+  };
+
   const prepareImagesForExport = async (container: HTMLElement, defaultFallbackUrl: string) => {
     const images = Array.from(container.querySelectorAll("img"));
 
     await Promise.all(
-      images.map((img) => {
-        return new Promise<void>((resolve) => {
-          const fallback = img.getAttribute("data-fallback-src") || defaultFallbackUrl || TRANSPARENT_PIXEL;
+      images.map(async (img) => {
+        const fallback = img.getAttribute("data-fallback-src") || defaultFallbackUrl || TRANSPARENT_PIXEL;
 
-          // Attach defensive onError to prevent unhandled DOM error events in html-to-image
-          img.onerror = () => {
-            if (img.src !== fallback) {
-              img.src = fallback;
-            } else if (img.src !== TRANSPARENT_PIXEL) {
-              img.src = TRANSPARENT_PIXEL;
-            }
-            resolve();
-          };
+        // Attach defensive onError to prevent unhandled DOM error events in html-to-image
+        img.onerror = () => {
+          if (img.src !== fallback) {
+            img.src = fallback;
+          } else if (img.src !== TRANSPARENT_PIXEL) {
+            img.src = TRANSPARENT_PIXEL;
+          }
+        };
 
-          const currentSrc = img.src || img.getAttribute("src") || "";
+        const currentSrc = img.src || img.getAttribute("src") || "";
 
-          // If it's empty or already a Data URL, resolve immediately
-          if (!currentSrc || currentSrc.startsWith("data:")) {
-            resolve();
+        // If it's empty or already a Data URL, resolve immediately
+        if (!currentSrc || currentSrc.startsWith("data:")) {
+          return;
+        }
+
+        try {
+          const dataUrl = await urlToDataUrl(currentSrc);
+          if (dataUrl && dataUrl.startsWith("data:")) {
+            img.src = dataUrl;
             return;
           }
+        } catch (err) {
+          console.warn("[PDF Debug] Failed to convert image to Data URL:", currentSrc, err);
+        }
 
-          // Pre-convert remote or external images via Image object into canvas Data URL
-          const tempImg = new Image();
-          tempImg.crossOrigin = "Anonymous";
-
-          const timer = setTimeout(() => {
-            console.warn("[PDF Debug] Image load timeout for:", currentSrc);
-            img.src = fallback;
-            resolve();
-          }, 3000);
-
-          tempImg.onload = () => {
-            clearTimeout(timer);
-            try {
-              const canvas = document.createElement("canvas");
-              canvas.width = tempImg.naturalWidth || tempImg.width || 100;
-              canvas.height = tempImg.naturalHeight || tempImg.height || 100;
-              const ctx = canvas.getContext("2d");
-              if (ctx) {
-                ctx.drawImage(tempImg, 0, 0);
-                const dataUrl = canvas.toDataURL("image/png");
-                img.src = dataUrl;
-                resolve();
-                return;
-              }
-            } catch (err) {
-              console.warn("[PDF Debug] Canvas CORS conversion failed for:", currentSrc, err);
+        // If conversion failed, attempt converting fallback image
+        if (fallback && !fallback.startsWith("data:")) {
+          try {
+            const fallbackDataUrl = await urlToDataUrl(fallback);
+            if (fallbackDataUrl && fallbackDataUrl.startsWith("data:")) {
+              img.src = fallbackDataUrl;
+              return;
             }
-            img.src = fallback;
-            resolve();
-          };
+          } catch (e) {
+            console.warn("[PDF Debug] Fallback conversion failed:", e);
+          }
+        }
 
-          tempImg.onerror = () => {
-            clearTimeout(timer);
-            console.warn("[PDF Debug] Failed to load remote image:", currentSrc);
-            img.src = fallback;
-            resolve();
-          };
-
-          tempImg.src = currentSrc;
-        });
+        if (fallback) {
+          img.src = fallback;
+        }
       })
     );
   };
@@ -395,10 +423,11 @@ export default function ProposalPreview() {
         } catch (pageErr) {
           console.warn(`[PDF Debug] Primary capture failed for page ${i + 1}, retrying with image fallbacks:`, pageErr);
           
-          // Force all non-data URL images on this page clone to TRANSPARENT_PIXEL
+          // Force non-data URL images on this page clone to TRANSPARENT_PIXEL, except Client Logos
           const pageImgs = Array.from(pageEl.querySelectorAll("img"));
           pageImgs.forEach((img) => {
-            if (!img.src.startsWith("data:")) {
+            const isClientLogo = img.getAttribute("alt") === "Client Logo" || img.getAttribute("data-is-client-logo") === "true";
+            if (!img.src.startsWith("data:") && !isClientLogo) {
               img.src = TRANSPARENT_PIXEL;
             }
           });

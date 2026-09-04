@@ -1,6 +1,7 @@
 import { useMemo } from "react";
-import { CreditCard, Percent, ShieldCheck, Plus, Trash2, Calculator, Server, Landmark } from "lucide-react";
+import { CreditCard, Percent, ShieldCheck, Plus, Trash2, Calculator, Server, Landmark, Sparkles, RefreshCw } from "lucide-react";
 import { InputPanelProps, LabelPremium, SectionHeader, ModernInput, ModernTextArea, InputGroupCard } from "./shared";
+import { toast } from "react-toastify";
 
 export default function CommercialFrameworkPanel({ proposal, currentStep, updatePricing }: InputPanelProps) {
   
@@ -16,16 +17,71 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
     return { base, discPct, discAmt, subtotal, taxPct, total };
   }, [proposal.pricing.coreValuation, proposal.pricing.discountPercentage, proposal.pricing.taxRate]);
 
+  const totalAllocatedPct = useMemo(() => {
+    return (proposal.pricing.milestones || []).reduce((acc: number, m: any) => {
+      return acc + (parseFloat(String(m.percentage || 0)) || 0);
+    }, 0);
+  }, [proposal.pricing.milestones]);
+
+  const totalAllocatedRupees = useMemo(() => {
+    return Math.round((totalAllocatedPct / 100) * stats.subtotal);
+  }, [totalAllocatedPct, stats.subtotal]);
+
+  const handleAutoBalanceMilestones = () => {
+    const milestones = proposal.pricing.milestones || [];
+    if (milestones.length === 0) return;
+
+    const count = milestones.length;
+    const equalShare = Math.floor(100 / count);
+    const remainder = 100 - (equalShare * count);
+
+    const rebalanced = milestones.map((m: any, idx: number) => ({
+      ...m,
+      percentage: idx === 0 ? equalShare + remainder : equalShare
+    }));
+
+    updatePricing({ milestones: rebalanced });
+    toast.success(`✨ Auto-balanced ${count} milestones to 100%!`);
+  };
+
   const addMilestone = () => {
     const milestones = proposal.pricing.milestones || [];
-    updatePricing({
-      milestones: [...milestones, { name: "New Milestone", percentage: 0, description: "" }]
-    });
+    const count = milestones.length + 1;
+    const equalShare = Math.floor(100 / count);
+    const remainder = 100 - (equalShare * count);
+
+    const names = [
+      "Project Initiation & Architecture Setup",
+      "Core Development & System Integration",
+      "Beta Testing & QA Verification",
+      "Final Deployment & Training Sign-off",
+      "Post-Launch Maintenance Support"
+    ];
+    const defaultName = names[milestones.length] || `Milestone Phase ${count}`;
+
+    const updated = [...milestones, { name: defaultName, percentage: 0, description: "" }].map((m, idx) => ({
+      ...m,
+      percentage: idx === 0 ? equalShare + remainder : equalShare
+    }));
+
+    updatePricing({ milestones: updated });
+    toast.info(`✨ Added phase. Auto-balanced ${count} milestones to 100%!`);
   };
 
   const removeMilestone = (idx: number) => {
-    const milestones = proposal.pricing.milestones.filter((_: any, i: number) => i !== idx);
-    updatePricing({ milestones });
+    const remaining = (proposal.pricing.milestones || []).filter((_: any, i: number) => i !== idx);
+    if (remaining.length > 0) {
+      const count = remaining.length;
+      const equalShare = Math.floor(100 / count);
+      const remainder = 100 - (equalShare * count);
+      const updated = remaining.map((m: any, i: number) => ({
+        ...m,
+        percentage: i === 0 ? equalShare + remainder : equalShare
+      }));
+      updatePricing({ milestones: updated });
+    } else {
+      updatePricing({ milestones: [] });
+    }
   };
 
   const updateMilestone = (idx: number, data: any) => {
@@ -180,33 +236,76 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
       <InputGroupCard
         icon={<CreditCard className="w-[18px] h-[18px]" />}
         title="Investment Roadmap"
-        description="Defined payment milestones & deliverables"
+        description="Defined payment milestones & deliverables with auto-calculation"
         accentColor="indigo"
       >
         <div className="space-y-4">
-          <div className="flex justify-between items-center border-b border-slate-100 dark:border-white/5 pb-2">
-            <LabelPremium className="mb-0">Payment Milestones</LabelPremium>
-            <button 
-              type="button"
-              onClick={addMilestone} 
-              className="text-[10px] font-black uppercase text-primary hover:text-primary/80 transition-all bg-primary/10 dark:bg-primary/5 px-4 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm"
-            >
-              <Plus size={10} /> Add Milestone
-            </button>
+          <div className="flex flex-wrap justify-between items-center border-b border-slate-100 dark:border-white/5 pb-3 gap-2">
+            <LabelPremium className="mb-0">Payment Milestones ({proposal.pricing.milestones?.length || 0})</LabelPremium>
+            
+            <div className="flex items-center gap-2">
+              <button 
+                type="button"
+                onClick={handleAutoBalanceMilestones}
+                className="text-[9.5px] font-black uppercase text-[#1AA6E1] hover:text-[#1AA6E1]/80 transition-all bg-[#1AA6E1]/10 border border-[#1AA6E1]/20 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm"
+              >
+                <RefreshCw size={10} /> Auto-Balance (100%)
+              </button>
+              
+              <button 
+                type="button"
+                onClick={addMilestone} 
+                className="text-[9.5px] font-black uppercase text-primary hover:text-primary/80 transition-all bg-primary/10 border border-primary/20 px-3.5 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm"
+              >
+                <Plus size={10} /> Add Milestone
+              </button>
+            </div>
           </div>
 
+          {/* Live Milestone Allocation Progress Bar */}
+          {proposal.pricing.milestones?.length > 0 && (
+            <div className="p-3 bg-slate-50 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 rounded-xl space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className={`w-2.5 h-2.5 rounded-full ${totalAllocatedPct === 100 ? "bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" : "bg-amber-500 animate-pulse"}`} />
+                  <span className="text-[10px] font-black uppercase text-slate-800 dark:text-slate-200 tracking-wider">
+                    Allocated: {totalAllocatedPct}% ({formatINR(totalAllocatedRupees)} / {formatINR(stats.subtotal)})
+                  </span>
+                </div>
+                <span className={`text-[8.5px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full ${
+                  totalAllocatedPct === 100 
+                    ? "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400" 
+                    : "bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400"
+                }`}>
+                  {totalAllocatedPct === 100 ? "✓ 100% Balanced" : `${100 - totalAllocatedPct > 0 ? `${100 - totalAllocatedPct}% Unallocated` : `${totalAllocatedPct - 100}% Over Allocated`}`}
+                </span>
+              </div>
+              
+              {/* Progress Bar */}
+              <div className="w-full h-2 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full transition-all duration-500 ${totalAllocatedPct === 100 ? "bg-[#99CB48]" : totalAllocatedPct > 100 ? "bg-rose-500" : "bg-amber-500"}`}
+                  style={{ width: `${Math.min(100, totalAllocatedPct)}%` }}
+                />
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 gap-4">
-             {proposal.pricing.milestones?.map((m: any, i: number) => (
-                <div key={i} className="relative group bg-white dark:bg-white/5 p-5 rounded-2xl border border-slate-100 dark:border-white/5 hover:border-[#99CB48]/20 transition-all duration-300 shadow-sm flex gap-4 items-start">
+             {proposal.pricing.milestones?.map((m: any, i: number) => {
+                const calculatedRupees = Math.round((parseFloat(String(m.percentage || 0)) / 100) * (stats.subtotal || 0));
+
+                return (
+                <div key={i} className="relative group bg-white dark:bg-white/5 p-5 rounded-2xl border border-slate-100 dark:border-white/5 hover:border-[#99CB48]/30 transition-all duration-300 shadow-sm flex gap-4 items-start">
                    <div className="w-10 h-10 bg-slate-50 dark:bg-[#0B0E14] rounded-xl flex items-center justify-center font-black text-slate-900 dark:text-white text-sm italic shrink-0 shadow-md -rotate-3 group-hover:rotate-0 transition-transform border border-slate-100 dark:border-white/5">
                       {String(i + 1).padStart(2, '0')}
                    </div>
                    
                    <div className="flex-1 space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-                         <div className="md:col-span-9 space-y-3">
+                         <div className="md:col-span-7 space-y-3">
                             <div className="space-y-1">
-                               <p className="text-[8px] font-bold uppercase text-slate-400 tracking-widest pl-0.5">Milestone Phase</p>
+                               <p className="text-[8px] font-bold uppercase text-slate-400 tracking-widest pl-0.5">Milestone Phase Name</p>
                                <ModernInput 
                                  className="bg-transparent border-b border-transparent focus:border-slate-200 dark:border-white/10 font-semibold text-slate-800 dark:text-white p-0 h-8 text-sm focus:bg-white dark:focus:bg-white/5 focus:px-2 rounded transition-all" 
                                  placeholder="e.g. System Blueprint & Initiation"
@@ -221,51 +320,75 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
                               onChange={(e) => updateMilestone(i, { description: e.target.value })} 
                             />
                          </div>
-                         <div className="md:col-span-3">
+
+                         {/* Bidirectional Auto-Calculated Inputs: Allocation % and Rupee Amount */}
+                         <div className="md:col-span-5 grid grid-cols-2 gap-2.5">
                             <div className="space-y-1">
                                <p className="text-[8px] font-bold uppercase text-slate-400 tracking-widest pl-0.5">Allocation (%)</p>
                                <div className="relative">
                                   <ModernInput 
                                     type="number"
-                                    className="h-10 pl-3 pr-8 font-semibold text-primary text-sm bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-lg focus-visible:ring-primary focus:bg-white dark:focus:bg-white/5 text-center" 
+                                    className="h-10 pl-3 pr-7 font-bold text-primary text-xs bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-lg focus-visible:ring-primary focus:bg-white dark:focus:bg-white/5 text-center" 
                                     value={m.percentage} 
-                                    onChange={(e) => updateMilestone(i, { percentage: e.target.value })} 
+                                    onChange={(e) => {
+                                      const val = parseFloat(e.target.value) || 0;
+                                      updateMilestone(i, { percentage: val });
+                                    }} 
                                   />
-                                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-primary/45 font-bold text-xs">%</span>
+                                  <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-primary/60 font-bold text-xs">%</span>
                                 </div>
                              </div>
-                          </div>
-                       </div>
-                    </div>
+
+                             <div className="space-y-1">
+                               <p className="text-[8px] font-bold uppercase text-slate-400 tracking-widest pl-0.5">Amount (₹)</p>
+                               <div className="relative">
+                                  <ModernInput 
+                                    type="text"
+                                    className="h-10 pl-5 pr-2 font-bold text-emerald-600 dark:text-emerald-400 text-xs bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-lg text-right" 
+                                    placeholder="0"
+                                    value={calculatedRupees.toLocaleString("en-IN")}
+                                    onChange={(e) => {
+                                      const rawNum = parseFloat(e.target.value.replace(/[^0-9.]/g, "")) || 0;
+                                      const totalVal = stats.subtotal || 1;
+                                      const calculatedPct = Math.min(100, Math.round(((rawNum / totalVal) * 100) * 10) / 10);
+                                      updateMilestone(i, { percentage: calculatedPct });
+                                    }} 
+                                  />
+                                  <span className="absolute left-2 top-1/2 -translate-y-1/2 text-emerald-500 font-bold text-xs">₹</span>
+                               </div>
+                             </div>
+                         </div>
+                      </div>
+                   </div>
  
-                    <button 
-                      onClick={() => removeMilestone(i)} 
-                      className="absolute top-4 right-4 p-1.5 bg-red-50 dark:bg-red-500/10 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-100 dark:hover:bg-red-500/20 transition-all opacity-0 group-hover:opacity-100 border border-red-100/50"
-                    >
-                       <Trash2 size={14} />
-                    </button>
+                   <button 
+                     onClick={() => removeMilestone(i)} 
+                     className="absolute top-4 right-4 p-1.5 bg-red-50 dark:bg-red-500/10 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-100 dark:hover:bg-red-500/20 transition-all opacity-0 group-hover:opacity-100 border border-red-100/50"
+                   >
+                      <Trash2 size={14} />
+                   </button>
                  </div>
-              ))}
-           </div>
-         </div>
-       </InputGroupCard>
- 
-       {/* ──── ROI LOGIC ──── */}
-       <InputGroupCard
-         icon={<ShieldCheck className="w-[18px] h-[18px]" />}
-         title="ROI Settlement Protocol"
-         description="Dynamic terms for payment release and sign-offs"
-         accentColor="rose"
-       >
-         <div className="space-y-2">
-           <LabelPremium>Settlement Logic & Terms</LabelPremium>
-           <ModernTextArea 
-             placeholder="Clarify the settlement logic. E.g., 'Payment for each phase is due upon successful deployment to the staging environment and client protocol sign-off...'" 
-             value={proposal.pricing.roiLogic} 
-             onChange={(e) => updatePricing({ roiLogic: e.target.value })} 
-           />
-         </div>
-       </InputGroupCard>
-     </div>
-   );
- }
+              );})}
+          </div>
+        </div>
+      </InputGroupCard>
+
+      {/* ──── ROI LOGIC ──── */}
+      <InputGroupCard
+        icon={<ShieldCheck className="w-[18px] h-[18px]" />}
+        title="ROI Settlement Protocol"
+        description="Dynamic terms for payment release and sign-offs"
+        accentColor="rose"
+      >
+        <div className="space-y-2">
+          <LabelPremium>Settlement Logic & Terms</LabelPremium>
+          <ModernTextArea 
+            placeholder="Clarify the settlement logic. E.g., 'Payment for each phase is due upon successful deployment to the staging environment and client protocol sign-off...'" 
+            value={proposal.pricing.roiLogic} 
+            onChange={(e) => updatePricing({ roiLogic: e.target.value })} 
+          />
+        </div>
+      </InputGroupCard>
+    </div>
+  );
+}

@@ -2,6 +2,21 @@ import { Monitor, Server, Database, Cloud, ShieldCheck } from "lucide-react";
 import { InputPanelProps, LabelPremium, SectionHeader, ModernInput, InputGroupCard } from "./shared";
 
 export default function TechnicalStackPanel({ proposal, currentStep, updateTechArchitecture }: InputPanelProps) {
+  const frontendVal = Array.isArray(proposal?.techArchitecture?.frontendStack)
+    ? proposal.techArchitecture.frontendStack.join(", ")
+    : (proposal?.techArchitecture?.frontendStack || "");
+
+  const backendVal = Array.isArray(proposal?.techArchitecture?.backendStack)
+    ? proposal.techArchitecture.backendStack.join(", ")
+    : (proposal?.techArchitecture?.backendStack || "");
+
+  const databaseVal = proposal?.techArchitecture?.database || "";
+  const hostingVal = proposal?.techArchitecture?.hosting || "";
+
+  const securityVal = Array.isArray(proposal?.techArchitecture?.securityFeatures)
+    ? proposal.techArchitecture.securityFeatures.join(", ")
+    : (proposal?.techArchitecture?.securityFeatures || "");
+
   return (
     <div className="space-y-8 pb-10">
       <SectionHeader 
@@ -14,15 +29,15 @@ export default function TechnicalStackPanel({ proposal, currentStep, updateTechA
         <InputGroupCard
           icon={<Monitor className="w-[18px] h-[18px]" />}
           title="Frontend Interface Stack"
-          description="Client interface technologies"
+          description="Client interface technologies (comma separated)"
           accentColor="blue"
         >
           <div className="space-y-2">
             <LabelPremium>Frontend Frameworks & Libs</LabelPremium>
             <ModernInput 
               placeholder="React, Next.js, Tailwind CSS..." 
-              value={proposal.techArchitecture.frontendStack.join(", ")} 
-              onChange={(e) => updateTechArchitecture({ frontendStack: e.target.value.split(",").map((i: string) => i.trim()) })} 
+              value={frontendVal} 
+              onChange={(e) => updateTechArchitecture({ frontendStack: e.target.value.split(",").map((i: string) => i.trimStart()) })} 
             />
           </div>
         </InputGroupCard>
@@ -30,15 +45,15 @@ export default function TechnicalStackPanel({ proposal, currentStep, updateTechA
         <InputGroupCard
           icon={<Server className="w-[18px] h-[18px]" />}
           title="Core Engine (Backend)"
-          description="Application logic & compute backend"
+          description="Application logic & compute backend (comma separated)"
           accentColor="purple"
         >
           <div className="space-y-2">
             <LabelPremium>Backend Technologies</LabelPremium>
             <ModernInput 
               placeholder="Node.js, Python, Go..." 
-              value={proposal.techArchitecture.backendStack.join(", ")} 
-              onChange={(e) => updateTechArchitecture({ backendStack: e.target.value.split(",").map((i: string) => i.trim()) })} 
+              value={backendVal} 
+              onChange={(e) => updateTechArchitecture({ backendStack: e.target.value.split(",").map((i: string) => i.trimStart()) })} 
             />
           </div>
         </InputGroupCard>
@@ -53,7 +68,7 @@ export default function TechnicalStackPanel({ proposal, currentStep, updateTechA
             <LabelPremium>Databases & Stores</LabelPremium>
             <ModernInput 
               placeholder="PostgreSQL, MongoDB, Redis..." 
-              value={proposal.techArchitecture.database} 
+              value={databaseVal} 
               onChange={(e) => updateTechArchitecture({ database: e.target.value })} 
             />
           </div>
@@ -69,8 +84,25 @@ export default function TechnicalStackPanel({ proposal, currentStep, updateTechA
             <LabelPremium>Cloud Providers & Platforms</LabelPremium>
             <ModernInput 
               placeholder="AWS, Azure, Vercel..." 
-              value={proposal.techArchitecture.hosting} 
+              value={hostingVal} 
               onChange={(e) => updateTechArchitecture({ hosting: e.target.value })} 
+            />
+          </div>
+        </InputGroupCard>
+
+        <InputGroupCard
+          icon={<ShieldCheck className="w-[18px] h-[18px]" />}
+          title="Security Protocols"
+          description="Encryption & security compliance (comma separated)"
+          accentColor="indigo"
+          className="md:col-span-2"
+        >
+          <div className="space-y-2">
+            <LabelPremium>Security Features & Standards</LabelPremium>
+            <ModernInput 
+              placeholder="256-bit AES Encryption, SOC2 Compliance, Multi-factor Authentication..." 
+              value={securityVal} 
+              onChange={(e) => updateTechArchitecture({ securityFeatures: e.target.value.split(",").map((i: string) => i.trimStart()) })} 
             />
           </div>
         </InputGroupCard>

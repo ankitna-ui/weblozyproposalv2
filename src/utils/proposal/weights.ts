@@ -1,12 +1,12 @@
 const TOTAL_PAGE_HEIGHT = 1123;
-const HEADER_FOOTER_PADDING = 320; // Accounts for A4 margins, headers, footers
+const HEADER_FOOTER_PADDING = 240; // Optimized A4 content padding to pack pages efficiently
 const FIRST_PAGE_TITLE_AREA = 70; // Extra space taken by the title on the first page
 
-const BASE_CARD_HEIGHT = 52;   // Module header card height
+const BASE_CARD_HEIGHT = 50;   // Module header card height
 const CONTINUED_BADGE_HEIGHT = 20; // Extra height for "(Continued)" badge on continuation pages
-const FEATURE_ROW_HEIGHT = 36; // Height per feature row
-const CARD_GAP = 20;           // Gap between module cards
-const CONTINUATION_FOOTER = 22; // "Continued on next page..." row height
+const FEATURE_ROW_HEIGHT = 38; // Height per feature row (exact match for py-2.5 padding)
+const CARD_GAP = 16;           // Gap between module cards
+const CONTINUATION_FOOTER = 20; // "Continued on next page..." row height
 
 /**
  * A module segment represents a slice of a module that fits on one page.

@@ -2,6 +2,80 @@ import { InputPanelProps, LabelPremium, SectionHeader, ModernInput, InputGroupCa
 import { ImagePlus, Hash, User, FileText, Settings, Calendar, Globe } from "lucide-react";
 import React from "react";
 
+const compressImageFile = (file: File): Promise<string> => {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const result = e.target?.result as string;
+      if (!result) {
+        resolve("");
+        return;
+      }
+      const img = new Image();
+      img.onload = () => {
+        const maxDim = 800;
+        let width = img.width;
+        let height = img.height;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          resolve(result);
+          return;
+        }
+        ctx.drawImage(img, 0, 0, width, height);
+        const isPng = file.type === "image/png" || file.name.toLowerCase().endsWith(".png");
+        const mime = isPng ? "image/png" : "image/jpeg";
+        resolve(canvas.toDataURL(mime, isPng ? undefined : 0.85));
+      };
+      img.onerror = () => resolve(result);
+      img.src = result;
+    };
+    reader.onerror = () => resolve("");
+    reader.readAsDataURL(file);
+  });
+};
+
+const convertUrlToBase64 = (url: string): Promise<string> => {
+  return new Promise((resolve) => {
+    if (!url || !url.startsWith("http")) {
+      resolve(url);
+      return;
+    }
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.onload = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.naturalWidth || img.width || 300;
+        canvas.height = img.naturalHeight || img.height || 300;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(img, 0, 0);
+          const dataUrl = canvas.toDataURL("image/png");
+          resolve(dataUrl);
+          return;
+        }
+      } catch (e) {
+        console.warn("Canvas conversion failed for remote logo URL:", e);
+      }
+      resolve(url);
+    };
+    img.onerror = () => resolve(url);
+    img.src = url;
+  });
+};
+
 export default function CoverIdentityPanel({ proposal, currentStep, updateClient }: InputPanelProps) {
   return (
     <div className="space-y-6">
@@ -18,7 +92,17 @@ export default function CoverIdentityPanel({ proposal, currentStep, updateClient
           <ModernInput 
             placeholder="https://example.com/logo.png" 
             value={proposal.client.clientLogoUrl || ""} 
-            onChange={(e) => updateClient({ clientLogoUrl: e.target.value })} 
+            onChange={(e) => {
+              const val = e.target.value;
+              updateClient({ clientLogoUrl: val });
+              if (val && val.startsWith("http")) {
+                convertUrlToBase64(val).then((base64) => {
+                  if (base64 && base64.startsWith("data:")) {
+                    updateClient({ clientLogoUrl: base64 });
+                  }
+                });
+              }
+            }} 
           />
           
           <div className="relative">
@@ -36,14 +120,13 @@ export default function CoverIdentityPanel({ proposal, currentStep, updateClient
               accept="image/*" 
               className="hidden" 
               id="client-logo-upload"
-              onChange={(e) => {
+              onChange={async (e) => {
                 const file = e.target.files?.[0];
                 if (file) {
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                    updateClient({ clientLogoUrl: reader.result as string });
-                  };
-                  reader.readAsDataURL(file);
+                  const compressed = await compressImageFile(file);
+                  if (compressed) {
+                    updateClient({ clientLogoUrl: compressed });
+                  }
                 }
               }}
             />

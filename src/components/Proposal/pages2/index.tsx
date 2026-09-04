@@ -55,13 +55,20 @@ const ProposalPDF = forwardRef<HTMLDivElement, ProposalPDFProps>(({ proposal, ac
 
   let currentPageNum = 1;
   // Calculate pages needed for modules dynamically (matching ModuleArchitecturePage fallback logic)
+  // Separate Core Modules vs Future Scalability Modules onto dedicated pages
   const solutionModules = proposal?.solution?.selectedModules?.length > 0 
     ? proposal.solution.selectedModules 
     : [
         { id: "sample-mod-1", name: "Industrial Product Management", features: [{ name: "Product dependency management", price: "₹2,500" }, { name: "Variant & SKU workflows", price: "₹1,500" }, { name: "Category management" }], price: "₹25,000" },
       ];
-  const modulePages = paginateModules(solutionModules);
-  const modulePagesCount = modulePages.length || 1;
+
+  const coreModules = solutionModules.filter(m => !m.isFutureScalability);
+  const futureModules = solutionModules.filter(m => m.isFutureScalability === true);
+
+  const coreModulePages = paginateModules(coreModules.length > 0 ? coreModules : (futureModules.length > 0 ? [] : solutionModules));
+  const futureModulePages = futureModules.length > 0 ? paginateModules(futureModules) : [];
+
+  const modulePagesCount = coreModulePages.length + futureModulePages.length;
 
   useEffect(() => {
     if (activeStep !== undefined && containerRef.current) {
@@ -135,10 +142,11 @@ const ProposalPDF = forwardRef<HTMLDivElement, ProposalPDFProps>(({ proposal, ac
           
           return (
             <React.Fragment key="modules">
-              {modulePages.map((pageSegments, pageIdx) => {
+              {/* Core Modules Pages */}
+              {coreModulePages.map((pageSegments, pageIdx) => {
                 return (
                   <div 
-                    key={`modules-page-${pageIdx}`} 
+                    key={`core-modules-page-${pageIdx}`} 
                     id={pageIdx === 0 ? "proposal-page-modules" : `proposal-page-modules-${pageIdx}`} 
                     className="scroll-mt-24 w-full flex justify-center pdf-page proposal-page"
                   >
@@ -147,7 +155,28 @@ const ProposalPDF = forwardRef<HTMLDivElement, ProposalPDFProps>(({ proposal, ac
                       pageNum={startPageNum + pageIdx} 
                       pageSegments={pageSegments} 
                       pageIdx={pageIdx} 
-                      totalPages={modulePagesCount}
+                      totalPages={coreModulePages.length}
+                      isFuturePage={false}
+                    />
+                  </div>
+                );
+              })}
+
+              {/* Dedicated Future Scalability Modules Pages */}
+              {futureModulePages.map((pageSegments, pageIdx) => {
+                return (
+                  <div 
+                    key={`future-modules-page-${pageIdx}`} 
+                    id={pageIdx === 0 && coreModulePages.length === 0 ? "proposal-page-modules" : `proposal-page-future-modules-${pageIdx}`} 
+                    className="scroll-mt-24 w-full flex justify-center pdf-page proposal-page"
+                  >
+                    <ModuleArchitecturePage 
+                      proposal={proposal} 
+                      pageNum={startPageNum + coreModulePages.length + pageIdx} 
+                      pageSegments={pageSegments} 
+                      pageIdx={pageIdx} 
+                      totalPages={futureModulePages.length}
+                      isFuturePage={true}
                     />
                   </div>
                 );

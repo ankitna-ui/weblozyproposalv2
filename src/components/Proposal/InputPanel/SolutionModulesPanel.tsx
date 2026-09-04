@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Wand2, X, Loader2, Trash2, Sparkles, CheckCircle, Plus, Clipboard, ShieldAlert } from "lucide-react";
+import { Wand2, X, Loader2, Trash2, Sparkles, CheckCircle, Plus, Clipboard, ShieldAlert, ClipboardList, Zap, Layers, Rocket } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTokens } from "@/hooks/useTokens";
 import TokenAnalyticsBar from "@/components/Proposal/TokenAnalyticsBar";
@@ -10,6 +10,88 @@ import { Module } from "@/types/proposal";
 import { InputPanelProps, LabelPremium, SectionHeader, ModernInput, ModernTextArea, InputGroupCard } from "./shared";
 
 import { toast } from "react-toastify";
+
+export interface ParsedBulkModule {
+  name: string;
+  price?: string;
+  features: { name: string; price?: string }[];
+}
+
+export function parseBulkModulesText(text: string): ParsedBulkModule[] {
+  if (!text || !text.trim()) return [];
+
+  const rawLines = text.split("\n").map(l => l.trim()).filter(Boolean);
+  const result: ParsedBulkModule[] = [];
+  let currentModule: ParsedBulkModule | null = null;
+
+  for (let i = 0; i < rawLines.length; i++) {
+    const line = rawLines[i];
+
+    // Check if line starts with a bullet point or list marker
+    const isBulletLine = /^[•\-*+▪■●○]/.test(line) || /^\d+[\.\)]\s+/.test(line);
+
+    // Strip bullet symbol/prefix
+    let cleaned = line
+      .replace(/^[•\-*+▪■●○\s]+/, "")
+      .replace(/^(module|feature|sub-module)\s*\d*[\:\-]\s*/i, "")
+      .trim();
+
+    if (!cleaned) continue;
+
+    // Check lookahead: is next line a bullet point?
+    const nextLine = rawLines[i + 1] || "";
+    const nextIsBullet = /^[•\-*+▪■●○]/.test(nextLine) || /^\d+[\.\)]\s+/.test(nextLine);
+
+    // Header criteria:
+    const isHeaderWord = /^(module|system|node|architecture|phase|section)\s*\d*[\:\s\-]/i.test(line) || line.endsWith(":");
+    const isNumberedModule = /^(module\s*)?\d+[\.\)]\s+[A-Z0-9]/i.test(line);
+    
+    const isHeader = isHeaderWord || isNumberedModule || (!isBulletLine && nextIsBullet) || (currentModule === null && !isBulletLine);
+
+    if (isHeader && cleaned.length > 1) {
+      let moduleName = cleaned.replace(/[\:\-]+$/, "").trim();
+      moduleName = moduleName.replace(/^(module\s*\d*[\:\-]\s*|\d+[\.\)]\s*)/i, "").trim();
+
+      let price = "";
+      const priceMatch = moduleName.match(/[\(\[\{]?(?:price|est|cost)?\s*[\:\=]?\s*₹?\s*([\d,]+k?)\s*[\)\]\}]?$/i);
+      if (priceMatch && priceMatch[1]) {
+        price = priceMatch[1];
+        moduleName = moduleName.replace(priceMatch[0], "").trim();
+      }
+
+      currentModule = {
+        name: moduleName || cleaned,
+        price: price,
+        features: []
+      };
+      result.push(currentModule);
+    } else {
+      if (!currentModule) {
+        currentModule = {
+          name: "Core System Module",
+          price: "",
+          features: []
+        };
+        result.push(currentModule);
+      }
+
+      let featureName = cleaned.replace(/^\d+[\.\)]\s*/, "").trim();
+      let featurePrice = "";
+      const fPriceMatch = featureName.match(/[\(\[\{]?\s*₹?\s*([\d,]+)\s*[\)\]\}]?$/i);
+      if (fPriceMatch && fPriceMatch[1] && featureName.includes("₹")) {
+        featurePrice = fPriceMatch[1];
+        featureName = featureName.replace(fPriceMatch[0], "").trim();
+      }
+
+      currentModule.features.push({
+        name: featureName,
+        price: featurePrice
+      });
+    }
+  }
+
+  return result.filter(m => m.name && (m.features.length > 0 || m.price));
+}
 
 function generateRealisticFallbackFeatures(moduleName: string): string[] {
   const name = moduleName.toLowerCase();
@@ -151,7 +233,35 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
   const [bulkImportText, setBulkImportText] = useState("");
   const [showQuotaModal, setShowQuotaModal] = useState(false);
 
+  const [smartBulkText, setSmartBulkText] = useState("");
+  const [parsedSmartModules, setParsedSmartModules] = useState<ParsedBulkModule[]>([]);
+
   const { consumeTokens } = useTokens();
+
+  const handleApplySmartBulkModules = (asFutureScalability: boolean = false) => {
+    if (parsedSmartModules.length === 0) return;
+
+    const newModules: Module[] = parsedSmartModules.map(m => ({
+      id: Math.random().toString(36).substr(2, 9),
+      name: m.name,
+      price: m.price || "",
+      features: m.features.map(f => ({ name: f.name, price: f.price || "" })),
+      isCustom: true,
+      isFutureScalability: asFutureScalability
+    }));
+
+    updateSolution({ selectedModules: [...proposal.solution.selectedModules, ...newModules] });
+
+    const moduleTypeLabel = asFutureScalability ? "Future Scalability Modules" : "Core Modules";
+    toast.success(`✨ Created & placed ${newModules.length} ${moduleTypeLabel} on the proposal page!`);
+    setSmartBulkText("");
+    setParsedSmartModules([]);
+
+    const element = document.getElementById("manual-node-section");
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const handleAddSingleModule = async () => {
     if (!singleModuleName) return;
@@ -509,6 +619,76 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
         </Button>
       </InputGroupCard>
 
+      {/* Smart Bulk Import Card */}
+      <InputGroupCard
+        icon={<ClipboardList className="w-[18px] h-[18px]" />}
+        title="Smart Paste: Modules & Features"
+        description="Modules aur unke sare features ko ek sath text box me paste karein — system automatically parse karke page par add kar dega"
+        accentColor="emerald"
+      >
+        <div className="space-y-4">
+          <ModernTextArea 
+            className="min-h-[140px] p-4 text-xs font-mono text-slate-800 dark:text-slate-100 bg-white dark:bg-[#131722] border border-slate-200 dark:border-white/10 rounded-xl focus:border-primary/50 placeholder:font-sans placeholder:text-slate-400 leading-relaxed" 
+            placeholder={`Yaha Modules aur unke Features paste karein, jaise:\n\nModule 1: Lead & CRM System (₹25,000)\n- Automated lead capture\n- Dynamic lead scoring\n- Sales pipeline Kanban view\n\nModule 2: Billing & Invoice Suite (₹35,000)\n- Recurring subscription engine\n- Multi-currency GST settlement\n- Customer self-service portal`} 
+            value={smartBulkText} 
+            onChange={(e) => {
+              const val = e.target.value;
+              setSmartBulkText(val);
+              const parsed = parseBulkModulesText(val);
+              setParsedSmartModules(parsed);
+            }} 
+          />
+
+          {/* Real-time Detection Badge */}
+          {parsedSmartModules.length > 0 && (
+            <div className="p-3.5 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 rounded-xl space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                  <span className="text-[10px] font-black uppercase text-emerald-700 dark:text-emerald-400 tracking-wider">
+                    Detected: {parsedSmartModules.length} Modules & {parsedSmartModules.reduce((acc, m) => acc + m.features.length, 0)} Features
+                  </span>
+                </div>
+                <span className="text-[8px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest bg-emerald-100 dark:bg-emerald-500/20 px-2 py-0.5 rounded-full">
+                  Auto-Parsed Ready
+                </span>
+              </div>
+              <div className="flex gap-1.5 flex-wrap pt-1">
+                {parsedSmartModules.map((m, idx) => (
+                  <span key={idx} className="px-2.5 py-1 bg-white dark:bg-[#0B0E14] border border-emerald-200 dark:border-emerald-500/20 text-slate-800 dark:text-slate-200 rounded-lg text-[9.5px] font-bold shadow-sm">
+                    {m.name} <span className="text-emerald-500">({m.features.length} features)</span> {m.price ? `· ₹${m.price}` : ""}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <Button 
+              onClick={() => handleApplySmartBulkModules(false)} 
+              disabled={!smartBulkText.trim() || parsedSmartModules.length === 0} 
+              className="h-12 bg-[#99CB48] hover:bg-[#88B540] text-[#0B0E14] font-black uppercase tracking-[0.12em] text-[10.5px] rounded-xl shadow-lg shadow-[#99CB48]/20 transition-all flex items-center justify-center gap-1.5 disabled:opacity-40"
+            >
+              <Zap size={15} />
+              {parsedSmartModules.length > 0 
+                ? `Add ${parsedSmartModules.length} Core Modules` 
+                : "Add as Core Modules"}
+            </Button>
+
+            <Button 
+              onClick={() => handleApplySmartBulkModules(true)} 
+              disabled={!smartBulkText.trim() || parsedSmartModules.length === 0} 
+              className="h-12 bg-[#1AA6E1] hover:bg-[#158bbd] text-white font-black uppercase tracking-[0.12em] text-[10.5px] rounded-xl shadow-lg shadow-[#1AA6E1]/20 transition-all flex items-center justify-center gap-1.5 disabled:opacity-40"
+            >
+              <Rocket size={15} />
+              {parsedSmartModules.length > 0 
+                ? `Add ${parsedSmartModules.length} Future Modules` 
+                : "Add as Future Modules"}
+            </Button>
+          </div>
+        </div>
+      </InputGroupCard>
+
       {/* Active Module List */}
       <div className="space-y-6 pt-4">
         <div className="flex justify-between items-center px-1" id="manual-node-section">
@@ -552,7 +732,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                 className={`border-l-4 ${borderColors[accent]} border-y border-r border-y-slate-200 dark:border-y-white/5 border-r-slate-200 dark:border-r-white/5 overflow-hidden rounded-3xl shadow-sm hover:shadow-md transition-all duration-300 group bg-slate-50/30 dark:bg-[#131720]/40`}
               >
                 {/* Card Header (Sleek and Packed) */}
-                <div className="p-4 sm:p-5 bg-slate-100/40 dark:bg-[#181E29]/40 border-b border-slate-200/50 dark:border-white/5 flex flex-wrap items-center justify-between gap-4 group-hover:bg-slate-100/60 dark:group-hover:bg-[#1c2330]/50 transition-colors">
+                <div className="p-4 sm:p-5 bg-slate-100/40 dark:bg-[#181E29]/40 border-b border-slate-200/50 dark:border-white/5 flex flex-wrap items-center justify-between gap-3 group-hover:bg-slate-100/60 dark:group-hover:bg-[#1c2330]/50 transition-colors">
                   <div className="flex items-center gap-3 flex-1 min-w-[200px]">
                      <div className={`w-8 h-8 rounded-lg ${badgeColors[accent]} flex items-center justify-center font-black italic shadow-sm rotate-3 group-hover:rotate-0 transition-all duration-500 shrink-0 text-xs`}>
                         M{mIdx + 1}
@@ -569,6 +749,22 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                      />
                   </div>
                   
+                  {/* Future Scalability Toggle */}
+                  <button
+                    onClick={() => {
+                      const next = [...proposal.solution.selectedModules];
+                      next[mIdx].isFutureScalability = !next[mIdx].isFutureScalability;
+                      updateSolution({ selectedModules: next });
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-[8.5px] font-black uppercase tracking-wider transition-all border shrink-0 ${
+                      module.isFutureScalability
+                        ? "bg-[#1AA6E1]/15 text-[#1AA6E1] border-[#1AA6E1]/40 shadow-sm"
+                        : "bg-slate-100 dark:bg-white/5 text-slate-400 border-slate-200 dark:border-white/10 hover:text-slate-600"
+                    }`}
+                  >
+                    {module.isFutureScalability ? "🚀 Future Scalability" : "⚙️ Core Module"}
+                  </button>
+
                   {/* Module Price Field */}
                   <div className="flex items-center gap-2 shrink-0">
                      <div className="text-[8px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-wider">Est. Price:</div>

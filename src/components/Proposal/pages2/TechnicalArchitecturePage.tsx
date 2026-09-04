@@ -9,12 +9,30 @@ interface PageProps {
 }
 
 const TechnicalArchitecturePage: React.FC<PageProps> = ({ proposal, pageNum }) => {
+  const getCleanArray = (data: any, fallback: string[]) => {
+    if (Array.isArray(data)) {
+      const cleaned = data.map(item => String(item).trim()).filter(Boolean);
+      return cleaned.length > 0 ? cleaned : fallback;
+    }
+    if (typeof data === 'string' && data.trim()) {
+      const cleaned = data.split(',').map(item => item.trim()).filter(Boolean);
+      return cleaned.length > 0 ? cleaned : fallback;
+    }
+    return fallback;
+  };
+
   const stack = {
-    frontendStack: ["Tailwind CSS/Bootstrap", "HTML5", "CSS3", "JavaScript", "Livewire"],
-    backendStack: ["Laravel Framework", "Livewire Backend Integration", "Laravel Scheduler", "PHP", "Laravel Breeze / Jetstream"],
-    database: "MySQL",
-    hosting: "Cloud File Storage Integration",
-    securityFeatures: ["256-bit AES Encryption", "SOC2 Compliance", "Multi-factor Authentication"]
+    frontendStack: getCleanArray(proposal?.techArchitecture?.frontendStack, [
+      "Tailwind CSS/Bootstrap", "HTML5", "CSS3", "JavaScript", "Livewire"
+    ]),
+    backendStack: getCleanArray(proposal?.techArchitecture?.backendStack, [
+      "Laravel Framework", "Livewire Backend Integration", "Laravel Scheduler", "PHP", "Laravel Breeze / Jetstream"
+    ]),
+    database: proposal?.techArchitecture?.database || "MySQL",
+    hosting: proposal?.techArchitecture?.hosting || "Cloud File Storage Integration",
+    securityFeatures: getCleanArray(proposal?.techArchitecture?.securityFeatures, [
+      "256-bit AES Encryption", "SOC2 Compliance", "Multi-factor Authentication"
+    ])
   };
 
   return (
