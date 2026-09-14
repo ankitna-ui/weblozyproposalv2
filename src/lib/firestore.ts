@@ -147,6 +147,19 @@ export async function updateProposal(id: string, proposal: Partial<Proposal>) {
   }
 }
 
+export async function updateProposalStatus(id: string, newStatus: string) {
+  try {
+    const docRef = doc(db, PROPOSALS_COLLECTION, id);
+    await updateDoc(docRef, {
+      "client.status": newStatus,
+      updatedAt: Date.now()
+    });
+  } catch (error) {
+    console.error("Error updating proposal status:", error);
+    throw error;
+  }
+}
+
 export async function getProposal(id: string) {
   try {
     const docRef = doc(db, PROPOSALS_COLLECTION, id);

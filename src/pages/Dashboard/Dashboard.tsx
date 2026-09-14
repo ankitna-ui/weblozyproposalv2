@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getProposals, deleteProposal } from "@/lib/firestore";
+import { getProposals, deleteProposal, updateProposalStatus } from "@/lib/firestore";
 import { auth, db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { Proposal } from "@/types/proposal";
@@ -130,6 +130,19 @@ export default function Dashboard() {
     }
   };
 
+  const handleStatusChange = async (id: string, newStatus: string) => {
+    try {
+      await updateProposalStatus(id, newStatus);
+      setProposals(prev => prev.map(p => 
+        p.id === id ? { ...p, client: { ...p.client, status: newStatus as any } } : p
+      ));
+      toast.success(`Protocol status updated to ${newStatus}`);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update status");
+    }
+  };
+
   const filteredProposals = useMemo(() => {
     if (!searchQuery) return proposals;
     return proposals.filter(p => 
@@ -160,11 +173,12 @@ export default function Dashboard() {
   const stats = useMemo(() => {
     const total = proposals.length;
     const drafts = proposals.filter(p => (p.client?.status || 'Draft') === 'Draft').length;
-    const sent = proposals.filter(p => p.client?.status === 'Sent').length;
+    const sent = proposals.filter(p => p.client?.status === 'Sent' || ((p as any).isDownloaded && p.client?.status !== 'Accepted' && p.client?.status !== 'Declined')).length;
     const accepted = proposals.filter(p => p.client?.status === 'Accepted').length;
     const declined = proposals.filter(p => p.client?.status === 'Declined').length;
     const finalized = sent + accepted + declined;
-    const valuation = proposals.reduce((sum, p) => sum + getProposalValuation(p), 0);
+    // Exclude declined from pipeline valuation
+    const valuation = proposals.filter(p => p.client?.status !== 'Declined').reduce((sum, p) => sum + getProposalValuation(p), 0);
 
     return {
       proposals: total,
@@ -488,14 +502,21 @@ export default function Dashboard() {
                         </div>
                       </td>
                       <td className="py-4 pr-4">
-                        <Badge variant="outline" className={`rounded-md px-3 py-1 text-[8px] font-black uppercase tracking-wider border ${
-                          status === 'Accepted' ? 'bg-[#99CB48]/10 text-emerald-600 dark:text-[#99CB48] border-emerald-500/20' :
-                          status === 'Sent' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
-                          status === 'Declined' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' :
-                          'bg-amber-500/10 text-amber-500 border-amber-500/20'
-                        }`}>
-                          {status}
-                        </Badge>
+                        <select
+                          value={status}
+                          onChange={(e) => handleStatusChange(p.id, e.target.value)}
+                          className={`rounded-md px-2.5 py-1 text-[9px] font-black uppercase tracking-wider border outline-none cursor-pointer appearance-none text-center ${
+                            status === 'Accepted' ? 'bg-[#99CB48]/10 text-emerald-600 dark:text-[#99CB48] border-emerald-500/20' :
+                            status === 'Sent' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
+                            status === 'Declined' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' :
+                            'bg-amber-500/10 text-amber-500 border-amber-500/20'
+                          }`}
+                        >
+                          <option value="Draft" className="text-slate-900 bg-white font-bold">DRAFT</option>
+                          <option value="Sent" className="text-slate-900 bg-white font-bold">SENT</option>
+                          <option value="Accepted" className="text-slate-900 bg-white font-bold">ACCEPTED (WON)</option>
+                          <option value="Declined" className="text-slate-900 bg-white font-bold">DECLINED (LOST)</option>
+                        </select>
                       </td>
                       <td className="py-4 pr-4">
                         <div className="text-slate-500 dark:text-gray-400 text-[10px] font-medium flex flex-col">

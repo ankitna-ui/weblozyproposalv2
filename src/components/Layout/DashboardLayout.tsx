@@ -49,11 +49,13 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
   const stats = useMemo(() => {
     const total = proposals.length;
     const drafts = proposals.filter(p => (p.client?.status || 'Draft') === 'Draft').length;
-    const downloaded = proposals.filter(p => (p as any).isDownloaded || p.client?.status === 'Sent' || p.client?.status === 'Accepted' || p.client?.status === 'Declined').length;
+    const downloaded = proposals.filter(p => p.client?.status === 'Sent' || (p as any).isDownloaded).length;
+    const accepted = proposals.filter(p => p.client?.status === 'Accepted').length;
     return {
       proposals: total,
       drafts: drafts,
-      downloaded: downloaded
+      downloaded: downloaded,
+      accepted: accepted
     };
   }, [proposals]);
 
@@ -134,13 +136,24 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
 
                 <div
                   onClick={() => mobileNavigate('/saved')}
-                  className={`flex items-center justify-between px-4 py-2.5 rounded-xl cursor-pointer transition-colors ${!isActive('/drafts') && !isActive('/saved') && !isActive('/dashboard') && !isActive('/') ? 'bg-orange-500/10 text-orange-500' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/5'}`}
+                  className={`flex items-center justify-between px-4 py-2.5 rounded-xl cursor-pointer transition-colors ${!isActive('/drafts') && !isActive('/saved') && !isActive('/dashboard') && !isActive('/') ? 'bg-purple-500/10 text-purple-500' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/5'}`}
                 >
                   <div className="flex items-center gap-3">
                     <Download size={16} />
-                    <span className="text-[11px] font-bold tracking-wider">Downloaded</span>
+                    <span className="text-[11px] font-bold tracking-wider">Sent Assets</span>
                   </div>
                   <span className="text-[9px] bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-full">{stats.downloaded}</span>
+                </div>
+
+                <div
+                  onClick={() => mobileNavigate('/saved')}
+                  className={`flex items-center justify-between px-4 py-2.5 rounded-xl cursor-pointer transition-colors text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/5`}
+                >
+                  <div className="flex items-center gap-3">
+                    <ToyBrick size={16} className="text-emerald-500" />
+                    <span className="text-[11px] font-bold tracking-wider text-emerald-500">Won / Accepted</span>
+                  </div>
+                  <span className="text-[9px] text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded-full">{stats.accepted}</span>
                 </div>
               </div>
             </div>

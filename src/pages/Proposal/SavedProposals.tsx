@@ -13,9 +13,8 @@ import {
   Building2, 
   Loader2,
   AlertOctagon,
-  Users
 } from "lucide-react";
-import { getProposals, deleteProposal } from "@/lib/firestore";
+import { getProposals, deleteProposal, updateProposalStatus } from "@/lib/firestore";
 import { auth } from "@/lib/firebase";
 import { Proposal } from "@/types/proposal";
 import { motion, AnimatePresence } from "framer-motion";
@@ -26,6 +25,7 @@ export default function SavedProposals() {
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("All");
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -62,10 +62,25 @@ export default function SavedProposals() {
     }
   };
 
-  const filteredProposals = proposals.filter(p => 
-    p.client?.referenceId?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    p.client?.proposalTitle?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const handleStatusChange = async (id: string, newStatus: string) => {
+    try {
+      await updateProposalStatus(id, newStatus);
+      setProposals(prev => prev.map(p => 
+        p.id === id ? { ...p, client: { ...p.client, status: newStatus as any } } : p
+      ));
+      toast.success(`Protocol status updated to ${newStatus}`);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update status");
+    }
+  };
+
+  const filteredProposals = proposals.filter(p => {
+    const matchesSearch = p.client?.referenceId?.toLowerCase().includes(searchQuery.toLowerCase()) || p.client?.proposalTitle?.toLowerCase().includes(searchQuery.toLowerCase());
+    const status = p.client?.status || 'Draft';
+    const matchesStatus = statusFilter === "All" || status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
   return (
     <DashboardLayout searchQuery={searchQuery} setSearchQuery={setSearchQuery}>
@@ -81,6 +96,24 @@ export default function SavedProposals() {
             New Proposal
           </Button>
         </header>
+
+        {/* Pipeline Filter Tabs */}
+        <div className="flex gap-2 pb-2 overflow-x-auto custom-scrollbar">
+          {["All", "Draft", "Sent", "Accepted", "Declined"].map((status) => (
+            <Button 
+              key={status}
+              onClick={() => setStatusFilter(status)}
+              variant="outline"
+              className={`rounded-full h-8 px-4 text-[10px] font-black uppercase tracking-widest transition-all ${
+                statusFilter === status 
+                  ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900 border-transparent shadow-md"
+                  : "bg-transparent border-slate-200 dark:border-white/10 text-slate-500 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-white/5"
+              }`}
+            >
+              {status}
+            </Button>
+          ))}
+        </div>
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 space-y-4">
@@ -113,13 +146,22 @@ export default function SavedProposals() {
                   <Card className="rounded-[2rem] border border-slate-200 dark:border-white/5 bg-white dark:bg-[#11151D] hover:bg-white/[0.02] transition-colors group">
                     <CardHeader className="pb-4">
                       <div className="flex justify-between items-start mb-4">
-                        <Badge className={`rounded-md px-2 py-0.5 uppercase text-[8px] font-black tracking-widest ${
-                          p.client.status === 'Accepted' ? "bg-green-500/10 text-green-500" : 
-                          p.client.status === 'Sent' ? "bg-blue-500/10 text-blue-500" : 
-                          "bg-orange-500/10 text-orange-500"
-                        }`}>
-                          {p.client.status}
-                        </Badge>
+                        <select
+                          value={p.client.status || 'Draft'}
+                          onChange={(e) => handleStatusChange(p.id!, e.target.value)}
+                          onClick={(e) => e.stopPropagation()}
+                          className={`rounded-md px-2 py-0.5 text-[8px] font-black uppercase tracking-widest border outline-none cursor-pointer appearance-none text-center ${
+                            p.client.status === 'Accepted' ? 'bg-[#99CB48]/10 text-emerald-600 dark:text-[#99CB48] border-emerald-500/20' :
+                            p.client.status === 'Sent' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
+                            p.client.status === 'Declined' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' :
+                            'bg-amber-500/10 text-amber-500 border-amber-500/20'
+                          }`}
+                        >
+                          <option value="Draft" className="text-slate-900 bg-white font-bold">DRAFT</option>
+                          <option value="Sent" className="text-slate-900 bg-white font-bold">SENT</option>
+                          <option value="Accepted" className="text-slate-900 bg-white font-bold">ACCEPTED (WON)</option>
+                          <option value="Declined" className="text-slate-900 bg-white font-bold">DECLINED (LOST)</option>
+                        </select>
                         <span className="text-[9px] font-bold text-slate-400 dark:text-gray-600">{p.client.referenceId}</span>
                       </div>
                       <CardTitle className="text-lg font-black uppercase tracking-tight text-slate-900 dark:text-white group-hover:text-blue-400 transition-colors line-clamp-2 leading-tight">
