@@ -159,7 +159,7 @@ export default function Dashboard() {
       const price = parseFloat(priceStr);
       return acc + (isNaN(price) ? 0 : price);
     }, 0);
-    const base = baseVal || moduleSum || 0;
+    const base = baseVal + moduleSum;
     const discountPctStr = String(p.pricing?.discountPercentage || "0").replace(/[^0-9.]/g, "");
     const discountPct = parseFloat(discountPctStr) || 0;
     const discountAmount = base * (discountPct / 100);

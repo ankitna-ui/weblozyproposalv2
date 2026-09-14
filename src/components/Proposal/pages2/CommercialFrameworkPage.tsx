@@ -34,7 +34,7 @@ const CommercialFrameworkPage: React.FC<PageProps> = ({ proposal, pageNum }) => 
       }, 0);
 
       const baseVal = proposal?.pricing?.coreValuation ? parseFloat(proposal.pricing.coreValuation) : 0;
-      const base = baseVal || moduleSum || 0;
+      const base = baseVal + moduleSum;
 
       // 2. Discount
       const discountPctStr = String(proposal?.pricing?.discountPercentage || "0").replace(/[^0-9.]/g, "");
