@@ -152,7 +152,7 @@ export default function Dashboard() {
     );
   }, [proposals, searchQuery]);
 
-  const getProposalValuation = (p: Proposal) => {
+  const getProposalValuationDetails = (p: Proposal) => {
     const baseVal = p.pricing?.coreValuation ? parseFloat(String(p.pricing.coreValuation).replace(/[^0-9.]/g, "")) : 0;
     const moduleSum = (p.solution?.selectedModules || []).reduce((acc, m) => {
       const priceStr = String(m.price || "0").replace(/[^0-9.]/g, "");
@@ -163,7 +163,20 @@ export default function Dashboard() {
     const discountPctStr = String(p.pricing?.discountPercentage || "0").replace(/[^0-9.]/g, "");
     const discountPct = parseFloat(discountPctStr) || 0;
     const discountAmount = base * (discountPct / 100);
-    return base - discountAmount;
+    const finalValue = base - discountAmount;
+    
+    return {
+      baseVal,
+      moduleSum,
+      base,
+      discountPct,
+      discountAmount,
+      finalValue
+    };
+  };
+
+  const getProposalValuation = (p: Proposal) => {
+    return getProposalValuationDetails(p).finalValue;
   };
 
   const formatCurrency = (val: number) => {
@@ -550,7 +563,91 @@ export default function Dashboard() {
           </div>
         </div>
 
+      {/* Pipeline Ecosystem Valuation Breakdown */}
+      <div className="mt-8">
+        <div className="bg-white dark:bg-[#11151D] border border-slate-200 dark:border-white/5 rounded-3xl p-6 lg:p-8">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h3 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white mb-2">Pipeline Ecosystem Valuation</h3>
+              <p className="text-slate-500 dark:text-gray-400 font-medium text-xs uppercase tracking-widest">Detailed financial analysis of all active strategic protocols</p>
+            </div>
+            <div className="w-12 h-12 bg-[#99CB48]/10 text-[#99CB48] rounded-2xl flex items-center justify-center border border-[#99CB48]/20">
+              <CreditCard className="w-6 h-6" />
+            </div>
+          </div>
+
+          <div className="overflow-x-auto custom-scrollbar">
+            <table className="w-full text-left whitespace-nowrap min-w-[800px]">
+              <thead>
+                <tr className="border-b border-slate-200 dark:border-white/5 text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-gray-500">
+                  <th className="pb-4 pl-4 font-black">Ref ID / Client</th>
+                  <th className="pb-4 text-right">Core Value</th>
+                  <th className="pb-4 text-right">Add-on Modules</th>
+                  <th className="pb-4 text-right">Discount</th>
+                  <th className="pb-4 text-right">Final Valuation</th>
+                  <th className="pb-4 pr-4 text-center">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-white/5">
+                {proposals.filter(p => p.client?.status !== 'Declined').map((p) => {
+                  const vals = getProposalValuationDetails(p);
+                  const status = p.client?.status || 'Draft';
+                  return (
+                    <tr key={`val-${p.id}`} className="hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors group">
+                      <td className="py-4 pl-4">
+                        <div className="flex flex-col">
+                          <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">{p.client?.referenceId}</span>
+                          <span className="text-[10px] font-medium text-slate-500 dark:text-gray-400 uppercase tracking-wider truncate max-w-[200px]">
+                            {p.client?.companyName || p.client?.clientName || "Valued Client"}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-4 text-right">
+                        <span className="text-xs font-bold text-slate-700 dark:text-gray-300">{vals.baseVal > 0 ? formatCurrency(vals.baseVal) : "—"}</span>
+                      </td>
+                      <td className="py-4 text-right">
+                        <span className="text-xs font-bold text-slate-700 dark:text-gray-300">{vals.moduleSum > 0 ? formatCurrency(vals.moduleSum) : "—"}</span>
+                      </td>
+                      <td className="py-4 text-right">
+                        <div className="flex flex-col items-end">
+                          <span className="text-xs font-bold text-rose-500 dark:text-rose-400">{vals.discountPct > 0 ? `-${vals.discountPct}%` : "—"}</span>
+                          {vals.discountAmount > 0 && <span className="text-[9px] font-bold text-rose-500/70">-{formatCurrency(vals.discountAmount)}</span>}
+                        </div>
+                      </td>
+                      <td className="py-4 text-right">
+                        <span className="text-[13px] font-black text-slate-900 dark:text-white tracking-tight">{formatCurrency(vals.finalValue)}</span>
+                      </td>
+                      <td className="py-4 pr-4">
+                        <div className="flex justify-center">
+                          <Badge className={`rounded-md px-2.5 py-1 text-[9px] font-black uppercase tracking-wider border outline-none text-center ${
+                            status === 'Accepted' ? 'bg-[#99CB48]/10 text-emerald-600 dark:text-[#99CB48] border-emerald-500/20' :
+                            status === 'Sent' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
+                            status === 'Declined' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' :
+                            'bg-amber-500/10 text-amber-500 border-amber-500/20'
+                          }`}>
+                            {status}
+                          </Badge>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+              <tfoot>
+                <tr className="border-t-2 border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.02]">
+                  <td colSpan={4} className="py-5 pl-4 text-right text-xs font-black uppercase tracking-widest text-slate-500 dark:text-gray-400">Total Ecosystem Valuation</td>
+                  <td className="py-5 text-right">
+                    <span className="text-[15px] font-black tracking-tight text-[#99CB48]">{formatCurrency(stats.valuation)}</span>
+                  </td>
+                  <td className="py-5 pr-4"></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
       </div>
+
+    </div>
 
       {/* Stunning Custom Confirmation Modal */}
       <AnimatePresence>
