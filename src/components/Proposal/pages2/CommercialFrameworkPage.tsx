@@ -292,12 +292,12 @@ const CommercialFrameworkPage: React.FC<PageProps> = ({ proposal, pageNum }) => 
 
                                  {/* Milestone Card */}
                                  <div className={`flex-1 flex items-center justify-between bg-white border border-slate-100 rounded-[1.25rem] ${paddingClass} shadow-sm hover:shadow-md transition-shadow`}>
-                                    <div className="flex items-center gap-2.5 min-w-0">
+                                    <div className="flex items-center gap-2.5 min-w-0 flex-1 pr-2">
                                        {/* Circle Badge */}
                                        <div className={`${circleSizeClass} rounded-full bg-[#070b13] flex items-center justify-center text-white font-extrabold shrink-0 shadow-sm leading-none whitespace-nowrap tracking-tighter`}>
                                           {m.percentage}
                                        </div>
-                                       <div className="min-w-0">
+                                       <div className="min-w-0 flex-1">
                                           <h4 className={`${titleSizeClass} font-extrabold text-[#070b13] tracking-tight ${titleTruncateClass}`}>{m.name}</h4>
                                           {!hideDesc && m.description && (
                                              <p className={`${descSizeClass} font-medium text-slate-400 mt-0.5 leading-tight ${descTruncateClass}`}>{m.description}</p>
