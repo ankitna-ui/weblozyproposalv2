@@ -36,12 +36,14 @@ export interface BusinessSituation {
 export interface Module {
   id: string;
   name: string;
-  features: (string | { name: string; price?: string })[];
+  features: (string | { name: string; price?: string; isHighlighted?: boolean; highlightTag?: string })[];
   price?: string | number;
   description?: string;
   icon?: string;
   isCustom?: boolean;
   isFutureScalability?: boolean;
+  isHighlighted?: boolean;
+  highlightTag?: string;
 }
 
 export interface SolutionDetails {

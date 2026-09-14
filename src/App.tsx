@@ -23,6 +23,7 @@ const UserProfile = lazy(() => import('@/pages/Users/UserProfile'));
 const ActiveDrafts = lazy(() => import('@/pages/Strategic/ActiveDrafts'));
 const InstitutionalAssets = lazy(() => import('@/pages/Strategic/InstitutionalAssets'));
 const ClientNetwork = lazy(() => import('@/pages/Strategic/ClientNetwork'));
+const Pipeline = lazy(() => import('@/pages/Pipeline/Pipeline'));
 const SuperAdminLayout = lazy(() => import('@/components/Layout/SuperAdminLayout'));
 const SuperAdminDashboard = lazy(() => import('@/pages/SuperAdmin/SuperAdminDashboard'));
 const SuperAdminUsers = lazy(() => import('@/pages/SuperAdmin/SuperAdminUsers'));
@@ -90,6 +91,7 @@ function App() {
           <Route path="/drafts" element={user ? <ActiveDrafts /> : <Navigate to="/login" />} />
           <Route path="/assets" element={user ? <InstitutionalAssets /> : <Navigate to="/login" />} />
           <Route path="/clients" element={user ? <ClientNetwork /> : <Navigate to="/login" />} />
+          <Route path="/pipeline" element={user ? <Pipeline /> : <Navigate to="/login" />} />
         
           <Route 
             path="/" 

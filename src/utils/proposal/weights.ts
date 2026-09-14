@@ -17,6 +17,8 @@ export interface ModuleSegment {
   name: string;
   price?: string | number;
   isFutureScalability?: boolean;
+  isHighlighted?: boolean;
+  highlightTag?: string;
   features: any[];         // The feature slice for this page
   isContinuation: boolean; // true if this is not the first segment of the module
   continuesOnNext: boolean;// true if this module has more features on the next page
@@ -84,6 +86,8 @@ export function paginateModules(allModules: any[]): ModuleSegment[][] {
         name: module.name,
         price: module.price,
         isFutureScalability: module.isFutureScalability,
+        isHighlighted: module.isHighlighted,
+        highlightTag: module.highlightTag,
         features: featuresForThisPage,
         isContinuation: !isFirstSegmentOfModule,
         continuesOnNext,
