@@ -420,22 +420,22 @@ export default function Pipeline() {
                                           ? p.client.clientName 
                                           : p.client?.companyName && p.client.companyName !== "VALUED CLIENT" 
                                             ? p.client.companyName 
-                                            : p.client?.contactPerson || "—"}
+                                            : p.client?.contactPerson || "N/A"}
                                    </span>
                                 </div>
                              </td>
                              <td className="py-4 text-right">
-                                <span className="text-xs font-bold text-slate-700 dark:text-gray-300">{vals.baseVal > 0 ? formatCurrency(vals.baseVal) : "—"}</span>
+                                <span className="text-xs font-bold text-slate-700 dark:text-gray-300">{formatCurrency(vals.baseVal)}</span>
                              </td>
                               <td className="py-4 text-right">
                                 <div className="flex flex-col items-end">
-                                   <span className="text-xs font-bold text-slate-700 dark:text-gray-300">{vals.moduleSum > 0 ? formatCurrency(vals.moduleSum) : "—"}</span>
+                                   <span className="text-xs font-bold text-slate-700 dark:text-gray-300">{formatCurrency(vals.moduleSum)}</span>
                                    {vals.moduleCount > 0 && <span className="text-[9px] font-bold text-blue-500">{vals.moduleCount} Modules</span>}
                                 </div>
                               </td>
                              <td className="py-4 text-right">
                                 <div className="flex flex-col items-end">
-                                   <span className="text-xs font-bold text-rose-500 dark:text-rose-400">{vals.discountPct > 0 ? `-${vals.discountPct}%` : "—"}</span>
+                                   <span className="text-xs font-bold text-rose-500 dark:text-rose-400">-{vals.discountPct}%</span>
                                    {vals.discountAmount > 0 && <span className="text-[9px] font-bold text-rose-500/70">-{formatCurrency(vals.discountAmount)}</span>}
                                 </div>
                              </td>
@@ -545,21 +545,21 @@ export default function Pipeline() {
                                           ? p.client.clientName 
                                           : p.client?.companyName && p.client.companyName !== "VALUED CLIENT" 
                                             ? p.client.companyName 
-                                            : p.client?.contactPerson || "—"}
+                                            : p.client?.contactPerson || "N/A"}
                                     </span>
                                  </div>
                               </td>
                               <td className="p-3 text-right">
-                                 <span className="text-xs font-bold text-slate-700">{vals.baseVal > 0 ? formatCurrency(vals.baseVal) : "—"}</span>
+                                 <span className="text-xs font-bold text-slate-700">{formatCurrency(vals.baseVal)}</span>
                               </td>
                               <td className="p-3 text-right">
                                  <div className="flex flex-col items-end">
-                                    <span className="text-xs font-bold text-slate-700">{vals.moduleSum > 0 ? formatCurrency(vals.moduleSum) : "—"}</span>
+                                    <span className="text-xs font-bold text-slate-700">{formatCurrency(vals.moduleSum)}</span>
                                     {vals.moduleCount > 0 && <span className="text-[9px] font-bold text-blue-600">{vals.moduleCount} Modules</span>}
                                  </div>
                               </td>
                               <td className="p-3 text-right">
-                                 <span className="text-xs font-bold text-rose-500">{vals.discountPct > 0 ? `-${vals.discountPct}%` : "—"}</span>
+                                 <span className="text-xs font-bold text-rose-500">-{vals.discountPct}%</span>
                               </td>
                               <td className="p-3 text-right">
                                  <span className="text-sm font-black text-slate-900">{formatCurrency(vals.finalValue)}</span>
