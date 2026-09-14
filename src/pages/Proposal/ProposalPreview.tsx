@@ -1,6 +1,7 @@
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { getProposal } from "@/lib/firestore";
 import {
   Download,
   Printer,
@@ -49,7 +50,25 @@ export default function ProposalPreview() {
   const [isExporting, setIsExporting] = useState(false);
   const [exportProgress, setExportProgress] = useState(0);
 
-  const proposal = location.state?.proposal as Proposal;
+  const [proposal, setProposal] = useState<Proposal | null>(
+    (location.state?.proposal as Proposal) || null
+  );
+  const [isLoading, setIsLoading] = useState(!location.state?.proposal);
+
+  useEffect(() => {
+    if (!proposal && id) {
+      getProposal(id)
+        .then((data) => {
+          if (data) {
+            setProposal(data as Proposal);
+          }
+        })
+        .catch(console.error)
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [id, proposal]);
 
   const visiblePages = (proposal?.pageConfig || [
     { id: "cover", name: "Cover Page", visible: true },
@@ -115,6 +134,17 @@ export default function ProposalPreview() {
       observer.disconnect();
     };
   }, [visiblePages, proposal]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-[100dvh] flex items-center justify-center bg-[#0B0E14]">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-8 h-8 text-primary animate-spin" />
+          <h2 className="text-sm font-black text-white uppercase tracking-wider">Loading Proposal...</h2>
+        </div>
+      </div>
+    );
+  }
 
   if (!proposal) {
     return (
