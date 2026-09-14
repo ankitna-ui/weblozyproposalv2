@@ -71,26 +71,20 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
       ];
     }
     
-    let firstMilestonePercentage = 50;
-    if (price >= 1000000) {
-      firstMilestonePercentage = 30;
-    } else if (price >= 500000) {
-      firstMilestonePercentage = 40;
-    }
-    
-    const remainingPercentage = 100 - firstMilestonePercentage;
-    const remainingCount = count - 1;
-    const equalShare = Math.floor(remainingPercentage / remainingCount);
-    const remainder = remainingPercentage - (equalShare * remainingCount);
-
     const generated = names.map((name, idx) => {
       let percentage = 0;
-      if (idx === 0) {
-        percentage = firstMilestonePercentage;
-      } else if (idx === 1) {
-        percentage = equalShare + remainder;
+      if (count === 8) {
+        const splits = [30, 15, 15, 10, 10, 10, 5, 5];
+        percentage = splits[idx];
+      } else if (count === 6) {
+        const splits = [30, 20, 15, 15, 10, 10];
+        percentage = splits[idx];
+      } else if (count === 5) {
+        const splits = [40, 25, 15, 10, 10];
+        percentage = splits[idx];
       } else {
-        percentage = equalShare;
+        const splits = [50, 30, 20];
+        percentage = splits[idx];
       }
       return {
         name,
