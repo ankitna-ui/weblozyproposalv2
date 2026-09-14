@@ -27,6 +27,63 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
     return Math.round((totalAllocatedPct / 100) * stats.subtotal);
   }, [totalAllocatedPct, stats.subtotal]);
 
+  const handleGenerateSmartMilestones = () => {
+    const price = stats.base; // Use base valuation
+    let count = 3;
+    if (price >= 1500000) count = 8;
+    else if (price >= 1000000) count = 6;
+    else if (price >= 500000) count = 5;
+    
+    let names: string[] = [];
+    if (count === 3) {
+      names = [
+        "Project Initiation & Architecture Setup",
+        "Core Development & Beta Release",
+        "Final Deployment & Handoff"
+      ];
+    } else if (count === 5) {
+      names = [
+        "Project Initiation & Architecture Setup",
+        "UI/UX Design & Prototyping",
+        "Core Development & Integration",
+        "Beta Testing & QA Verification",
+        "Final Deployment & Training Sign-off"
+      ];
+    } else if (count === 6) {
+      names = [
+        "Project Initiation & Architecture Setup",
+        "UI/UX Design & Prototyping",
+        "Frontend Development & Core API",
+        "Backend Infrastructure & Integration",
+        "Beta Testing, QA & Security Audit",
+        "Final Deployment & Training Sign-off"
+      ];
+    } else if (count === 8) {
+      names = [
+        "Project Initiation & Architecture Setup",
+        "UI/UX Design & Advanced Prototyping",
+        "Frontend Development Phase 1",
+        "Backend Infrastructure Phase 1",
+        "Core Integration & Phase 2 Dev",
+        "Beta Testing & Security Audit",
+        "Pre-Launch QA Verification",
+        "Final Deployment & Training Sign-off"
+      ];
+    }
+    
+    const equalShare = Math.floor(100 / count);
+    const remainder = 100 - (equalShare * count);
+
+    const generated = names.map((name, idx) => ({
+      name,
+      percentage: idx === 0 ? equalShare + remainder : equalShare,
+      description: ""
+    }));
+
+    updatePricing({ milestones: generated });
+    toast.success(`✨ Generated ${count} strategic milestones based on ₹${(price/100000).toFixed(1)}L valuation!`);
+  };
+
   const handleAutoBalanceMilestones = () => {
     const milestones = proposal.pricing.milestones || [];
     if (milestones.length === 0) return;
@@ -244,6 +301,13 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
             <LabelPremium className="mb-0">Payment Milestones ({proposal.pricing.milestones?.length || 0})</LabelPremium>
             
             <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleGenerateSmartMilestones}
+                className="text-[9.5px] font-black uppercase text-amber-500 hover:text-amber-400 transition-all bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm"
+              >
+                <Sparkles size={10} /> Smart Allocate
+              </button>
               <button 
                 type="button"
                 onClick={handleAutoBalanceMilestones}
