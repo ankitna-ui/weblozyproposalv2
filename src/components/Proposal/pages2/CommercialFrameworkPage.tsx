@@ -80,53 +80,46 @@ const CommercialFrameworkPage: React.FC<PageProps> = ({ proposal, pageNum }) => 
       // DYNAMIC STYLE CALCULATIONS TO PREVENT OVERFLOW INSIDE EXPANDED TIMELINE CARD (Supports up to 15+ milestones)
     const gapClass = 
        mCount <= 3 ? "space-y-4" : 
-       mCount <= 5 ? "space-y-3" : 
-       mCount <= 8 ? "space-y-2" : 
+       mCount <= 8 ? "space-y-2.5" : 
        mCount <= 10 ? "space-y-1.5" : "space-y-1";
 
     const paddingClass = 
        mCount <= 3 ? "py-3 px-4" : 
-       mCount <= 5 ? "py-2.5 px-3.5" : 
-       mCount <= 8 ? "py-2 px-3" : 
+       mCount <= 8 ? "py-2.5 px-3.5" : 
        mCount <= 10 ? "py-1.5 px-2.5" : "py-1 px-2";
 
     const titleSizeClass = 
        mCount <= 3 ? "text-[13px]" : 
-       mCount <= 5 ? "text-[12px]" : 
-       mCount <= 8 ? "text-[11px]" : 
+       mCount <= 8 ? "text-[11.5px]" : 
        mCount <= 10 ? "text-[10px]" : "text-[9px]";
 
     const descSizeClass = 
        mCount <= 3 ? "text-[9.5px]" : 
-       mCount <= 5 ? "text-[8.5px]" : "text-[8px]";
+       mCount <= 8 ? "text-[8.5px]" : "text-[8px]";
 
     const priceSizeClass = 
        mCount <= 3 ? "text-[13.5px]" : 
-       mCount <= 5 ? "text-[12px]" : 
-       mCount <= 8 ? "text-[11px]" : 
+       mCount <= 8 ? "text-[12px]" : 
        mCount <= 10 ? "text-[10px]" : "text-[9px]";
 
     const badgeSizeClass = 
        mCount <= 3 ? "text-[8.5px]" : 
-       mCount <= 5 ? "text-[8px]" : 
-       mCount <= 8 ? "text-[7.5px]" : 
+       mCount <= 8 ? "text-[8px]" : 
        mCount <= 10 ? "text-[7px]" : "text-[6px]";
 
     const circleSizeClass = 
        mCount <= 3 ? "w-10 h-10 text-[11px]" : 
-       mCount <= 5 ? "w-9 h-9 text-[10px]" : 
-       mCount <= 8 ? "w-8 h-8 text-[9px]" : 
+       mCount <= 8 ? "w-9 h-9 text-[10px]" : 
        mCount <= 10 ? "w-7 h-7 text-[8px]" : "w-6 h-6 text-[7px]";
 
-    const hideDesc = mCount >= 6;
+    const hideDesc = mCount >= 5;
 
-    const titleTruncateClass = mCount <= 5 ? "whitespace-normal break-words line-clamp-2" : "truncate";
+    const titleTruncateClass = mCount <= 8 ? "whitespace-normal break-words line-clamp-2" : "truncate";
     const descTruncateClass = "whitespace-normal break-words line-clamp-2";
 
     const lineTopBottomClass = 
        mCount <= 3 ? "top-[33px] bottom-[33px]" :
-       mCount <= 5 ? "top-[28px] bottom-[28px]" :
-       mCount <= 8 ? "top-[24px] bottom-[24px]" :
+       mCount <= 8 ? "top-[28px] bottom-[28px]" :
        mCount <= 10 ? "top-[20px] bottom-[20px]" : "top-[16px] bottom-[16px]";
 
 
