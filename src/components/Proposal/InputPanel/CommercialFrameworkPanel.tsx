@@ -71,14 +71,33 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
       ];
     }
     
-    const equalShare = Math.floor(100 / count);
-    const remainder = 100 - (equalShare * count);
+    let firstMilestonePercentage = 50;
+    if (price >= 1000000) {
+      firstMilestonePercentage = 30;
+    } else if (price >= 500000) {
+      firstMilestonePercentage = 40;
+    }
+    
+    const remainingPercentage = 100 - firstMilestonePercentage;
+    const remainingCount = count - 1;
+    const equalShare = Math.floor(remainingPercentage / remainingCount);
+    const remainder = remainingPercentage - (equalShare * remainingCount);
 
-    const generated = names.map((name, idx) => ({
-      name,
-      percentage: idx === 0 ? equalShare + remainder : equalShare,
-      description: ""
-    }));
+    const generated = names.map((name, idx) => {
+      let percentage = 0;
+      if (idx === 0) {
+        percentage = firstMilestonePercentage;
+      } else if (idx === 1) {
+        percentage = equalShare + remainder;
+      } else {
+        percentage = equalShare;
+      }
+      return {
+        name,
+        percentage,
+        description: ""
+      };
+    });
 
     updatePricing({ milestones: generated });
     toast.success(`✨ Generated ${count} strategic milestones based on ₹${(price/100000).toFixed(1)}L valuation!`);
