@@ -2,7 +2,7 @@ import React from "react";
 import { Proposal } from "@/types/proposal";
 import { ModuleSegment } from "@/utils/proposal/weights";
 import PageWrapper from "./PageWrapper";
-import { CheckCircle2, IndianRupee, ShieldCheck, Cpu, Zap, Layers, Rocket, Lock } from "lucide-react";
+import { CheckCircle2, IndianRupee, ShieldCheck, Cpu, Zap, Layers, Rocket, Lock, Star } from "lucide-react";
 
 interface ModulePageProps {
   proposal: Proposal;
@@ -53,12 +53,13 @@ const ModuleArchitecturePage: React.FC<ModulePageProps> = ({
         <div className="flex-1 flex flex-col gap-4 overflow-visible py-1">
           {pageSegments.map((segment, sIdx) => {
             const isFutureMod = segment.isFutureScalability || isFuture;
-            const primaryColor = isFutureMod ? 'bg-[#1AA6E1]' : 'bg-[#99CB48]';
-            const borderColor = isFutureMod ? 'border-[#1AA6E1]' : 'border-slate-900';
-            const textColor = isFutureMod ? 'text-[#1AA6E1]' : 'text-[#80ae36]';
+            const basePrimaryColor = isFutureMod ? 'bg-[#1AA6E1]' : 'bg-[#99CB48]';
+            const primaryColor = segment.isHighlighted ? 'bg-amber-400' : basePrimaryColor;
+            const borderColor = segment.isHighlighted ? 'border-amber-400' : (isFutureMod ? 'border-[#1AA6E1]' : 'border-slate-900');
+            const textColor = segment.isHighlighted ? 'text-amber-500' : (isFutureMod ? 'text-[#1AA6E1]' : 'text-[#80ae36]');
             
             return (
-            <div key={`${segment.id}-${sIdx}`} className={`module-card break-inside-avoid w-full border-[1.5px] ${borderColor} overflow-hidden rounded-xl shadow-sm bg-white`}>
+            <div key={`${segment.id}-${sIdx}`} className={`module-card break-inside-avoid w-full border-[1.5px] ${borderColor} overflow-hidden rounded-xl shadow-sm ${segment.isHighlighted ? 'shadow-[0_0_15px_rgba(251,191,36,0.15)] bg-amber-50/20' : 'bg-white'}`}>
               {/* Module Header */}
               {segment.isContinuation ? (
                  <div className={`${primaryColor} py-1.5 px-4 border-b-[1px] ${borderColor} flex items-center justify-between`}>
@@ -75,7 +76,13 @@ const ModuleArchitecturePage: React.FC<ModulePageProps> = ({
                      </h3>
                    </div>
                    <div className="flex items-center gap-2 shrink-0">
-                     {isFutureMod && (
+                     {segment.isHighlighted && (
+                       <div className="bg-white/25 px-2.5 py-0.5 rounded-md border border-white/40 backdrop-blur-sm flex items-center gap-1 shadow-sm">
+                         <Star size={10} className="text-white fill-white" />
+                         <span className="text-[8.5px] font-black uppercase tracking-widest text-white drop-shadow-sm">Featured</span>
+                       </div>
+                     )}
+                     {isFutureMod && !segment.isHighlighted && (
                        <div className="bg-white/20 px-2.5 py-0.5 rounded-md border border-white/30 backdrop-blur-sm flex items-center gap-1">
                          <Rocket size={10} className="text-white" />
                          <span className="text-[8.5px] font-black uppercase tracking-widest text-white">Future Scalability</span>
@@ -93,32 +100,38 @@ const ModuleArchitecturePage: React.FC<ModulePageProps> = ({
 
               {/* Features Table */}
               <div className="bg-white divide-y divide-slate-100">
-                {segment.features.map((feature: any, fIdx: number) => (
+                {segment.features.map((feature: any, fIdx: number) => {
+                  const isFeatureHighlighted = typeof feature !== 'string' && feature.isHighlighted;
+                  return (
                   <div 
                     key={fIdx} 
                     className={`grid grid-cols-[1fr,auto,28px] items-center py-2.5 px-4 min-h-[38px] transition-colors ${
-                      fIdx % 2 === 0 ? "bg-white" : "bg-slate-50/60"
+                      isFeatureHighlighted ? "bg-amber-50/60" : (fIdx % 2 === 0 ? "bg-white" : "bg-slate-50/60")
                     }`}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                       <div className={`w-1.5 h-1.5 rounded-full ${primaryColor} shrink-0`} />
-                       <span className="text-[11.5px] font-bold tracking-tight text-slate-700 leading-snug truncate">
+                       {isFeatureHighlighted ? (
+                         <Star size={12} className="text-amber-500 fill-amber-500 shrink-0" />
+                       ) : (
+                         <div className={`w-1.5 h-1.5 rounded-full ${primaryColor} shrink-0`} />
+                       )}
+                       <span className={`text-[11.5px] ${isFeatureHighlighted ? "font-black text-amber-700" : "font-bold text-slate-700"} tracking-tight leading-snug truncate`}>
                          {typeof feature === 'string' ? feature : feature.name}
                        </span>
                     </div>
                     {feature.price && (
                        <div className="mr-2 px-2 py-0.5 bg-slate-100 border border-slate-200 rounded flex items-center gap-0.5 shrink-0">
-                          <IndianRupee size={8} className={textColor} strokeWidth={3} />
+                          <IndianRupee size={8} className={isFeatureHighlighted ? "text-amber-600" : textColor} strokeWidth={3} />
                           <span className="text-[9.5px] font-black text-slate-600">{feature.price}</span>
                        </div>
                     )}
                     <div className="flex justify-end items-center">
-                       <div className={`flex items-center justify-center w-4.5 h-4.5 rounded-full ${primaryColor} text-white shrink-0 shadow-sm`}>
+                       <div className={`flex items-center justify-center w-4.5 h-4.5 rounded-full ${isFeatureHighlighted ? 'bg-amber-400' : primaryColor} text-white shrink-0 shadow-sm`}>
                           <CheckCircle2 size={11} strokeWidth={3} />
                        </div>
                     </div>
                   </div>
-                ))}
+                )})}
               </div>
             </div>
           );})}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Wand2, X, Loader2, Trash2, Sparkles, CheckCircle, Plus, Clipboard, ShieldAlert, ClipboardList, Zap, Layers, Rocket } from "lucide-react";
+import { Wand2, X, Loader2, Trash2, Sparkles, CheckCircle, Plus, Clipboard, ShieldAlert, ClipboardList, Zap, Layers, Rocket, Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTokens } from "@/hooks/useTokens";
 import TokenAnalyticsBar from "@/components/Proposal/TokenAnalyticsBar";
@@ -749,21 +749,38 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                      />
                   </div>
                   
-                  {/* Future Scalability Toggle */}
-                  <button
-                    onClick={() => {
-                      const next = [...proposal.solution.selectedModules];
-                      next[mIdx].isFutureScalability = !next[mIdx].isFutureScalability;
-                      updateSolution({ selectedModules: next });
-                    }}
-                    className={`px-2.5 py-1 rounded-lg text-[8.5px] font-black uppercase tracking-wider transition-all border shrink-0 ${
-                      module.isFutureScalability
-                        ? "bg-[#1AA6E1]/15 text-[#1AA6E1] border-[#1AA6E1]/40 shadow-sm"
-                        : "bg-slate-100 dark:bg-white/5 text-slate-400 border-slate-200 dark:border-white/10 hover:text-slate-600"
-                    }`}
-                  >
-                    {module.isFutureScalability ? "🚀 Future Scalability" : "⚙️ Core Module"}
-                  </button>
+                  {/* Highlight & Future Scalability Toggles */}
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                      onClick={() => {
+                        const next = [...proposal.solution.selectedModules];
+                        next[mIdx].isHighlighted = !next[mIdx].isHighlighted;
+                        updateSolution({ selectedModules: next });
+                      }}
+                      className={`px-2.5 py-1 rounded-lg text-[8.5px] font-black uppercase tracking-wider transition-all border shrink-0 flex items-center gap-1 ${
+                        module.isHighlighted
+                          ? "bg-amber-100/50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-300 dark:border-amber-500/30 shadow-sm"
+                          : "bg-slate-100 dark:bg-white/5 text-slate-400 border-slate-200 dark:border-white/10 hover:text-slate-600"
+                      }`}
+                    >
+                      <Star size={10} className={module.isHighlighted ? "fill-amber-500 text-amber-500" : ""} />
+                      {module.isHighlighted ? "Featured" : "Highlight"}
+                    </button>
+                    <button
+                      onClick={() => {
+                        const next = [...proposal.solution.selectedModules];
+                        next[mIdx].isFutureScalability = !next[mIdx].isFutureScalability;
+                        updateSolution({ selectedModules: next });
+                      }}
+                      className={`px-2.5 py-1 rounded-lg text-[8.5px] font-black uppercase tracking-wider transition-all border shrink-0 ${
+                        module.isFutureScalability
+                          ? "bg-[#1AA6E1]/15 text-[#1AA6E1] border-[#1AA6E1]/40 shadow-sm"
+                          : "bg-slate-100 dark:bg-white/5 text-slate-400 border-slate-200 dark:border-white/10 hover:text-slate-600"
+                      }`}
+                    >
+                      {module.isFutureScalability ? "🚀 Future Scalability" : "⚙️ Core Module"}
+                    </button>
+                  </div>
 
                   {/* Module Price Field */}
                   <div className="flex items-center gap-2 shrink-0">
@@ -832,16 +849,36 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
                             <span className="absolute left-1 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 font-bold text-[7px]">₹</span>
                          </div>
 
-                         <button 
-                           onClick={() => {
-                             const next = [...proposal.solution.selectedModules];
-                             next[mIdx].features = next[mIdx].features.filter((_: any, i: number) => i !== fIdx);
-                             updateSolution({ selectedModules: next });
-                           }} 
-                           className="opacity-0 group-hover/item:opacity-100 text-slate-400 hover:text-red-500 transition-all shrink-0"
-                         >
-                           <X size={12} />
-                         </button>
+                         <div className={`flex items-center gap-0.5 transition-all shrink-0 ${
+                           (typeof feature !== 'string' && feature.isHighlighted) ? "opacity-100" : "opacity-0 group-hover/item:opacity-100"
+                         }`}>
+                           <button 
+                             onClick={() => {
+                               const next = [...proposal.solution.selectedModules];
+                               const currentFeature = typeof feature === 'string' ? { name: feature, price: "" } : { ...feature };
+                               currentFeature.isHighlighted = !currentFeature.isHighlighted;
+                               next[mIdx].features[fIdx] = currentFeature;
+                               updateSolution({ selectedModules: next });
+                             }}
+                             className={`p-1.5 rounded-lg transition-all ${
+                               (typeof feature !== 'string' && feature.isHighlighted) 
+                                 ? "text-amber-500 bg-amber-50 dark:bg-amber-500/10" 
+                                 : "text-slate-400 hover:text-amber-500 hover:bg-slate-100 dark:hover:bg-white/5"
+                             }`}
+                           >
+                             <Star size={12} className={(typeof feature !== 'string' && feature.isHighlighted) ? "fill-amber-500" : ""} />
+                           </button>
+                           <button 
+                             onClick={() => {
+                               const next = [...proposal.solution.selectedModules];
+                               next[mIdx].features = next[mIdx].features.filter((_: any, i: number) => i !== fIdx);
+                               updateSolution({ selectedModules: next });
+                             }} 
+                             className="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-slate-100 dark:hover:bg-white/5 transition-all"
+                           >
+                             <X size={12} />
+                           </button>
+                         </div>
                       </div>
                     ))}
                   </div>
