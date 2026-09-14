@@ -90,14 +90,31 @@ export default function SavedProposals() {
     return matchesSearch && matchesStatus;
   });
 
+  const getHeaderDetails = () => {
+    switch (statusFilter) {
+      case "Draft":
+        return { title: "Active Drafts", subtitle: "Protocols currently in development" };
+      case "Sent":
+        return { title: "Sent Assets", subtitle: "Protocols delivered to clients" };
+      case "Accepted":
+        return { title: "Won / Accepted", subtitle: "Successfully finalized enterprise protocols" };
+      case "Declined":
+        return { title: "Declined / Lost", subtitle: "Protocols that were not accepted" };
+      default:
+        return { title: "Strategic Proposals", subtitle: "Vault of all generated enterprise protocols" };
+    }
+  };
+
+  const { title, subtitle } = getHeaderDetails();
+
   return (
     <DashboardLayout searchQuery={searchQuery} setSearchQuery={setSearchQuery}>
       <div className="max-w-[1400px] mx-auto space-y-8">
         
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <h1 className="text-3xl font-black uppercase tracking-tighter text-blue-500 mb-2">Strategic Proposals</h1>
-            <p className="text-muted-foreground font-medium uppercase text-[10px] tracking-[0.3em]">Vault of all generated enterprise protocols</p>
+            <h1 className="text-3xl font-black uppercase tracking-tighter text-blue-500 mb-2">{title}</h1>
+            <p className="text-muted-foreground font-medium uppercase text-[10px] tracking-[0.3em]">{subtitle}</p>
           </div>
           <Button onClick={() => navigate('/create')} className="h-12 px-6 gap-2 bg-blue-500 text-slate-900 dark:text-white hover:bg-blue-600 rounded-xl font-black uppercase text-[10px] tracking-widest shadow-lg shadow-blue-500/20 active:scale-95 transition-all">
             <Plus className="w-4 h-4" />
