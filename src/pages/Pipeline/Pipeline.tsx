@@ -505,6 +505,41 @@ export default function Pipeline() {
                </div>
             </div>
 
+            {/* Print Charts */}
+            <div className="flex gap-4 mb-8">
+               <div className="flex-1 border border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center">
+                  <h4 className="text-xs font-black uppercase tracking-widest text-slate-700 mb-2">Financial Distribution</h4>
+                  <PieChart width={160} height={160}>
+                    <Pie
+                      data={distributionData}
+                      innerRadius={50}
+                      outerRadius={75}
+                      paddingAngle={4}
+                      cornerRadius={4}
+                      dataKey="value"
+                      stroke="none"
+                    >
+                      {distributionData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                  </PieChart>
+               </div>
+               <div className="flex-1 border border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center">
+                  <h4 className="text-xs font-black uppercase tracking-widest text-slate-700 mb-2">Pipeline Funnel</h4>
+                  <BarChart width={280} height={160} data={barChartData} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: '#6b7280', fontWeight: 700 }} dy={5} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: '#6b7280' }} />
+                    <Bar dataKey="count" radius={[4, 4, 0, 0]} maxBarSize={40}>
+                       {barChartData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                       ))}
+                    </Bar>
+                  </BarChart>
+               </div>
+            </div>
+
             {/* Table */}
             <div className="flex-1">
                <h3 className="text-sm font-black uppercase tracking-widest text-slate-800 mb-4 border-b border-slate-200 pb-2">Pipeline Ecosystem Detail</h3>
@@ -527,7 +562,7 @@ export default function Pipeline() {
                               <td className="p-3">
                                  <div className="flex flex-col">
                                     <span className="text-xs font-bold text-slate-900 uppercase">{p.client?.referenceId}</span>
-                                    <span className="text-[10px] font-medium text-slate-500 uppercase truncate max-w-[150px]">
+                                    <span className="text-[10px] font-medium text-slate-500 uppercase whitespace-normal break-words max-w-[200px]">
                                        {p.client?.companyName || p.client?.clientName || "Valued Client"}
                                     </span>
                                  </div>
@@ -567,23 +602,26 @@ export default function Pipeline() {
             <h2 className="text-3xl font-black text-center text-slate-900 uppercase tracking-tight mb-8">Internal Policy & Confidentiality</h2>
 
             <div className="flex-1 space-y-6 text-slate-700 text-sm leading-relaxed border-y-2 border-slate-100 py-8">
+               <p className="font-black text-rose-600 text-justify text-base uppercase tracking-wider">
+                  STRICT CONFIDENTIALITY & NON-DISCLOSURE WARNING
+               </p>
                <p className="font-bold text-justify">
-                  This document and any accompanying materials contain highly confidential and proprietary information belonging exclusively to Weblozy.
+                  This document, containing proprietary financial projections, strategic protocols, and pipeline valuations, is the exclusive intellectual property of Weblozy. Access is strictly granted on a need-to-know basis.
                </p>
                <p className="text-justify">
-                  By reviewing this pipeline report, you acknowledge and agree that the data contained herein—including but not limited to client names, valuation metrics, strategic protocols, and discount structures—constitutes trade secrets and sensitive corporate intelligence.
+                  By possessing or reviewing this report, you are legally bound by Weblozy's Non-Disclosure Agreement (NDA). The data herein includes trade secrets, sensitive client identities, and highly confidential financial frameworks that provide Weblozy with a competitive advantage.
                </p>
-               <h4 className="font-black text-slate-900 uppercase tracking-wider text-xs mt-6 mb-2">1. Non-Disclosure & Restrictions</h4>
+               <h4 className="font-black text-slate-900 uppercase tracking-wider text-xs mt-6 mb-2 text-rose-500">1. ABSOLUTE PROHIBITION ON DISTRIBUTION</h4>
                <p className="text-justify">
-                  Under no circumstances shall this report be distributed, reproduced, transmitted, or shared with any third party outside of authorized Weblozy personnel without explicit prior written consent from executive management. Any unauthorized dissemination will result in severe disciplinary action and potential legal proceedings.
+                  Under NO circumstances shall any portion of this report be duplicated, photographed, electronically transmitted, shared on cloud platforms, or verbally communicated to any individual outside of Weblozy's authorized executive board. Any breach of this clause will trigger immediate termination of employment and civil litigation for damages.
                </p>
-               <h4 className="font-black text-slate-900 uppercase tracking-wider text-xs mt-6 mb-2">2. Data Integrity</h4>
+               <h4 className="font-black text-slate-900 uppercase tracking-wider text-xs mt-6 mb-2">2. ZERO-TOLERANCE DATA MANIPULATION</h4>
                <p className="text-justify">
-                  The metrics presented represent real-time pipeline valuations at the time of generation. Operators are strictly prohibited from manipulating, misrepresenting, or externally broadcasting these internal forecasts.
+                  The valuations and statuses represented in this document are pulled directly from the Weblozy ecosystem. Any attempt by an operator, BDE, or BDM to artificially inflate, misrepresent, or tamper with pipeline metrics is considered corporate fraud and will be dealt with under the fullest extent of the law.
                </p>
-               <h4 className="font-black text-slate-900 uppercase tracking-wider text-xs mt-6 mb-2">3. Accountability</h4>
+               <h4 className="font-black text-slate-900 uppercase tracking-wider text-xs mt-6 mb-2">3. MANDATORY DESTRUCTION OF RECORD</h4>
                <p className="text-justify">
-                  The authorized personnel generating this report accepts full responsibility for its safekeeping. Hard copies must be shredded when no longer in use, and digital copies must reside solely on secure, company-approved servers.
+                  The authorizing personnel generating this report accepts sole liability for its chain of custody. Physical copies must be securely cross-cut shredded immediately post-review. Digital files downloaded locally must be permanently purged at the end of the operational day.
                </p>
             </div>
 

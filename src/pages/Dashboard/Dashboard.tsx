@@ -343,7 +343,7 @@ export default function Dashboard() {
           </div>
 
           {/* Card 4: Pipeline Valuation */}
-          <div onClick={() => navigate('/saved')} className="cursor-pointer transition-all hover:scale-[1.02] bg-white dark:bg-[#11151D] border-t-2 border-t-emerald-500 border-x border-b border-slate-200 dark:border-white/5 rounded-2xl p-6 relative overflow-hidden group shadow-sm hover:shadow-md">
+          <div onClick={() => navigate('/pipeline')} className="cursor-pointer transition-all hover:scale-[1.02] bg-white dark:bg-[#11151D] border-t-2 border-t-emerald-500 border-x border-b border-slate-200 dark:border-white/5 rounded-2xl p-6 relative overflow-hidden group shadow-sm hover:shadow-md">
             <div className="absolute -right-4 -bottom-4 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity text-slate-900 dark:text-white"><TrendingUp size={100} /></div>
             <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-5 border border-emerald-500/20">
               <TrendingUp size={16} />
