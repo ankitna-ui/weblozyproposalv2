@@ -188,9 +188,8 @@ export default function Pipeline() {
     try {
       // Small delay to ensure rendering is complete
       await new Promise(r => setTimeout(r, 300));
-      const element = reportRef.current;
       // Make it visible momentarily for canvas capture
-      element.style.display = 'block';
+      const element = reportRef.current;
 
       // Capture Page 1: Analytics & Data
       const page1 = element.querySelector('#report-page-1') as HTMLElement;
@@ -199,8 +198,6 @@ export default function Pipeline() {
       // Capture Page 2: Policy & Signature
       const page2 = element.querySelector('#report-page-2') as HTMLElement;
       const canvas2 = await html2canvas(page2, { scale: 2, useCORS: true, logging: false });
-
-      element.style.display = 'none';
 
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -235,7 +232,6 @@ export default function Pipeline() {
       toast.error("Failed to generate PDF. Please try again.");
     } finally {
       setIsGeneratingPDF(false);
-      if (reportRef.current) reportRef.current.style.display = 'none';
     }
   };
 
@@ -463,7 +459,7 @@ export default function Pipeline() {
       <div 
          ref={reportRef} 
          className="absolute top-0 left-0 w-[800px] bg-white pointer-events-none text-slate-900 z-[-9999]"
-         style={{ display: 'none' }}
+         style={{ position: 'fixed', top: '-9999px', left: '-9999px', opacity: 0 }}
       >
          {/* PAGE 1: Data & Analytics */}
          <div id="report-page-1" className="bg-white w-[800px] min-h-[1130px] p-10 flex flex-col relative overflow-hidden">
@@ -502,41 +498,6 @@ export default function Pipeline() {
                   <div className="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-1">Lost Valuation</div>
                   <div className="text-xl font-black text-slate-900">{formatCurrency(pipelineStats.lost)}</div>
                   <div className="text-[9px] font-bold text-rose-500 uppercase tracking-wider">{pipelineStats.lostCount} Protocols</div>
-               </div>
-            </div>
-
-            {/* Print Charts */}
-            <div className="flex gap-4 mb-8">
-               <div className="flex-1 border border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center">
-                  <h4 className="text-xs font-black uppercase tracking-widest text-slate-700 mb-2">Financial Distribution</h4>
-                  <PieChart width={160} height={160}>
-                    <Pie
-                      data={distributionData}
-                      innerRadius={50}
-                      outerRadius={75}
-                      paddingAngle={4}
-                      cornerRadius={4}
-                      dataKey="value"
-                      stroke="none"
-                    >
-                      {distributionData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                  </PieChart>
-               </div>
-               <div className="flex-1 border border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center">
-                  <h4 className="text-xs font-black uppercase tracking-widest text-slate-700 mb-2">Pipeline Funnel</h4>
-                  <BarChart width={280} height={160} data={barChartData} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: '#6b7280', fontWeight: 700 }} dy={5} />
-                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: '#6b7280' }} />
-                    <Bar dataKey="count" radius={[4, 4, 0, 0]} maxBarSize={40}>
-                       {barChartData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                       ))}
-                    </Bar>
-                  </BarChart>
                </div>
             </div>
 
