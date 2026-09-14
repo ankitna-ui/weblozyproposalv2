@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +13,7 @@ import {
   Building2, 
   Loader2,
   AlertOctagon,
+  Users
 } from "lucide-react";
 import { getProposals, deleteProposal, updateProposalStatus } from "@/lib/firestore";
 import { auth } from "@/lib/firebase";
@@ -22,12 +23,19 @@ import { toast } from "react-toastify";
 import DashboardLayout from "@/components/Layout/DashboardLayout";
 
 export default function SavedProposals() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("All");
+  const [statusFilter, setStatusFilter] = useState<string>((location.state as any)?.filter || "All");
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    if ((location.state as any)?.filter) {
+      setStatusFilter((location.state as any).filter);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     async function loadProposals() {

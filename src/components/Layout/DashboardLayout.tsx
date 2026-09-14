@@ -62,9 +62,9 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
   const isActive = (path: string) => location.pathname === path;
 
   // Auto-close sidebar on mobile when navigating
-  const mobileNavigate = (path: string) => {
+  const mobileNavigate = (path: string, options?: any) => {
     setIsMobileMenuOpen(false);
-    navigate(path);
+    navigate(path, options);
   };
 
   return (
@@ -113,7 +113,7 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
               <div className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-gray-500 mb-3 px-4">Strategic Management</div>
               <div className="space-y-1">
                 <div
-                  onClick={() => mobileNavigate('/saved')}
+                  onClick={() => mobileNavigate('/saved', { state: { filter: 'All' } })}
                   className={`flex items-center justify-between px-4 py-2.5 rounded-xl cursor-pointer transition-colors ${isActive('/saved') ? 'bg-blue-500/10 text-blue-500' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/5'}`}
                 >
                   <div className="flex items-center gap-3">
@@ -124,7 +124,7 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
                 </div>
 
                 <div
-                  onClick={() => mobileNavigate('/drafts')}
+                  onClick={() => mobileNavigate('/saved', { state: { filter: 'Draft' } })}
                   className={`flex items-center justify-between px-4 py-2.5 rounded-xl cursor-pointer transition-colors ${isActive('/drafts') ? 'bg-[#99CB48]/10 text-[#99CB48]' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/5'}`}
                 >
                   <div className="flex items-center gap-3">
@@ -135,7 +135,7 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
                 </div>
 
                 <div
-                  onClick={() => mobileNavigate('/saved')}
+                  onClick={() => mobileNavigate('/saved', { state: { filter: 'Sent' } })}
                   className={`flex items-center justify-between px-4 py-2.5 rounded-xl cursor-pointer transition-colors ${!isActive('/drafts') && !isActive('/saved') && !isActive('/dashboard') && !isActive('/') ? 'bg-purple-500/10 text-purple-500' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/5'}`}
                 >
                   <div className="flex items-center gap-3">
@@ -146,7 +146,7 @@ export default function DashboardLayout({ children, searchQuery, setSearchQuery 
                 </div>
 
                 <div
-                  onClick={() => mobileNavigate('/saved')}
+                  onClick={() => mobileNavigate('/saved', { state: { filter: 'Accepted' } })}
                   className={`flex items-center justify-between px-4 py-2.5 rounded-xl cursor-pointer transition-colors text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/5`}
                 >
                   <div className="flex items-center gap-3">
