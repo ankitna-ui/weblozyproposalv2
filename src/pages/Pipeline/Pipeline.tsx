@@ -115,6 +115,7 @@ export default function Pipeline() {
       const price = parseFloat(priceStr);
       return acc + (isNaN(price) ? 0 : price);
     }, 0);
+    const moduleCount = (p.solution?.selectedModules || []).length;
     const base = baseVal || moduleSum || 0;
     const discountPctStr = String(p.pricing?.discountPercentage || "0").replace(/[^0-9.]/g, "");
     const discountPct = parseFloat(discountPctStr) || 0;
@@ -124,6 +125,7 @@ export default function Pipeline() {
     return {
       baseVal,
       moduleSum,
+      moduleCount,
       base,
       discountPct,
       discountAmount,
@@ -403,20 +405,34 @@ export default function Pipeline() {
                        const status = p.client?.status || 'Draft';
                        return (
                           <tr key={`val-${p.id}`} className="hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors group">
-                             <td className="py-4 pl-4">
+                              <td className="py-4 pl-4">
                                 <div className="flex flex-col">
-                                   <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">{p.client?.referenceId}</span>
+                                   <a 
+                                      href={`/preview/${p.id}`} 
+                                      target="_blank" 
+                                      rel="noopener noreferrer" 
+                                      className="text-xs font-bold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 uppercase tracking-tight transition-colors"
+                                   >
+                                      {p.client?.referenceId}
+                                   </a>
                                    <span className="text-[10px] font-medium text-slate-500 dark:text-gray-400 uppercase tracking-wider truncate max-w-[150px]">
-                                      {p.client?.companyName || p.client?.clientName || "Valued Client"}
+                                      {p.client?.clientName && p.client.clientName !== "VALUED CLIENT" 
+                                          ? p.client.clientName 
+                                          : p.client?.companyName && p.client.companyName !== "VALUED CLIENT" 
+                                            ? p.client.companyName 
+                                            : p.client?.contactPerson || "—"}
                                    </span>
                                 </div>
                              </td>
                              <td className="py-4 text-right">
                                 <span className="text-xs font-bold text-slate-700 dark:text-gray-300">{vals.baseVal > 0 ? formatCurrency(vals.baseVal) : "—"}</span>
                              </td>
-                             <td className="py-4 text-right">
-                                <span className="text-xs font-bold text-slate-700 dark:text-gray-300">{vals.moduleSum > 0 ? formatCurrency(vals.moduleSum) : "—"}</span>
-                             </td>
+                              <td className="py-4 text-right">
+                                <div className="flex flex-col items-end">
+                                   <span className="text-xs font-bold text-slate-700 dark:text-gray-300">{vals.moduleSum > 0 ? formatCurrency(vals.moduleSum) : "—"}</span>
+                                   {vals.moduleCount > 0 && <span className="text-[9px] font-bold text-blue-500">{vals.moduleCount} Modules</span>}
+                                </div>
+                              </td>
                              <td className="py-4 text-right">
                                 <div className="flex flex-col items-end">
                                    <span className="text-xs font-bold text-rose-500 dark:text-rose-400">{vals.discountPct > 0 ? `-${vals.discountPct}%` : "—"}</span>
@@ -509,6 +525,7 @@ export default function Pipeline() {
                      <tr className="border-b-2 border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-500 bg-slate-50">
                         <th className="p-3">Ref ID / Client</th>
                         <th className="p-3 text-right">Core Value</th>
+                        <th className="p-3 text-right">Modules</th>
                         <th className="p-3 text-right">Discount</th>
                         <th className="p-3 text-right">Final Valuation</th>
                         <th className="p-3 text-center">Status</th>
@@ -524,12 +541,22 @@ export default function Pipeline() {
                                  <div className="flex flex-col">
                                     <span className="text-xs font-bold text-slate-900 uppercase">{p.client?.referenceId}</span>
                                     <span className="text-[10px] font-medium text-slate-500 uppercase whitespace-normal break-words max-w-[200px]">
-                                       {p.client?.companyName || p.client?.clientName || "Valued Client"}
+                                       {p.client?.clientName && p.client.clientName !== "VALUED CLIENT" 
+                                          ? p.client.clientName 
+                                          : p.client?.companyName && p.client.companyName !== "VALUED CLIENT" 
+                                            ? p.client.companyName 
+                                            : p.client?.contactPerson || "—"}
                                     </span>
                                  </div>
                               </td>
                               <td className="p-3 text-right">
                                  <span className="text-xs font-bold text-slate-700">{vals.baseVal > 0 ? formatCurrency(vals.baseVal) : "—"}</span>
+                              </td>
+                              <td className="p-3 text-right">
+                                 <div className="flex flex-col items-end">
+                                    <span className="text-xs font-bold text-slate-700">{vals.moduleSum > 0 ? formatCurrency(vals.moduleSum) : "—"}</span>
+                                    {vals.moduleCount > 0 && <span className="text-[9px] font-bold text-blue-600">{vals.moduleCount} Modules</span>}
+                                 </div>
                               </td>
                               <td className="p-3 text-right">
                                  <span className="text-xs font-bold text-rose-500">{vals.discountPct > 0 ? `-${vals.discountPct}%` : "—"}</span>
