@@ -19,11 +19,13 @@ import AuthLayout from "@/pages/Auth/AuthLayout";
 import { toast } from "react-toastify";
 import logo from "@/assets/weblozy-logo.png";
 import roiIllustration from "@/assets/roi_3d_illustration.png";
+import { TermsModal } from "@/components/Auth/TermsModal";
 
 type AuthMode = "login" | "signup" | "forgot-password" | "loading";
 
 export default function LoginPage() {
   const [authMode, setAuthMode] = useState<AuthMode>("login");
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -391,8 +393,8 @@ export default function LoginPage() {
               </AnimatePresence>
 
               {/* Form */}
-              <form onSubmit={handleSubmit} className="w-full flex-1 flex flex-col h-full">
-                <div className="flex-1 space-y-4">
+              <form onSubmit={handleSubmit} className="w-full flex-1 flex flex-col h-full relative">
+                <div className="space-y-4">
                   {/* Signup Fields */}
                   <AnimatePresence mode="wait">
                     {authMode === "signup" && (
