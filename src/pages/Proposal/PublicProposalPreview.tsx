@@ -22,6 +22,14 @@ export default function PublicProposalPreview() {
 
   useEffect(() => {
     if (!id) return;
+
+    // Check if link was already viewed on this browser
+    const hasViewed = localStorage.getItem(`viewed_proposal_${id}`);
+    if (hasViewed) {
+      setError("expired");
+      setIsLoading(false);
+      return;
+    }
     
     setIsLoading(true);
     const docRef = doc(db, "proposals", id);
@@ -39,8 +47,11 @@ export default function PublicProposalPreview() {
           setError("invalid");
           setProposal(null);
         } else {
+          // It's valid and they are viewing it for the first time
           setProposal(data);
           setError(null);
+          // Mark as viewed so if they refresh, it dies
+          localStorage.setItem(`viewed_proposal_${id}`, 'true');
         }
       } else {
         setError("not_found");
