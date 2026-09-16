@@ -180,16 +180,16 @@ export default function LoginPage() {
                 transition={{ duration: 0.6 }}
               >
                 <div className="text-[10px] font-bold tracking-[0.2em] text-slate-300 uppercase mb-4">
-                  Welcome to Weblozy
+                  Welcome to Weblozy Proposals
                 </div>
                 
                 <h1 className="text-5xl xl:text-6xl font-black tracking-tight leading-[1.05] text-white mb-6">
-                  Strategic<br />
-                  <span className="text-[#34D399]">Workstation.</span>
+                  Smart Proposal<br />
+                  <span className="text-[#34D399]">Generator.</span>
                 </h1>
                 
                 <p className="text-slate-300 text-sm leading-relaxed max-w-md mb-12">
-                  Secure corporate environment for generating, analyzing, and deploying strategic business proposals.
+                  Create, manage, and deliver winning business proposals with our advanced automation and intelligent templates.
                 </p>
               </motion.div>
 
@@ -206,8 +206,8 @@ export default function LoginPage() {
                     <ShieldCheck size={20} className="text-[#34D399]" />
                   </div>
                   <div>
-                    <h3 className="text-white text-[10px] font-black uppercase tracking-wider mb-1">Secure Core</h3>
-                    <p className="text-[11px] font-medium text-slate-400 leading-tight">Enterprise-grade<br/>protection.</p>
+                    <h3 className="text-white text-[10px] font-black uppercase tracking-wider mb-1">Smart Templates</h3>
+                    <p className="text-[11px] font-medium text-slate-400 leading-tight">Pre-designed<br/>professional layouts.</p>
                   </div>
                 </div>
                 {/* Feature 2 */}
@@ -216,8 +216,8 @@ export default function LoginPage() {
                     <Zap size={20} className="text-slate-300" />
                   </div>
                   <div>
-                    <h3 className="text-white text-[10px] font-black uppercase tracking-wider mb-1">Automated</h3>
-                    <p className="text-[11px] font-medium text-slate-400 leading-tight">Intelligent<br/>deployment.</p>
+                    <h3 className="text-white text-[10px] font-black uppercase tracking-wider mb-1">Auto-Calculations</h3>
+                    <p className="text-[11px] font-medium text-slate-400 leading-tight">Instant pricing<br/>and estimations.</p>
                   </div>
                 </div>
                 {/* Feature 3 */}
@@ -226,8 +226,8 @@ export default function LoginPage() {
                     <BarChart2 size={20} className="text-[#A78BFA]" />
                   </div>
                   <div>
-                    <h3 className="text-white text-[10px] font-black uppercase tracking-wider mb-1">Data Driven</h3>
-                    <p className="text-[11px] font-medium text-slate-400 leading-tight">Smarter<br/>strategies.</p>
+                    <h3 className="text-white text-[10px] font-black uppercase tracking-wider mb-1">Client Ready</h3>
+                    <p className="text-[11px] font-medium text-slate-400 leading-tight">Export to PDF<br/>or share instantly.</p>
                   </div>
                 </div>
               </motion.div>
@@ -237,15 +237,15 @@ export default function LoginPage() {
             <div className="w-full flex items-end justify-between">
               <div className="flex flex-col gap-6">
                 <div className="flex items-center gap-2 text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase">
-                  <span>IDEAS</span>
+                  <span>DRAFT</span>
                   <ChevronRight size={12} className="text-slate-600" />
-                  <span>SOLUTIONS</span>
+                  <span>REVIEW</span>
                   <ChevronRight size={12} className="text-slate-600" />
-                  <span>GROWTH</span>
+                  <span>WIN DEALS</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Lock className="w-4 h-4 text-[#34D399]" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">AES-256 ENCRYPTED</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">SECURE PROPOSALS</span>
                 </div>
               </div>
 
@@ -340,7 +340,7 @@ export default function LoginPage() {
                   {authMode === "signup" ? "CREATE ACCOUNT" : authMode === "forgot-password" ? "RECOVER KEY" : "WELCOME BACK"}
                 </h3>
                 <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-tight">
-                  {authMode === "signup" ? "Join Weblozy workspace." : authMode === "forgot-password" ? "Recover your access." : "Sign in to access your workspace."}
+                  {authMode === "signup" ? "Start creating proposals." : authMode === "forgot-password" ? "Recover your proposal access." : "Sign in to create proposals."}
                 </h2>
               </div>
               
