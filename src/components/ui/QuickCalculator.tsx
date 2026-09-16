@@ -27,7 +27,7 @@ export default function QuickCalculator() {
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-8 left-8 z-[100] group flex items-center justify-center w-12 h-12 bg-white dark:bg-[#0B0E14]/80 backdrop-blur-xl border border-slate-300 dark:border-white/10 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-primary/40 transition-all duration-300 no-print"
+        className="fixed bottom-24 right-8 z-[100] group flex items-center justify-center w-12 h-12 bg-white dark:bg-[#0B0E14]/80 backdrop-blur-xl border border-slate-300 dark:border-white/10 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-primary/40 transition-all duration-300 no-print"
         title="Quick Calculator"
       >
         <Calculator className="w-5 h-5 text-slate-700 dark:text-gray-300 group-hover:text-primary transition-colors" />
@@ -40,7 +40,7 @@ export default function QuickCalculator() {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-24 left-8 z-[101] w-80 bg-white dark:bg-[#11141A] rounded-2xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden no-print"
+            className="fixed bottom-40 right-8 z-[101] w-80 bg-white dark:bg-[#11141A] rounded-2xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden no-print"
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/5">
               <div className="flex items-center gap-2">
