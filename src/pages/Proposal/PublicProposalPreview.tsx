@@ -1,14 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getProposal } from "@/lib/firestore";
+import { db } from "@/lib/firebase";
 import { 
   FileText, Clock, ShieldAlert, FileWarning
 } from "lucide-react";
 import { Proposal } from "@/types/proposal";
 import ProposalPDF from "@/components/Proposal/pages2";
 import bannerLogo from "@/assets/banner_logo.png";
-import { db } from "@/lib/firebase";
 import { doc, onSnapshot } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 export default function PublicProposalPreview() {
   const { id } = useParams<{ id: string }>();
@@ -71,6 +72,27 @@ export default function PublicProposalPreview() {
     const interval = setInterval(updateTimer, 1000);
     return () => clearInterval(interval);
   }, [proposal?.shareExpiry]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Prevent Ctrl+P / Cmd+P (Print) and Ctrl+S / Cmd+S (Save)
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 's')) {
+        e.preventDefault();
+        toast.warning("This document is restricted. Downloading or printing is not allowed.", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          theme: "light",
+        });
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
