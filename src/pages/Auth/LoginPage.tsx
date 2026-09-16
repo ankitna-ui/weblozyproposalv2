@@ -331,7 +331,7 @@ export default function LoginPage() {
             className="w-full max-w-[440px] mt-12 lg:mt-0 relative z-10"
           >
             {/* The Floating Card with fixed exact height so it never resizes */}
-            <div className="w-full h-[760px] sm:h-[730px] bg-[#07131C] border border-[#142A38] rounded-3xl p-6 sm:p-8 shadow-[0_0_60px_rgba(0,0,0,0.5),_0_0_20px_rgba(52,211,153,0.03)] relative overflow-hidden flex flex-col">
+            <div className="w-full h-[780px] sm:h-[760px] bg-[#07131C] border border-[#142A38] rounded-3xl p-6 sm:p-8 shadow-[0_0_60px_rgba(0,0,0,0.5),_0_0_20px_rgba(52,211,153,0.03)] relative overflow-hidden flex flex-col">
               {/* Subtle top-left green glow inside card */}
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#34D399]/40 to-transparent" />
               
@@ -417,7 +417,7 @@ export default function LoginPage() {
                               placeholder="Ankit Nag"
                               value={fullName}
                               onChange={(e) => setFullName(e.target.value)}
-                              className="w-full h-[52px] pl-11 pr-4 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
+                              className="w-full h-12 pl-11 pr-4 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
                             />
                           </div>
                         </div>
@@ -432,7 +432,7 @@ export default function LoginPage() {
                               placeholder="WL-0099"
                               value={employeeId}
                               onChange={(e) => setEmployeeId(e.target.value)}
-                              className="w-full h-[52px] pl-11 pr-4 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
+                              className="w-full h-12 pl-11 pr-4 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
                             />
                           </div>
                         </div>
@@ -452,7 +452,7 @@ export default function LoginPage() {
                         placeholder="name@weblozy.in"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full h-[52px] pl-11 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
+                        className="w-full h-12 pl-11 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
                       />
                       {isEmailValid(email) ? (
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center">
@@ -486,7 +486,7 @@ export default function LoginPage() {
                           placeholder="••••••••"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          className="w-full h-[52px] pl-11 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
+                          className="w-full h-12 pl-11 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
                         />
                         <button
                           type="button"
@@ -518,7 +518,7 @@ export default function LoginPage() {
                             placeholder="••••••••"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="w-full h-[52px] pl-11 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
+                            className="w-full h-12 pl-11 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
                           />
                           <button
                             type="button"
