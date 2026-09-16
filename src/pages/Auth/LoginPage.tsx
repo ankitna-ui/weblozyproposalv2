@@ -26,6 +26,8 @@ type AuthMode = "login" | "signup" | "forgot-password" | "loading";
 export default function LoginPage() {
   const [authMode, setAuthMode] = useState<AuthMode>("login");
   const [isTermsOpen, setIsTermsOpen] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
+  const [agreeTerms, setAgreeTerms] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -533,21 +535,23 @@ export default function LoginPage() {
                   {/* Options check & help */}
                   <div className="flex justify-between items-center pt-2 pb-2 shrink-0">
                     {authMode === 'login' ? (
-                      <label className="flex items-center gap-3 cursor-pointer group select-none">
-                        <div className="relative flex items-center justify-center w-5 h-5 rounded-[6px] border border-[#34D399] bg-[#0A261C] transition-colors">
-                          <CheckCircle2 size={12} className="text-[#34D399]" />
-                          <input type="checkbox" className="absolute opacity-0 w-full h-full cursor-pointer" defaultChecked />
+                      <label className="flex items-center gap-3 cursor-pointer group select-none" onClick={() => setRememberMe(!rememberMe)}>
+                        <div className={`relative flex items-center justify-center w-5 h-5 rounded-[6px] border transition-colors ${rememberMe ? 'border-[#34D399] bg-[#0A261C]' : 'border-[#142A38] bg-[#030910] group-hover:border-[#34D399]/50'}`}>
+                          {rememberMe && <CheckCircle2 size={12} className="text-[#34D399]" />}
                         </div>
                         <span className="text-[10px] text-white font-black uppercase tracking-widest">Remember me</span>
                       </label>
                     ) : authMode === 'signup' ? (
-                      <label className="flex items-center gap-3 cursor-pointer group select-none">
-                        <div className="relative flex items-center justify-center w-5 h-5 rounded-[6px] border border-[#34D399] bg-[#0A261C] transition-colors">
-                          <CheckCircle2 size={12} className="text-[#34D399]" />
-                          <input type="checkbox" className="absolute opacity-0 w-full h-full cursor-pointer" defaultChecked />
+                      <label className="flex items-center gap-3 cursor-pointer group select-none" onClick={(e) => {
+                        // Prevent toggling if clicking on the Terms link
+                        if ((e.target as HTMLElement).tagName.toLowerCase() === 'button') return;
+                        setAgreeTerms(!agreeTerms);
+                      }}>
+                        <div className={`relative flex items-center justify-center w-5 h-5 rounded-[6px] border transition-colors ${agreeTerms ? 'border-[#34D399] bg-[#0A261C]' : 'border-[#142A38] bg-[#030910] group-hover:border-[#34D399]/50'}`}>
+                          {agreeTerms && <CheckCircle2 size={12} className="text-[#34D399]" />}
                         </div>
                         <span className="text-[10px] text-white font-black uppercase tracking-widest">
-                          I agree to the <button type="button" onClick={() => setIsTermsOpen(true)} className="text-[#34D399] hover:underline uppercase">Terms</button>
+                          I agree to the <button type="button" onClick={() => setIsTermsOpen(true)} className="text-[#34D399] hover:underline uppercase relative z-10">Terms</button>
                         </span>
                       </label>
                     ) : (
@@ -566,8 +570,8 @@ export default function LoginPage() {
                 <div className="shrink-0 pt-4">
                   <button
                     type="submit"
-                    disabled={loading}
-                    className="w-full h-14 bg-gradient-to-r from-[#6EE7B7] via-[#34D399] to-[#38BDF8] text-[#030910] font-black uppercase tracking-[0.2em] text-xs rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:shadow-[0_0_30px_rgba(52,211,153,0.5)] transition-all duration-500 flex items-center justify-center gap-2 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden"
+                    disabled={loading || (authMode === 'signup' && !agreeTerms)}
+                    className="w-full h-14 bg-gradient-to-r from-[#6EE7B7] via-[#34D399] to-[#38BDF8] text-[#030910] font-black uppercase tracking-[0.2em] text-xs rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:shadow-[0_0_30px_rgba(52,211,153,0.5)] transition-all duration-500 flex items-center justify-center gap-2 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-[0_0_20px_rgba(52,211,153,0.3)] group relative overflow-hidden"
                   >
                     {/* Subtle shine effect */}
                     <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 group-hover:animate-shine" />
