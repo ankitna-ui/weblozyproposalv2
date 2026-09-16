@@ -567,7 +567,7 @@ export default function LoginPage() {
                 </div>
 
                 {/* Submit Button */}
-                <div className="shrink-0 pt-4">
+                <div className="shrink-0 pt-6">
                   <button
                     type="submit"
                     disabled={loading || (authMode === 'signup' && !agreeTerms)}
