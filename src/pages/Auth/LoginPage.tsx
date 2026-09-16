@@ -414,7 +414,7 @@ export default function LoginPage() {
                             </span>
                             <input
                               type="text"
-                              placeholder="Ankit Nag"
+                              placeholder="Alex Carter"
                               value={fullName}
                               onChange={(e) => setFullName(e.target.value)}
                               className="w-full h-11 pl-9 pr-3 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
@@ -429,7 +429,7 @@ export default function LoginPage() {
                             </span>
                             <input
                               type="text"
-                              placeholder="WL-0099"
+                              placeholder="WL-1042"
                               value={employeeId}
                               onChange={(e) => setEmployeeId(e.target.value)}
                               className="w-full h-11 pl-9 pr-3 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
@@ -449,7 +449,7 @@ export default function LoginPage() {
                       </span>
                       <input
                         type="email"
-                        placeholder="name@weblozy.in"
+                        placeholder="alex.carter@weblozy.in"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full h-11 pl-9 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
