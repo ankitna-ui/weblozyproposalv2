@@ -328,25 +328,25 @@ export default function LoginPage() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="w-full max-w-[440px] mt-12 lg:mt-0 relative z-10"
+            className="w-full max-w-[420px] mt-12 lg:mt-0 relative z-10"
           >
             {/* The Floating Card with fixed exact height so it never resizes */}
-            <div className="w-full h-[780px] sm:h-[760px] bg-[#07131C] border border-[#142A38] rounded-3xl p-6 sm:p-8 shadow-[0_0_60px_rgba(0,0,0,0.5),_0_0_20px_rgba(52,211,153,0.03)] relative overflow-hidden flex flex-col">
+            <div className="w-full h-[680px] sm:h-[650px] bg-[#07131C] border border-[#142A38] rounded-3xl p-5 sm:p-6 shadow-[0_0_60px_rgba(0,0,0,0.5),_0_0_20px_rgba(52,211,153,0.03)] relative overflow-hidden flex flex-col">
               {/* Subtle top-left green glow inside card */}
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#34D399]/40 to-transparent" />
               
-              <div className="mb-6 shrink-0">
-                <h3 className="text-[#34D399] text-[10px] font-black uppercase tracking-widest mb-1">
+              <div className="mb-4 shrink-0">
+                <h3 className="text-[#34D399] text-[9px] font-black uppercase tracking-widest mb-1">
                   {authMode === "signup" ? "CREATE ACCOUNT" : authMode === "forgot-password" ? "RECOVER KEY" : "WELCOME BACK"}
                 </h3>
-                <h2 className="text-2xl sm:text-[26px] font-bold text-white tracking-tight leading-tight">
+                <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-tight">
                   {authMode === "signup" ? "Join Weblozy workspace." : authMode === "forgot-password" ? "Recover your access." : "Sign in to access your workspace."}
                 </h2>
               </div>
               
               {/* Segmented Control */}
               {(authMode === "login" || authMode === "signup") && (
-                <div className="w-full shrink-0 flex bg-[#030910] p-1.5 rounded-[1.25rem] mb-6 shadow-inner border border-[#142A38] relative">
+                <div className="w-full shrink-0 flex bg-[#030910] p-1 rounded-2xl mb-4 shadow-inner border border-[#142A38] relative">
                   <button
                     type="button"
                     onClick={() => { setAuthMode("login"); setError(null); }}
@@ -396,7 +396,7 @@ export default function LoginPage() {
 
               {/* Form */}
               <form onSubmit={handleSubmit} className="w-full flex-1 flex flex-col h-full relative">
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {/* Signup Fields */}
                   <AnimatePresence mode="wait">
                     {authMode === "signup" && (
@@ -404,35 +404,35 @@ export default function LoginPage() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="grid grid-cols-2 gap-4 overflow-hidden shrink-0"
+                        className="grid grid-cols-2 gap-3 overflow-hidden shrink-0"
                       >
-                        <div className="space-y-2">
-                          <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Full Name</label>
+                        <div className="space-y-1.5">
+                          <label className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Full Name</label>
                           <div className="relative group">
-                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
-                              <User size={16} />
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
+                              <User size={14} />
                             </span>
                             <input
                               type="text"
                               placeholder="Ankit Nag"
                               value={fullName}
                               onChange={(e) => setFullName(e.target.value)}
-                              className="w-full h-12 pl-11 pr-4 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
+                              className="w-full h-11 pl-9 pr-3 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
                             />
                           </div>
                         </div>
-                        <div className="space-y-2">
-                          <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Employee ID</label>
+                        <div className="space-y-1.5">
+                          <label className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Employee ID</label>
                           <div className="relative group">
-                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
-                              <Building2 size={16} />
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
+                              <Building2 size={14} />
                             </span>
                             <input
                               type="text"
                               placeholder="WL-0099"
                               value={employeeId}
                               onChange={(e) => setEmployeeId(e.target.value)}
-                              className="w-full h-12 pl-11 pr-4 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
+                              className="w-full h-11 pl-9 pr-3 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
                             />
                           </div>
                         </div>
@@ -441,22 +441,22 @@ export default function LoginPage() {
                   </AnimatePresence>
 
                   {/* Email Field */}
-                  <div className="space-y-2 shrink-0">
-                    <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Corporate Email</label>
+                  <div className="space-y-1.5 shrink-0">
+                    <label className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Corporate Email</label>
                     <div className="relative group">
-                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
-                        <Mail size={16} />
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
+                        <Mail size={14} />
                       </span>
                       <input
                         type="email"
                         placeholder="name@weblozy.in"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full h-12 pl-11 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
+                        className="w-full h-11 pl-9 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
                       />
                       {isEmailValid(email) ? (
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center">
-                          <CheckCircle2 size={16} className="text-[#34D399]" />
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
+                          <CheckCircle2 size={14} className="text-[#34D399]" />
                         </div>
                       ) : null}
                     </div>
@@ -464,36 +464,36 @@ export default function LoginPage() {
 
                   {/* Password Field */}
                   {(authMode === "login" || authMode === "signup") && (
-                    <div className="space-y-2 shrink-0">
+                    <div className="space-y-1.5 shrink-0">
                       <div className="flex justify-between items-center">
-                        <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Access Key</label>
+                        <label className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Access Key</label>
                         {authMode === "login" && (
                           <button 
                             type="button" 
                             onClick={() => setAuthMode("forgot-password")} 
-                            className="text-[10px] font-black text-[#34D399] hover:underline uppercase tracking-widest"
+                            className="text-[9px] font-black text-[#34D399] hover:underline uppercase tracking-widest"
                           >
                             Forgot Key?
                           </button>
                         )}
                       </div>
                       <div className="relative group">
-                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
-                          <KeyRound size={16} />
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
+                          <KeyRound size={14} />
                         </span>
                         <input
                           type={showPassword ? "text" : "password"}
                           placeholder="••••••••"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          className="w-full h-12 pl-11 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
+                          className="w-full h-11 pl-9 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
                         >
-                          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                          {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
                         </button>
                       </div>
                     </div>
@@ -506,26 +506,26 @@ export default function LoginPage() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="space-y-2 overflow-hidden shrink-0"
+                        className="space-y-1.5 overflow-hidden shrink-0"
                       >
-                        <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Confirm Access Key</label>
+                        <label className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Confirm Access Key</label>
                         <div className="relative group">
-                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
-                            <KeyRound size={16} />
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
+                            <KeyRound size={14} />
                           </span>
                           <input
                             type={showConfirmPassword ? "text" : "password"}
                             placeholder="••••••••"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="w-full h-12 pl-11 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
+                            className="w-full h-11 pl-9 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
                           />
                           <button
                             type="button"
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
                           >
-                            {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                            {showConfirmPassword ? <EyeOff size={14} /> : <Eye size={14} />}
                           </button>
                         </div>
                       </motion.div>
@@ -533,7 +533,7 @@ export default function LoginPage() {
                   </AnimatePresence>
 
                   {/* Options check & help */}
-                  <div className="flex justify-between items-center pt-2 pb-2 shrink-0">
+                  <div className="flex justify-between items-center pt-2 pb-1 shrink-0">
                     {authMode === 'login' ? (
                       <label className="flex items-center gap-3 cursor-pointer group select-none" onClick={() => setRememberMe(!rememberMe)}>
                         <div className={`relative flex items-center justify-center w-5 h-5 rounded-[6px] border transition-colors ${rememberMe ? 'border-[#34D399] bg-[#0A261C]' : 'border-[#142A38] bg-[#030910] group-hover:border-[#34D399]/50'}`}>
@@ -567,11 +567,11 @@ export default function LoginPage() {
                 </div>
 
                 {/* Submit Button */}
-                <div className="shrink-0 pt-6">
+                <div className="shrink-0 pt-4">
                   <button
                     type="submit"
                     disabled={loading || (authMode === 'signup' && !agreeTerms)}
-                    className="w-full h-14 bg-gradient-to-r from-[#6EE7B7] via-[#34D399] to-[#38BDF8] text-[#030910] font-black uppercase tracking-[0.2em] text-xs rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:shadow-[0_0_30px_rgba(52,211,153,0.5)] transition-all duration-500 flex items-center justify-center gap-2 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-[0_0_20px_rgba(52,211,153,0.3)] group relative overflow-hidden"
+                    className="w-full h-12 bg-gradient-to-r from-[#6EE7B7] via-[#34D399] to-[#38BDF8] text-[#030910] font-black uppercase tracking-[0.2em] text-xs rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:shadow-[0_0_30px_rgba(52,211,153,0.5)] transition-all duration-500 flex items-center justify-center gap-2 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-[0_0_20px_rgba(52,211,153,0.3)] group relative overflow-hidden"
                   >
                     {/* Subtle shine effect */}
                     <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 group-hover:animate-shine" />
@@ -591,7 +591,7 @@ export default function LoginPage() {
                 </div>
                 
                 {/* Footer Shield text */}
-                <div className="mt-auto pt-6 border-t border-[#142A38] flex items-center justify-center gap-2 text-slate-500">
+                <div className="mt-auto pt-4 border-t border-[#142A38] flex items-center justify-center gap-2 text-slate-500">
                   <ShieldCheck size={14} />
                   <span className="text-[10px] font-medium tracking-wide">Your data is secure with Weblozy</span>
                 </div>
