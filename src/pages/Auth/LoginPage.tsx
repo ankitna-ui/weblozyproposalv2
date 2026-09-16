@@ -396,7 +396,7 @@ export default function LoginPage() {
 
               {/* Form */}
               <form onSubmit={handleSubmit} className="w-full flex-1 flex flex-col h-full relative">
-                <div className={`space-y-3 transition-all duration-500 ${authMode === 'login' ? 'mt-8' : 'mt-0'}`}>
+                <div className={`space-y-3 transition-all duration-500 ${authMode === 'login' ? 'mt-10' : 'mt-0'}`}>
                   {/* Signup Fields */}
                   <AnimatePresence mode="wait">
                     {authMode === "signup" && (
@@ -441,7 +441,7 @@ export default function LoginPage() {
                   </AnimatePresence>
 
                   {/* Email Field */}
-                  <div className={`space-y-1.5 shrink-0 transition-all duration-500 ${authMode === 'login' ? 'mb-4' : ''}`}>
+                  <div className={`space-y-1.5 shrink-0 transition-all duration-500 ${authMode === 'login' ? 'mb-6' : ''}`}>
                     <label className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Corporate Email</label>
                     <div className="relative group">
                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
@@ -464,7 +464,7 @@ export default function LoginPage() {
 
                   {/* Password Field */}
                   {(authMode === "login" || authMode === "signup") && (
-                    <div className={`space-y-1.5 shrink-0 transition-all duration-500 ${authMode === 'login' ? 'mb-4' : ''}`}>
+                    <div className={`space-y-1.5 shrink-0 transition-all duration-500 ${authMode === 'login' ? 'mb-6' : ''}`}>
                       <div className="flex justify-between items-center">
                         <label className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Access Key</label>
                         {authMode === "login" && (
@@ -533,7 +533,7 @@ export default function LoginPage() {
                   </AnimatePresence>
 
                   {/* Options check & help */}
-                  <div className={`flex justify-between items-center pt-2 pb-1 shrink-0 transition-all duration-500 ${authMode === 'login' ? 'mt-4' : ''}`}>
+                  <div className={`flex justify-between items-center pt-2 pb-1 shrink-0 transition-all duration-500 ${authMode === 'login' ? 'mt-6' : ''}`}>
                     {authMode === 'login' ? (
                       <label className="flex items-center gap-3 cursor-pointer group select-none" onClick={() => setRememberMe(!rememberMe)}>
                         <div className={`relative flex items-center justify-center w-5 h-5 rounded-[6px] border transition-colors ${rememberMe ? 'border-[#34D399] bg-[#0A261C]' : 'border-[#142A38] bg-[#030910] group-hover:border-[#34D399]/50'}`}>
@@ -567,7 +567,7 @@ export default function LoginPage() {
                 </div>
 
                 {/* Submit Button */}
-                <div className={`shrink-0 transition-all duration-500 ${authMode === 'login' ? 'pt-8' : 'pt-4'}`}>
+                <div className={`shrink-0 transition-all duration-500 ${authMode === 'login' ? 'pt-10' : 'pt-4'}`}>
                   <button
                     type="submit"
                     disabled={loading || (authMode === 'signup' && !agreeTerms)}
