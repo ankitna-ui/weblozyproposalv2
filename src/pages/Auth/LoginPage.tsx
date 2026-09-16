@@ -155,9 +155,14 @@ export default function LoginPage() {
               alt="Workspace" 
               className="w-full h-full object-cover opacity-90"
             />
-            {/* Dark gradient overlays for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#030910]/90 via-[#030910]/60 to-transparent z-10" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#030910]/80 via-transparent to-[#030910]/40 z-10" />
+            {/* Dark gradient overlays for text readability and seamless blending */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#030910]/90 via-[#030910]/40 to-transparent z-10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#030910]/90 via-transparent to-[#030910]/40 z-10" />
+            
+            {/* Smooth Edge Blend to right column */}
+            <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#030910] to-transparent z-20" />
+            <div className="absolute inset-y-0 right-0 w-64 bg-gradient-to-l from-[#030910]/80 to-transparent z-20" />
+            <div className="absolute inset-y-0 right-0 w-96 bg-gradient-to-l from-[#030910]/40 to-transparent z-20" />
           </div>
 
           <div className="relative z-20 w-full h-full flex flex-col justify-between">
@@ -259,12 +264,42 @@ export default function LoginPage() {
             {/* Subtle grid pattern */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#142A38_1px,transparent_1px),linear-gradient(to_bottom,#142A38_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20" />
             
+            {/* Abstract Tech Geometric Elements */}
+            {/* Large faint number */}
+            <div className="absolute -bottom-10 left-0 text-[#142A38]/30 text-[240px] font-black leading-none tracking-tighter select-none font-sans">
+              WL
+            </div>
+            
+            {/* Radar / Circle Pattern Top Right */}
+            <div className="absolute -top-32 -right-32 w-[500px] h-[500px] border-[1px] border-[#34D399]/5 rounded-full flex items-center justify-center">
+              <div className="w-[400px] h-[400px] border-[1px] border-[#38BDF8]/5 rounded-full border-dashed animate-[spin_60s_linear_infinite]" />
+              <div className="absolute w-[300px] h-[300px] border-[1px] border-[#34D399]/10 rounded-full" />
+            </div>
+
+            {/* Scattered Plus Signs for Tech Vibe */}
+            <div className="absolute top-[20%] left-[10%] text-[#34D399]/30 text-lg font-mono">+</div>
+            <div className="absolute top-[60%] right-[10%] text-[#38BDF8]/30 text-xl font-mono">+</div>
+            <div className="absolute bottom-[20%] right-[30%] text-[#34D399]/30 text-sm font-mono">+</div>
+            <div className="absolute top-[40%] right-[20%] text-white/10 text-xs font-mono">+</div>
+            
+            {/* Floating Glass Chips */}
+            <motion.div 
+              className="absolute top-[35%] right-[5%] w-16 h-16 rounded-xl border border-white/5 bg-white/[0.02] backdrop-blur-md rotate-12"
+              animate={{ y: [0, -15, 0], rotate: [12, 20, 12] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div 
+              className="absolute bottom-[30%] left-[5%] w-10 h-10 rounded-lg border border-[#34D399]/10 bg-[#34D399]/[0.02] backdrop-blur-md -rotate-12"
+              animate={{ y: [0, 15, 0], rotate: [-12, -25, -12] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            />
+
             {/* Glowing Orbs */}
             <motion.div 
               className="absolute top-[20%] right-[-10%] w-[400px] h-[400px] bg-[#34D399]/10 blur-[120px] rounded-full mix-blend-screen"
               animate={{ 
                 scale: [1, 1.2, 1],
-                opacity: [0.3, 0.6, 0.3],
+                opacity: [0.3, 0.5, 0.3],
                 x: [0, -30, 0]
               }}
               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
@@ -273,7 +308,7 @@ export default function LoginPage() {
               className="absolute bottom-[10%] left-[-10%] w-[350px] h-[350px] bg-[#38BDF8]/10 blur-[100px] rounded-full mix-blend-screen"
               animate={{ 
                 scale: [1, 1.3, 1],
-                opacity: [0.2, 0.5, 0.2],
+                opacity: [0.2, 0.4, 0.2],
                 y: [0, -40, 0]
               }}
               transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
