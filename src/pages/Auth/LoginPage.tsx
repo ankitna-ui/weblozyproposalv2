@@ -545,7 +545,7 @@ export default function LoginPage() {
                           <input type="checkbox" className="absolute opacity-0 w-full h-full cursor-pointer" defaultChecked />
                         </div>
                         <span className="text-[10px] text-white font-black uppercase tracking-widest">
-                          I agree to the <span className="text-[#34D399] hover:underline">Terms</span>
+                          I agree to the <button type="button" onClick={() => setIsTermsOpen(true)} className="text-[#34D399] hover:underline uppercase">Terms</button>
                         </span>
                       </label>
                     ) : (
@@ -594,6 +594,9 @@ export default function LoginPage() {
           </motion.div>
         </div>
       </div>
+      
+      {/* Terms Modal */}
+      <TermsModal isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
     </AuthLayout>
   );
 }
