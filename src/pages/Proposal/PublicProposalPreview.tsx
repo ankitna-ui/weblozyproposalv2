@@ -221,18 +221,20 @@ export default function PublicProposalPreview() {
             body { display: none !important; }
           }
           .watermark-overlay {
-            position: absolute;
+            position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background-image: url('${bannerLogo}');
             background-repeat: space;
             background-size: 300px;
-            opacity: 0.05;
+            opacity: 0.03;
             pointer-events: none;
-            z-index: 50;
+            z-index: 0;
             transform: rotate(-30deg) scale(1.5);
+            mix-blend-mode: multiply;
           }
         `}
       </style>
+      <div className="watermark-overlay"></div>
       <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-slate-100 no-print shadow-sm h-20 w-full">
         <div className="max-w-[1100px] mx-auto px-4 sm:px-6 h-full flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -257,17 +259,10 @@ export default function PublicProposalPreview() {
         </div>
       </header>
 
-      <div className="max-w-[1100px] mx-auto px-4 py-8 lg:py-12 flex justify-center relative">
+      <div className="max-w-[1100px] mx-auto px-4 py-8 lg:py-12 flex justify-center relative z-10">
         <div className="w-full max-w-[794px]" id="proposal-content">
-          <div className="relative bg-white shadow-2xl overflow-hidden rounded-xl">
-            {/* Watermark */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none z-50">
-              <div className="watermark-overlay w-[200%] h-[200%] -ml-[50%] -mt-[50%]"></div>
-            </div>
-            
-            <div className="relative z-10 pointer-events-none select-none">
-              <ProposalPDF proposal={proposal} isExporting={false} />
-            </div>
+          <div className="relative pointer-events-none select-none">
+            <ProposalPDF proposal={proposal} isExporting={false} />
           </div>
         </div>
       </div>
