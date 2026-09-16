@@ -4,15 +4,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
 
 export default function QuickCalculator() {
-  const location = useLocation();
-  const isHidden = location.pathname === "/login" || location.pathname.startsWith("/preview");
-
   const [isOpen, setIsOpen] = useState(false);
   const [moduleCount, setModuleCount] = useState<number | "">("");
   const [modulePrice, setModulePrice] = useState<number | "">(24000);
   const [discountPct, setDiscountPct] = useState<number | "">(15);
-
-  if (isHidden) return null;
 
   const basePrice = (Number(moduleCount) || 0) * (Number(modulePrice) || 0);
   const discountAmount = basePrice * ((Number(discountPct) || 0) / 100);
@@ -23,24 +18,27 @@ export default function QuickCalculator() {
   };
 
   return (
-    <>
-      {/* Floating Button */}
+    <div className="relative">
       <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-24 right-8 z-[100] group flex items-center justify-center w-12 h-12 bg-white dark:bg-[#0B0E14]/80 backdrop-blur-xl border border-slate-300 dark:border-white/10 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-primary/40 transition-all duration-300 no-print"
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          setIsOpen(!isOpen);
+        }}
+        className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-md transition-colors"
         title="Quick Calculator"
       >
-        <Calculator className="w-5 h-5 text-slate-700 dark:text-gray-300 group-hover:text-primary transition-colors" />
+        <Calculator className="w-4 h-4" />
+        <span className="text-[10px] font-bold uppercase tracking-wider">Module Calc</span>
       </button>
 
-      {/* Modal Popup */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-40 right-8 z-[101] w-80 bg-white dark:bg-[#11141A] rounded-2xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden no-print"
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            className="absolute top-full right-0 mt-2 z-[101] w-80 bg-white dark:bg-[#11141A] rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.2)] border border-slate-200 dark:border-white/10 overflow-hidden no-print"
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/5">
               <div className="flex items-center gap-2">
@@ -102,6 +100,6 @@ export default function QuickCalculator() {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }

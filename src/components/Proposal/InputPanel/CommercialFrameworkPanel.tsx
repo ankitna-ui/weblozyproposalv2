@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { CreditCard, Percent, ShieldCheck, Plus, Trash2, Calculator, Server, Landmark, Sparkles, RefreshCw } from "lucide-react";
 import { InputPanelProps, LabelPremium, SectionHeader, ModernInput, ModernTextArea, InputGroupCard } from "./shared";
+import QuickCalculator from "@/components/ui/QuickCalculator";
 import { toast } from "react-toastify";
 
 export default function CommercialFrameworkPanel({ proposal, currentStep, updatePricing }: InputPanelProps) {
@@ -179,7 +180,10 @@ export default function CommercialFrameworkPanel({ proposal, currentStep, update
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <LabelPremium>Project Valuation (Base)</LabelPremium>
+            <div className="flex justify-between items-center">
+              <LabelPremium>Project Valuation (Base)</LabelPremium>
+              <QuickCalculator />
+            </div>
             <div className="relative">
                <ModernInput 
                   type="number" 
