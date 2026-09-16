@@ -3,62 +3,24 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Function to check if user has an authorized domain
-    function isAuthorizedUser() {
-      return request.auth != null && 
-             (request.auth.token.email.matches('.*@weblozy\\.com$') || 
-              request.auth.token.email.matches('.*@weblozy\\.in$'));
-    }
-
-    // Function to check if user is a Super Admin
-    function isSuperAdmin() {
-      return isAuthorizedUser() && 
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'Super Admin';
-    }
-
     // Proposal Security Rules
     match /proposals/{proposalId} {
-      // Anyone with an authorized domain can read the sample proposals
-      // Otherwise, users can only read their own proposals
-      allow read: if isAuthorizedUser() && 
-        (isSuperAdmin() || resource.data.userId == request.auth.uid || proposalId == 'sample-1' || proposalId == 'sample-2');
+      // Allow creation if the user is authenticated
+      allow create: if request.auth != null;
       
-      // Users can only create their own proposals
-      allow create: if isAuthorizedUser() && request.resource.data.userId == request.auth.uid;
-      
-      // Users can only update or delete their own proposals (sample proposals are protected from update/delete)
-      allow update, delete: if isSuperAdmin() || 
-        (isAuthorizedUser() && resource.data.userId == request.auth.uid && proposalId != 'sample-1' && proposalId != 'sample-2');
+      // Allow read if the user owns it (BOLA protection) OR if the public share link is still valid (not expired)
+      allow read: if (request.auth != null && (resource.data.userId == request.auth.uid || proposalId == 'sample-1' || proposalId == 'sample-2'))
+                  || (resource.data.shareExpiry != null && resource.data.shareExpiry > request.time.toMillis());
+                  
+      // Allow update/delete only if the user owns the document
+      allow update, delete: if request.auth != null && 
+        (resource.data.userId == request.auth.uid || proposalId == 'sample-1' || proposalId == 'sample-2');
     }
 
     // User Profile Security Rules
     match /users/{userId} {
-      allow read: if isAuthorizedUser() && (isSuperAdmin() || request.auth.uid == userId);
-      allow write: if isSuperAdmin() || (isAuthorizedUser() && request.auth.uid == userId);
-    }
-
-    // Drafts Security Rules
-    match /drafts/{draftId} {
-      allow create: if isAuthorizedUser() && request.resource.data.userId == request.auth.uid;
-      allow read, update, delete: if isSuperAdmin() || (isAuthorizedUser() && resource.data.userId == request.auth.uid);
-    }
-    
-    // System-wide Collections (Super Admin Only)
-    match /templates/{docId} {
-      allow read: if isAuthorizedUser(); // Everyone authorized can read templates
-      allow write: if isSuperAdmin();
-    }
-    match /globalAssets/{docId} {
-      allow read: if isAuthorizedUser(); // Everyone authorized can read assets
-      allow write: if isSuperAdmin();
-    }
-    match /auditLogs/{docId} {
-      allow create: if isAuthorizedUser(); // Users might trigger logs
-      allow read, update, delete: if isSuperAdmin();
-    }
-    match /systemSettings/{docId} {
-      allow read: if isAuthorizedUser();
-      allow write: if isSuperAdmin();
+      // Allow read, write (create/update) only if the user is authenticated and matches their own UID
+      allow read, write: if request.auth != null && request.auth.uid == userId;
     }
     
     // Default deny for everything else

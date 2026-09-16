@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getProposal } from "@/lib/firestore";
-import {
-  FileText,
-  Clock,
-  ShieldAlert
+import { 
+  FileText, Clock, ShieldAlert, FileWarning
 } from "lucide-react";
 import { Proposal } from "@/types/proposal";
 import ProposalPDF from "@/components/Proposal/pages2";
+import bannerLogo from "@/assets/banner_logo.png";
+import { db } from "@/lib/firebase";
+import { doc, onSnapshot } from "firebase/firestore";
 
 export default function PublicProposalPreview() {
   const { id } = useParams<{ id: string }>();
@@ -19,31 +20,38 @@ export default function PublicProposalPreview() {
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const fetchProposal = async () => {
-      if (!id) return;
-      try {
-        setIsLoading(true);
-        const data = await getProposal(id);
-        if (data) {
-          // Check expiry
-          if (data.shareExpiry && Date.now() > data.shareExpiry) {
-            setError("expired");
-          } else if (!data.shareExpiry) {
-            setError("invalid");
-          } else {
-            setProposal(data as Proposal);
-          }
+    if (!id) return;
+    
+    setIsLoading(true);
+    const docRef = doc(db, "proposals", id);
+    
+    const unsubscribe = onSnapshot(docRef, (docSnap) => {
+      setIsLoading(false);
+      if (docSnap.exists()) {
+        const data = { id: docSnap.id, ...docSnap.data() } as Proposal;
+        
+        // Real-time expiry check
+        if (data.shareExpiry && Date.now() > data.shareExpiry) {
+          setError("expired");
+          setProposal(null);
+        } else if (!data.shareExpiry) {
+          setError("invalid");
+          setProposal(null);
         } else {
-          setError("not_found");
+          setProposal(data);
+          setError(null);
         }
-      } catch (err) {
-        console.error("Error fetching proposal:", err);
-        setError("error");
-      } finally {
-        setIsLoading(false);
+      } else {
+        setError("not_found");
+        setProposal(null);
       }
-    };
-    fetchProposal();
+    }, (err) => {
+      console.error("Error fetching proposal:", err);
+      setError("error");
+      setIsLoading(false);
+    });
+
+    return () => unsubscribe();
   }, [id]);
 
   useEffect(() => {
@@ -184,19 +192,34 @@ export default function PublicProposalPreview() {
     <div className="h-[100dvh] overflow-y-auto bg-[#F8FAFC]" ref={contentRef} style={{
       backgroundImage: 'radial-gradient(#e2e8f0 1.5px, transparent 1.5px)',
       backgroundSize: '24px 24px'
-    }}>
+    }} onContextMenu={(e) => e.preventDefault()}>
+      <style>
+        {`
+          @media print {
+            body { display: none !important; }
+          }
+          .watermark-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('${bannerLogo}');
+            background-repeat: space;
+            background-size: 300px;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 50;
+            transform: rotate(-30deg) scale(1.5);
+          }
+        `}
+      </style>
       <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-slate-100 no-print shadow-sm h-20 w-full">
         <div className="max-w-[1100px] mx-auto px-4 sm:px-6 h-full flex items-center justify-between">
           <div className="flex items-center gap-4">
-            {/* Minimal Logo space if needed, otherwise empty to balance flex */}
-            <div className="w-10"></div>
+            <div className="w-20 sm:w-24"></div>
           </div>
 
-          <div className="text-center">
+          <div className="text-center flex flex-col items-center">
+            <img src={bannerLogo} alt="Weblozy Logo" className="h-6 sm:h-8 mb-1 object-contain" />
             <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-primary bg-primary/10 px-3 py-1 rounded-full mb-1 inline-block">Secure Preview</span>
-            <h2 className="text-sm sm:text-base font-black text-[#0B0E14] uppercase tracking-wider truncate max-w-[200px] sm:max-w-[400px]">
-              {proposal.client?.proposalTitle || "Strategic Roadmapping"}
-            </h2>
           </div>
 
           <div className="flex items-center">
@@ -212,43 +235,17 @@ export default function PublicProposalPreview() {
         </div>
       </header>
 
-      <div className="max-w-[1100px] mx-auto px-4 py-8 lg:py-12 flex flex-col lg:flex-row gap-8 items-start justify-start relative">
-        <div className="hidden lg:block w-[260px] shrink-0 sticky top-[112px] z-20 space-y-4 no-print">
-          <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-[0_4px_24px_rgba(0,0,0,0.02)] space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-100/50 pb-3">
-              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0B0E14]">Document Outline</h3>
-              <span className="text-[9px] font-black text-primary bg-primary/10 px-2.5 py-0.5 rounded-full uppercase">
-                {visiblePages.length} Pages
-              </span>
+      <div className="max-w-[1100px] mx-auto px-4 py-8 lg:py-12 flex justify-center relative">
+        <div className="w-full max-w-[794px]" id="proposal-content">
+          <div className="relative bg-white shadow-2xl overflow-hidden rounded-xl">
+            {/* Watermark */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none z-50">
+              <div className="watermark-overlay w-[200%] h-[200%] -ml-[50%] -mt-[50%]"></div>
             </div>
-            <div className="space-y-1 max-h-[60vh] overflow-y-auto no-scrollbar pr-1">
-              {visiblePages.map((page) => {
-                const PageIcon = pageIconMap[page.id] || FileText;
-                const isCurrent = activeSection === page.id;
-                return (
-                  <button
-                    key={page.id}
-                    onClick={() => scrollToPage(page.id)}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-300 ${
-                      isCurrent
-                        ? "bg-primary/5 text-primary border border-primary/20 shadow-sm"
-                        : "text-slate-500 hover:bg-slate-50 border border-transparent hover:border-slate-200"
-                    }`}
-                  >
-                    <PageIcon className={`w-4 h-4 transition-colors ${isCurrent ? 'text-primary' : 'text-slate-400'}`} />
-                    <span className={`text-[11px] uppercase tracking-wider transition-all ${isCurrent ? 'font-bold' : 'font-semibold'}`}>
-                      {page.label}
-                    </span>
-                  </button>
-                );
-              })}
+            
+            <div className="relative z-10 pointer-events-none select-none">
+              <ProposalPDF proposal={proposal} isExporting={false} />
             </div>
-          </div>
-        </div>
-
-        <div className="flex-1 w-full min-w-0" id="proposal-content">
-          <div className="max-w-[794px] mx-auto bg-white shadow-2xl overflow-hidden rounded-xl">
-            <ProposalPDF proposal={proposal} isExporting={false} />
           </div>
         </div>
       </div>

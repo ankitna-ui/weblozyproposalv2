@@ -11,7 +11,8 @@ export default function GlobalHomeButton() {
     location.pathname === "/" || 
     location.pathname === "/dashboard" || 
     location.pathname === "/login" || 
-    location.pathname.startsWith("/preview");
+    location.pathname.startsWith("/preview") ||
+    location.pathname.startsWith("/share");
 
   if (isHidden) return null;
 
