@@ -560,36 +560,34 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                {/* Submit Button & Footer attached to bottom */}
-                <div className="shrink-0 mt-auto">
-                  <div className="pt-2">
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="w-full h-14 bg-gradient-to-r from-[#6EE7B7] via-[#34D399] to-[#38BDF8] text-[#030910] font-black uppercase tracking-[0.2em] text-xs rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:shadow-[0_0_30px_rgba(52,211,153,0.5)] transition-all duration-500 flex items-center justify-center gap-2 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden"
-                    >
-                      {/* Subtle shine effect */}
-                      <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 group-hover:animate-shine" />
-                      
-                      {loading ? (
-                        <>
-                          <div className="w-4 h-4 border-2 border-[#030910]/20 border-t-[#030910] rounded-full animate-spin relative z-10" />
-                          <span className="relative z-10">Authenticating...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span className="relative z-10">{authMode === "login" ? "SIGN IN" : authMode === "signup" ? "CREATE ACCOUNT" : "SEND RESET LINK"}</span>
-                          <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform relative z-10" />
-                        </>
-                      )}
-                    </button>
-                  </div>
-                  
-                  {/* Footer Shield text */}
-                  <div className="pt-4 mt-4 border-t border-[#142A38] flex items-center justify-center gap-2 text-slate-500">
-                    <ShieldCheck size={14} />
-                    <span className="text-[10px] font-medium tracking-wide">Your data is secure with Weblozy</span>
-                  </div>
+                {/* Submit Button */}
+                <div className="shrink-0 pt-4">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full h-14 bg-gradient-to-r from-[#6EE7B7] via-[#34D399] to-[#38BDF8] text-[#030910] font-black uppercase tracking-[0.2em] text-xs rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:shadow-[0_0_30px_rgba(52,211,153,0.5)] transition-all duration-500 flex items-center justify-center gap-2 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden"
+                  >
+                    {/* Subtle shine effect */}
+                    <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 group-hover:animate-shine" />
+                    
+                    {loading ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-[#030910]/20 border-t-[#030910] rounded-full animate-spin relative z-10" />
+                        <span className="relative z-10">Authenticating...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="relative z-10">{authMode === "login" ? "SIGN IN" : authMode === "signup" ? "CREATE ACCOUNT" : "SEND RESET LINK"}</span>
+                        <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform relative z-10" />
+                      </>
+                    )}
+                  </button>
+                </div>
+                
+                {/* Footer Shield text */}
+                <div className="mt-auto pt-6 border-t border-[#142A38] flex items-center justify-center gap-2 text-slate-500">
+                  <ShieldCheck size={14} />
+                  <span className="text-[10px] font-medium tracking-wide">Your data is secure with Weblozy</span>
                 </div>
               </form>
             </div>
