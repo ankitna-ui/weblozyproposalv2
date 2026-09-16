@@ -160,6 +160,22 @@ export async function updateProposalStatus(id: string, newStatus: string) {
   }
 }
 
+export async function generateShareLink(id: string) {
+  try {
+    const docRef = doc(db, PROPOSALS_COLLECTION, id);
+    // 10 minutes from now
+    const shareExpiry = Date.now() + 10 * 60 * 1000;
+    await updateDoc(docRef, {
+      shareExpiry,
+      updatedAt: Date.now()
+    });
+    return `${window.location.origin}/share/${id}`;
+  } catch (error) {
+    console.error("Error generating share link:", error);
+    throw error;
+  }
+}
+
 export async function getProposal(id: string) {
   try {
     const docRef = doc(db, PROPOSALS_COLLECTION, id);

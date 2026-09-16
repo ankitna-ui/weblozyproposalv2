@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { getProposal } from "@/lib/firestore";
+import { getProposal, generateShareLink } from "@/lib/firestore";
+import { toast } from "react-toastify";
 import {
   Download,
   Printer,
@@ -20,7 +21,8 @@ import {
   FileText,
   ArrowLeft,
   ArrowRight,
-  Home
+  Home,
+  Share2
 } from "lucide-react";
 import { Proposal } from "@/types/proposal";
 import ProposalPDF from "@/components/Proposal/pages2";
@@ -49,6 +51,7 @@ export default function ProposalPreview() {
   const [activeSection, setActiveSection] = useState<string>("cover");
   const [isExporting, setIsExporting] = useState(false);
   const [exportProgress, setExportProgress] = useState(0);
+  const [isGeneratingLink, setIsGeneratingLink] = useState(false);
 
   const [proposal, setProposal] = useState<Proposal | null>(
     (location.state?.proposal as Proposal) || null
@@ -579,6 +582,21 @@ export default function ProposalPreview() {
     exportPDF();
   };
 
+  const handleShareLink = async () => {
+    if (!proposal?.id) return;
+    try {
+      setIsGeneratingLink(true);
+      const shareUrl = await generateShareLink(proposal.id);
+      await navigator.clipboard.writeText(shareUrl);
+      toast.success("✨ Secure 10-minute link copied to clipboard!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to generate link");
+    } finally {
+      setIsGeneratingLink(false);
+    }
+  };
+
   return (
     <div className="h-[100dvh] overflow-y-auto bg-[#F8FAFC]" style={{
       backgroundImage: 'radial-gradient(#e2e8f0 1.5px, transparent 1.5px)',
@@ -605,6 +623,14 @@ export default function ProposalPreview() {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            <Button 
+              onClick={handleShareLink} 
+              disabled={isGeneratingLink}
+              className="h-10 px-4 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.1em] transition-all flex items-center gap-2"
+            >
+              {isGeneratingLink ? <Loader2 className="w-4 h-4 animate-spin" /> : <Share2 className="w-4 h-4" />}
+              <span className="hidden sm:inline">Share (10m)</span>
+            </Button>
             <Button onClick={exportPDF} className="h-10 px-4 sm:px-5 rounded-xl bg-primary hover:bg-[#88B540] text-white shadow-lg shadow-primary/20 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.15em] transition-all">
               <Download size={15} className="mr-1 sm:mr-2" />
               <span className="hidden sm:inline">Download Master PDF</span>

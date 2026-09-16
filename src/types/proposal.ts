@@ -185,4 +185,6 @@ export interface Proposal {
   creatorEmployeeId?: string;
   pageConfig?: PageConfig[];
   isDownloaded?: boolean;
+  isDeleted?: boolean;
+  shareExpiry?: number;
 }

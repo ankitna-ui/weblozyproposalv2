@@ -17,6 +17,7 @@ const CreateProposal = lazy(() => import('@/pages/Proposal/CreateProposal'));
 const EditProposal = lazy(() => import('@/pages/Proposal/EditProposal'));
 const SavedProposals = lazy(() => import('@/pages/Proposal/SavedProposals'));
 const ProposalPreview = lazy(() => import('@/pages/Proposal/ProposalPreview'));
+const PublicProposalPreview = lazy(() => import('@/pages/Proposal/PublicProposalPreview'));
 const UserProfile = lazy(() => import('@/pages/Users/UserProfile'));
 
 // New Strategic Pages
@@ -115,6 +116,10 @@ function App() {
           <Route 
             path="/preview/:id" 
             element={user ? <ProposalPreview /> : <Navigate to="/login" />} 
+          />
+          <Route 
+            path="/share/:id" 
+            element={<PublicProposalPreview />} 
           />
 
           <Route 

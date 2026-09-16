@@ -34,12 +34,23 @@ export default function QuickCalculator() {
 
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            className="absolute top-full right-0 mt-2 z-[101] w-80 bg-white dark:bg-[#11141A] rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.2)] border border-slate-200 dark:border-white/10 overflow-hidden no-print"
-          >
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            
+            {/* Modal Content */}
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              className="relative z-10 w-full max-w-sm bg-white dark:bg-[#11141A] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.5)] border border-slate-200 dark:border-white/10 overflow-hidden no-print"
+            >
             <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/5">
               <div className="flex items-center gap-2">
                 <Calculator className="w-4 h-4 text-primary" />
@@ -98,6 +109,7 @@ export default function QuickCalculator() {
               </div>
             </div>
           </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </div>
