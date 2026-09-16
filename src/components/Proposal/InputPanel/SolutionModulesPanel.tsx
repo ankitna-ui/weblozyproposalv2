@@ -4,7 +4,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Wand2, X, Loader2, Trash2, Sparkles, CheckCircle, Plus, Clipboard, ShieldAlert, ClipboardList, Zap, Layers, Rocket, Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTokens } from "@/hooks/useTokens";
-import TokenAnalyticsBar from "@/components/Proposal/TokenAnalyticsBar";
 import { generateModuleFeatures, extractModulesFromContext } from "@/lib/gemini";
 import { Module } from "@/types/proposal";
 import { InputPanelProps, LabelPremium, SectionHeader, ModernInput, ModernTextArea, InputGroupCard } from "./shared";
@@ -436,37 +435,13 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
 
   return (
     <div className="space-y-8 pb-10">
-      <TokenAnalyticsBar />
       <SectionHeader 
         title="Functional Blueprint" 
-        subtitle="Engineer the core system modules via Neural AI or precision manual definition" 
+        subtitle="Engineer the core system modules via smart paste or precision manual definition" 
         stepNumber={currentStep + 1} 
       />
       
-      {/* AI Generator - Premium Glassmorphism Card */}
-      <InputGroupCard
-        icon={<Sparkles className="w-[18px] h-[18px]" />}
-        title="Neural Module Protocol"
-        description="Synthesize system domain features using AI"
-        accentColor="primary"
-      >
-        <div className="flex gap-3 mt-2">
-          <ModernInput 
-            className="flex-1 h-11 px-3.5 text-xs font-semibold bg-white dark:bg-[#131722] border-slate-200 dark:border-white/10 rounded-xl" 
-            placeholder="System Domain (e.g. Smart Logistics Engine)" 
-            value={singleModuleName}
-            onChange={(e) => setSingleModuleName(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleAddSingleModule()}
-          />
-          <Button 
-            onClick={handleAddSingleModule} 
-            disabled={isAiLoading} 
-            className="h-11 bg-slate-100 dark:bg-slate-800 hover:bg-[#99CB48] dark:hover:bg-[#99CB48] text-slate-800 dark:text-white hover:text-[#0B0E14] dark:hover:text-[#0B0E14] rounded-xl px-5 text-xs font-bold tracking-wider shadow-sm transition-all hover:scale-102 active:scale-98 shrink-0 border border-slate-200 dark:border-white/5"
-          >
-            {isAiLoading ? <Loader2 size={14} className="animate-spin" /> : "Generate"}
-          </Button>
-        </div>
-      </InputGroupCard>
+      {/* AI Module Extraction and Tokens removed as requested */}
 
       <AnimatePresence>
         {previewModule && (
@@ -597,29 +572,7 @@ export default function SolutionModulesPanel({ proposal, currentStep, updateSolu
         )}
       </AnimatePresence>
 
-      {/* Bulk Extraction Panel */}
-      <InputGroupCard
-        icon={<Wand2 className="w-[18px] h-[18px]" />}
-        title="Bulk Tactical Extraction"
-        description="Extract multiple modules and features from raw requirements text"
-        accentColor="orange"
-      >
-        <ModernTextArea 
-          className="min-h-[100px] p-3.5 text-xs font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-[#131722] border border-slate-200 dark:border-white/10 rounded-xl focus:bg-white dark:bg-[#181e29]" 
-          placeholder="Paste entire system requirements or legacy audit notes here for neural parsing..." 
-          value={bulkContext} 
-          onChange={(e) => setBulkContext(e.target.value)} 
-        />
-        <Button 
-          onClick={handleBulkExtract} 
-          disabled={isAiLoading || !bulkContext} 
-          className="w-full h-11 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-white hover:bg-[#99CB48] dark:hover:bg-[#99CB48] hover:text-[#0B0E14] dark:hover:text-[#0B0E14] rounded-xl text-xs font-bold tracking-wider transition-all shadow-sm flex items-center justify-center gap-2"
-        >
-          {isAiLoading ? <Loader2 size={14} className="animate-spin" /> : "Extract All Protocol Nodes"}
-        </Button>
-      </InputGroupCard>
-
-      {/* Smart Bulk Import Card */}
+      {/* Bulk Extraction Panel Removed */}      {/* Smart Bulk Import Card */}
       <InputGroupCard
         icon={<ClipboardList className="w-[18px] h-[18px]" />}
         title="Smart Paste: Modules & Features"
