@@ -9,9 +9,7 @@ interface AuthLayoutProps {
 export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
   return (
     <div className={cn(
-      "min-h-screen w-full flex items-center justify-center p-4 transition-colors duration-500",
-      "bg-gradient-to-br from-[#F3F6FA] via-[#ECF1F7] to-[#E2E8F4]",
-      "dark:from-[#04060A] dark:via-[#090C12] dark:to-[#0E131F]"
+      "min-h-screen w-full flex bg-white dark:bg-[#0B0E14] transition-colors duration-500 overflow-hidden"
     )}>
       {children}
     </div>
