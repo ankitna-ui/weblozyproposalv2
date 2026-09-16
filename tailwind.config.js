@@ -49,6 +49,14 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      keyframes: {
+        shine: {
+          '100%': { left: '125%' },
+        },
+      },
+      animation: {
+        shine: 'shine 2s ease-in-out infinite',
+      },
     },
   },
   plugins: [],

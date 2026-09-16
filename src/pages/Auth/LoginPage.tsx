@@ -128,160 +128,184 @@ export default function LoginPage() {
 
   return (
     <AuthLayout>
-      {/* CSS FIX FOR BROWSER AUTOFILL BACKGROUND */}
       <style dangerouslySetInnerHTML={{__html: `
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap');
+        
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
         input:-webkit-autofill:focus, 
         input:-webkit-autofill:active {
             transition: background-color 5000s ease-in-out 0s;
-            -webkit-text-fill-color: currentColor !important;
+            -webkit-text-fill-color: white !important;
+        }
+
+        .handwritten-text {
+          font-family: 'Caveat', cursive;
         }
       `}} />
       
-      {/* FULL SCREEN BACKGROUND */}
-      <div className="w-full min-h-[100dvh] relative bg-[#04060A] overflow-hidden flex items-center justify-center p-4 sm:p-8">
+      <div className="w-full flex min-h-[100dvh] overflow-hidden bg-[#030910]">
         
-        {/* Background Ambient Effects */}
-        <div className="absolute inset-0 pointer-events-none z-0">
-          <div className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-[#99CB48]/20 blur-[150px] rounded-full mix-blend-screen" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#82b339]/15 blur-[120px] rounded-full mix-blend-screen" />
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-40 mix-blend-overlay"></div>
-          
-          {/* Floating 3D Illustration drifting in the background */}
-          <div className="absolute top-1/2 -translate-y-1/2 left-[-10%] lg:left-[5%] w-[80%] lg:w-[45%] flex items-center justify-center opacity-30 lg:opacity-50">
-            <motion.img 
-              src={roiIllustration} 
-              alt="Strategic Workstation" 
-              className="w-full max-w-none drop-shadow-[0_0_80px_rgba(153,203,72,0.3)]"
-              animate={{ 
-                y: [-30, 30, -30],
-                rotate: [-3, 3, -3]
-              }}
-              transition={{ 
-                duration: 10, 
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
+        {/* LEFT COLUMN: VISUAL (60%) */}
+        <div className="hidden lg:flex w-[55%] relative flex-col justify-between p-12 overflow-hidden bg-[#0A1118]">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <img 
+              src={new URL('@/assets/login_bg.png', import.meta.url).href} 
+              alt="Workspace" 
+              className="w-full h-full object-cover opacity-90"
             />
+            {/* Dark gradient overlays for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#030910]/90 via-[#030910]/60 to-transparent z-10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#030910]/80 via-transparent to-[#030910]/40 z-10" />
           </div>
-        </div>
 
-        {/* FLOATING GLASS CONTAINER */}
-        <div className="relative z-10 w-full max-w-[1150px] min-h-[750px] rounded-[2.5rem] lg:rounded-[3rem] overflow-hidden flex flex-col lg:flex-row shadow-[0_0_80px_rgba(0,0,0,0.8)] border border-white/10 backdrop-blur-3xl bg-[#0B0E14]/60">
-          
-          {/* LEFT COLUMN: BRANDING */}
-          <div className="w-full lg:w-1/2 relative flex-col justify-between p-8 sm:p-14 lg:p-16 border-b lg:border-b-0 lg:border-r border-white/10 hidden lg:flex">
-            <div className="relative z-10">
-              <img src={banner2Logo} alt="Weblozy Logo" className="h-7 object-contain mb-16" />
+          <div className="relative z-20 w-full h-full flex flex-col justify-between">
+            {/* Top Area: Logo & Hero Text */}
+            <div>
+              <img src={banner2Logo} alt="Weblozy Logo" className="h-8 object-contain mb-16" />
               
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 shadow-sm mb-6">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#99CB48] opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#99CB48]"></span>
-                  </span>
-                  <span className="text-[10px] font-black tracking-[0.2em] text-[#99CB48] uppercase">System Online</span>
+                <div className="text-[10px] font-bold tracking-[0.2em] text-slate-300 uppercase mb-4">
+                  Welcome to Weblozy
                 </div>
                 
-                <h1 className="text-4xl lg:text-5xl xl:text-6xl font-black tracking-tight leading-[1.05] text-white mb-6 drop-shadow-md">
+                <h1 className="text-5xl xl:text-6xl font-black tracking-tight leading-[1.05] text-white mb-6">
                   Strategic<br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#99CB48] to-[#A9DF50]">Workstation.</span>
+                  <span className="text-[#34D399]">Workstation.</span>
                 </h1>
                 
-                <p className="text-slate-300 text-sm leading-relaxed max-w-sm mb-12 drop-shadow">
+                <p className="text-slate-300 text-sm leading-relaxed max-w-md mb-12">
                   Secure corporate environment for generating, analyzing, and deploying strategic business proposals.
                 </p>
               </motion.div>
 
+              {/* Features Row */}
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="space-y-4 max-w-sm"
+                className="flex items-start gap-8"
               >
-                <div className="flex items-center gap-4 p-3 rounded-2xl bg-black/20 border border-white/5 hover:bg-white/5 transition-colors">
-                  <div className="w-10 h-10 rounded-xl bg-[#99CB48]/10 border border-[#99CB48]/20 flex items-center justify-center shrink-0">
-                    <ShieldCheck size={18} className="text-[#99CB48]" />
+                {/* Feature 1 */}
+                <div className="flex flex-col gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-[#030910]/80 backdrop-blur-sm border border-[#34D399]/40 shadow-[0_0_15px_rgba(52,211,153,0.15)] flex items-center justify-center">
+                    <ShieldCheck size={20} className="text-[#34D399]" />
                   </div>
                   <div>
-                    <h3 className="text-white text-xs font-black uppercase tracking-wider mb-0.5">Secure Core</h3>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Enterprise-grade protection.</p>
+                    <h3 className="text-white text-[10px] font-black uppercase tracking-wider mb-1">Secure Core</h3>
+                    <p className="text-[11px] font-medium text-slate-400 leading-tight">Enterprise-grade<br/>protection.</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 p-3 rounded-2xl bg-black/20 border border-white/5 hover:bg-white/5 transition-colors">
-                  <div className="w-10 h-10 rounded-xl bg-[#99CB48]/10 border border-[#99CB48]/20 flex items-center justify-center shrink-0">
-                    <Zap size={18} className="text-[#99CB48]" />
+                {/* Feature 2 */}
+                <div className="flex flex-col gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-[#030910]/60 backdrop-blur-sm border border-white/10 flex items-center justify-center">
+                    <Zap size={20} className="text-slate-300" />
                   </div>
                   <div>
-                    <h3 className="text-white text-xs font-black uppercase tracking-wider mb-0.5">Automated</h3>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Intelligent deployment.</p>
+                    <h3 className="text-white text-[10px] font-black uppercase tracking-wider mb-1">Automated</h3>
+                    <p className="text-[11px] font-medium text-slate-400 leading-tight">Intelligent<br/>deployment.</p>
+                  </div>
+                </div>
+                {/* Feature 3 */}
+                <div className="flex flex-col gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-[#030910]/60 backdrop-blur-sm border border-white/10 flex items-center justify-center">
+                    <BarChart2 size={20} className="text-[#A78BFA]" />
+                  </div>
+                  <div>
+                    <h3 className="text-white text-[10px] font-black uppercase tracking-wider mb-1">Data Driven</h3>
+                    <p className="text-[11px] font-medium text-slate-400 leading-tight">Smarter<br/>strategies.</p>
                   </div>
                 </div>
               </motion.div>
             </div>
 
-            <div className="relative z-10 flex items-center justify-between border-t border-white/10 pt-6 mt-8">
-              <div className="flex items-center gap-2">
-                <Lock className="w-4 h-4 text-[#99CB48]" />
-                <span className="text-[9px] font-black uppercase tracking-[0.25em] text-slate-500">AES-256 ENCRYPTED</span>
+            {/* Bottom Area */}
+            <div className="w-full flex items-end justify-between">
+              <div className="flex flex-col gap-6">
+                <div className="flex items-center gap-2 text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase">
+                  <span>IDEAS</span>
+                  <ChevronRight size={12} className="text-slate-600" />
+                  <span>SOLUTIONS</span>
+                  <ChevronRight size={12} className="text-slate-600" />
+                  <span>GROWTH</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Lock className="w-4 h-4 text-[#34D399]" />
+                  <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">AES-256 ENCRYPTED</span>
+                </div>
               </div>
-              <div className="text-right">
-                <span className="block text-[8px] font-black text-slate-500 uppercase tracking-widest mb-0.5">System Time</span>
-                <span className="block text-[10px] font-black text-[#99CB48] tracking-widest">{time || "00:00:00 PM"}</span>
+
+              {/* Handwritten text */}
+              <div className="relative mr-8 rotate-[-5deg]">
+                <div className="handwritten-text text-3xl text-white font-semibold leading-tight">
+                  Better Tech,<br/>Better Business
+                </div>
+                <div className="absolute -bottom-2 right-0 w-[120%] h-1 bg-[#34D399] rounded-full opacity-80 shadow-[0_0_10px_rgba(52,211,153,0.5)] transform -rotate-2" />
               </div>
             </div>
           </div>
+        </div>
 
-          {/* RIGHT COLUMN: FORM */}
-          <div className="w-full lg:w-1/2 flex items-center justify-center p-8 sm:p-14 lg:p-16 relative bg-white/5 lg:bg-transparent overflow-y-auto">
-            {/* Mobile Logo */}
-            <div className="absolute top-8 left-8 lg:hidden">
-              <img src={banner2Logo} alt="Weblozy Logo" className="h-6 object-contain" />
-            </div>
+        {/* RIGHT COLUMN: LOGIN FORM (45%) */}
+        <div className="w-full lg:w-[45%] flex items-center justify-center p-6 sm:p-12 relative bg-[#030910] overflow-y-auto">
+          {/* Mobile Logo */}
+          <div className="absolute top-8 left-8 lg:hidden">
+            <img src={banner2Logo} alt="Weblozy Logo" className="h-6 object-contain" />
+          </div>
 
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="w-full max-w-[420px] mt-12 lg:mt-0"
-            >
-              <div className="text-center sm:text-left mb-8">
-                <h2 className="text-3xl font-black text-white tracking-tight uppercase mb-2">
-                  {authMode === "signup" ? "Create Account" : authMode === "forgot-password" ? "Recover Account" : "Welcome Back"}
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="w-full max-w-[440px] mt-12 lg:mt-0"
+          >
+            {/* The Floating Card */}
+            <div className="w-full bg-[#07131C] border border-[#142A38] rounded-3xl p-8 sm:p-10 shadow-[0_0_60px_rgba(0,0,0,0.5),_0_0_20px_rgba(52,211,153,0.03)] relative overflow-hidden">
+              {/* Subtle top-left green glow inside card */}
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#34D399]/40 to-transparent" />
+              
+              <div className="mb-8">
+                <h3 className="text-[#34D399] text-[10px] font-black uppercase tracking-widest mb-2">
+                  {authMode === "signup" ? "CREATE ACCOUNT" : authMode === "forgot-password" ? "RECOVER KEY" : "WELCOME BACK"}
+                </h3>
+                <h2 className="text-2xl sm:text-[28px] font-bold text-white tracking-tight leading-tight">
+                  {authMode === "signup" ? "Join Weblozy workspace." : authMode === "forgot-password" ? "Recover your access." : "Sign in to access your Weblozy workspace."}
                 </h2>
-                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
-                  {authMode === "signup" ? "Join Weblozy and elevate your automation journey." : authMode === "forgot-password" ? "Recover your corporate access key." : "Sign in to access your Weblozy workspace."}
-                </p>
               </div>
               
               {/* Segmented Control */}
               {(authMode === "login" || authMode === "signup") && (
-                <div className="w-full flex bg-black/40 p-1.5 rounded-2xl mb-8 shadow-inner border border-white/5 relative">
+                <div className="w-full flex bg-[#030910] p-1.5 rounded-[1.25rem] mb-8 shadow-inner border border-[#142A38] relative">
                   <button
                     type="button"
                     onClick={() => { setAuthMode("login"); setError(null); }}
-                    className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all duration-300 relative z-10 ${
+                    className={`flex-1 py-3 text-[11px] font-bold uppercase tracking-wider rounded-[1rem] transition-all duration-300 flex items-center justify-center gap-2 relative z-10 ${
                       authMode === 'login' 
-                        ? "text-[#99CB48] bg-white/10 shadow-sm ring-1 ring-white/20" 
-                        : "text-slate-500 hover:text-slate-300"
+                        ? "text-[#34D399] bg-[#0A261C] border border-[#34D399]/30 shadow-[0_0_15px_rgba(52,211,153,0.1)]" 
+                        : "text-slate-400 hover:text-slate-300 border border-transparent"
                     }`}
                   >
+                    <User size={14} className={authMode === 'login' ? 'text-[#34D399]' : 'text-slate-500'} />
                     Sign In
                   </button>
                   <button
                     type="button"
                     onClick={() => { setAuthMode("signup"); setError(null); }}
-                    className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all duration-300 relative z-10 ${
+                    className={`flex-1 py-3 text-[11px] font-bold uppercase tracking-wider rounded-[1rem] transition-all duration-300 flex items-center justify-center gap-2 relative z-10 ${
                       authMode === 'signup' 
-                        ? "text-[#99CB48] bg-white/10 shadow-sm ring-1 ring-white/20" 
-                        : "text-slate-500 hover:text-slate-300"
+                        ? "text-[#34D399] bg-[#0A261C] border border-[#34D399]/30 shadow-[0_0_15px_rgba(52,211,153,0.1)]" 
+                        : "text-slate-400 hover:text-slate-300 border border-transparent"
                     }`}
                   >
+                    <div className="relative w-3.5 h-3.5 flex items-center justify-center">
+                      <span className="absolute w-full h-[1.5px] bg-current rounded-full"></span>
+                      <span className="absolute h-full w-[1.5px] bg-current rounded-full"></span>
+                    </div>
                     Sign Up
                   </button>
                 </div>
@@ -316,9 +340,9 @@ export default function LoginPage() {
                       className="grid grid-cols-2 gap-4 overflow-hidden"
                     >
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Full Name</label>
+                        <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Full Name</label>
                         <div className="relative group">
-                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[#99CB48] transition-colors">
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
                             <User size={16} />
                           </span>
                           <input
@@ -326,14 +350,14 @@ export default function LoginPage() {
                             placeholder="Ankit Nag"
                             value={fullName}
                             onChange={(e) => setFullName(e.target.value)}
-                            className="w-full h-12 pl-11 pr-4 text-xs font-bold rounded-xl border border-white/10 bg-black/20 text-white placeholder-slate-600 focus:outline-none focus:border-[#99CB48] focus:ring-1 focus:ring-[#99CB48] focus:bg-black/40 transition-all shadow-sm"
+                            className="w-full h-[52px] pl-11 pr-4 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
                           />
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Employee ID</label>
+                        <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Employee ID</label>
                         <div className="relative group">
-                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[#99CB48] transition-colors">
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
                             <Building2 size={16} />
                           </span>
                           <input
@@ -341,7 +365,7 @@ export default function LoginPage() {
                             placeholder="WL-0099"
                             value={employeeId}
                             onChange={(e) => setEmployeeId(e.target.value)}
-                            className="w-full h-12 pl-11 pr-4 text-xs font-bold rounded-xl border border-white/10 bg-black/20 text-white placeholder-slate-600 focus:outline-none focus:border-[#99CB48] focus:ring-1 focus:ring-[#99CB48] focus:bg-black/40 transition-all shadow-sm"
+                            className="w-full h-[52px] pl-11 pr-4 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
                           />
                         </div>
                       </div>
@@ -351,23 +375,23 @@ export default function LoginPage() {
 
                 {/* Email Field */}
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Corporate Email</label>
+                  <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Corporate Email</label>
                   <div className="relative group">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[#99CB48] transition-colors">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
                       <Mail size={16} />
                     </span>
                     <input
                       type="email"
-                      placeholder="name@weblozy.com"
+                      placeholder="name@weblozy.in"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full h-12 pl-11 pr-10 text-xs font-bold rounded-xl border border-white/10 bg-black/20 text-white placeholder-slate-600 focus:outline-none focus:border-[#99CB48] focus:ring-1 focus:ring-[#99CB48] focus:bg-black/40 transition-all shadow-sm"
+                      className="w-full h-[52px] pl-11 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
                     />
-                    {isEmailValid(email) && (
-                      <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center text-[#99CB48]">
-                        <CheckCircle2 size={16} className="text-[#99CB48]" />
+                    {isEmailValid(email) ? (
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center">
+                        <CheckCircle2 size={16} className="text-[#34D399]" />
                       </div>
-                    )}
+                    ) : null}
                   </div>
                 </div>
 
@@ -375,32 +399,32 @@ export default function LoginPage() {
                 {(authMode === "login" || authMode === "signup") && (
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Access Key</label>
+                      <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Access Key</label>
                       {authMode === "login" && (
                         <button 
                           type="button" 
                           onClick={() => setAuthMode("forgot-password")} 
-                          className="text-[10px] font-bold text-[#99CB48] hover:underline uppercase tracking-wider"
+                          className="text-[10px] font-bold text-[#34D399] hover:text-[#6EE7B7] transition-colors uppercase tracking-wider"
                         >
                           Forgot Key?
                         </button>
                       )}
                     </div>
                     <div className="relative group">
-                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[#99CB48] transition-colors">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
                         <KeyRound size={16} />
                       </span>
                       <input
                         type={showPassword ? "text" : "password"}
-                        placeholder="••••••••••••"
+                        placeholder="••••••••"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full h-12 pl-11 pr-10 text-xs font-bold rounded-xl border border-white/10 bg-black/20 text-white placeholder-slate-600 focus:outline-none focus:border-[#99CB48] focus:ring-1 focus:ring-[#99CB48] focus:bg-black/40 transition-all shadow-sm"
+                        className="w-full h-[52px] pl-11 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
                       >
                         {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                       </button>
@@ -417,22 +441,22 @@ export default function LoginPage() {
                       exit={{ opacity: 0, height: 0 }}
                       className="space-y-2 overflow-hidden"
                     >
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Confirm Access Key</label>
+                      <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Confirm Access Key</label>
                       <div className="relative group">
-                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[#99CB48] transition-colors">
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
                           <KeyRound size={16} />
                         </span>
                         <input
                           type={showConfirmPassword ? "text" : "password"}
-                          placeholder="••••••••••••"
+                          placeholder="••••••••"
                           value={confirmPassword}
                           onChange={(e) => setConfirmPassword(e.target.value)}
-                          className="w-full h-12 pl-11 pr-10 text-xs font-bold rounded-xl border border-white/10 bg-black/20 text-white placeholder-slate-600 focus:outline-none focus:border-[#99CB48] focus:ring-1 focus:ring-[#99CB48] focus:bg-black/40 transition-all shadow-sm"
+                          className="w-full h-[52px] pl-11 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
                         />
                         <button
                           type="button"
                           onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
                         >
                           {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                         </button>
@@ -442,32 +466,30 @@ export default function LoginPage() {
                 </AnimatePresence>
 
                 {/* Options check & help */}
-                <div className="flex justify-between items-center pt-2">
+                <div className="flex justify-between items-center pt-2 pb-2">
                   {authMode === 'login' ? (
-                    <>
-                      <label className="flex items-center gap-2 cursor-pointer group select-none">
-                        <input 
-                          type="checkbox" 
-                          className="w-4 h-4 rounded accent-[#99CB48] border-white/10 bg-transparent cursor-pointer"
-                        />
-                        <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">Remember me</span>
-                      </label>
-                    </>
+                    <label className="flex items-center gap-3 cursor-pointer group select-none">
+                      <div className="relative flex items-center justify-center w-5 h-5 rounded-[6px] border border-[#34D399] bg-[#0A261C] transition-colors">
+                        <CheckCircle2 size={12} className="text-[#34D399]" />
+                        <input type="checkbox" className="absolute opacity-0 w-full h-full cursor-pointer" defaultChecked />
+                      </div>
+                      <span className="text-[10px] text-white font-black uppercase tracking-widest">Remember me</span>
+                    </label>
                   ) : authMode === 'signup' ? (
-                    <label className="flex items-center gap-2 cursor-pointer group select-none">
-                      <input 
-                        type="checkbox" 
-                        className="w-4 h-4 rounded accent-[#99CB48] border-white/10 bg-transparent cursor-pointer"
-                      />
-                      <span className="text-[9px] text-slate-400 font-black uppercase tracking-wider">
-                        I agree to the <span className="text-[#99CB48] hover:underline">Terms</span>
+                    <label className="flex items-center gap-3 cursor-pointer group select-none">
+                      <div className="relative flex items-center justify-center w-5 h-5 rounded-[6px] border border-[#34D399] bg-[#0A261C] transition-colors">
+                        <CheckCircle2 size={12} className="text-[#34D399]" />
+                        <input type="checkbox" className="absolute opacity-0 w-full h-full cursor-pointer" defaultChecked />
+                      </div>
+                      <span className="text-[10px] text-white font-black uppercase tracking-widest">
+                        I agree to the <span className="text-[#34D399] hover:underline">Terms</span>
                       </span>
                     </label>
                   ) : (
                     <button 
                       type="button" 
                       onClick={() => setAuthMode("login")} 
-                      className="text-[10px] font-black text-[#99CB48] hover:underline uppercase tracking-widest"
+                      className="text-[10px] font-black text-[#34D399] hover:underline uppercase tracking-widest"
                     >
                       Return to Login
                     </button>
@@ -475,28 +497,37 @@ export default function LoginPage() {
                 </div>
 
                 {/* Submit Button */}
-                <div className="pt-6">
+                <div className="pt-2">
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full h-14 bg-white text-black font-black uppercase tracking-[0.2em] text-xs rounded-xl shadow-[0_10px_40px_-10px_rgba(255,255,255,0.2)] hover:shadow-[0_10px_40px_-10px_rgba(153,203,72,0.6)] transition-all duration-500 flex items-center justify-center gap-2 hover:-translate-y-1 hover:bg-[#99CB48] disabled:opacity-50 disabled:cursor-not-allowed group"
+                    className="w-full h-14 bg-gradient-to-r from-[#6EE7B7] via-[#34D399] to-[#38BDF8] text-[#030910] font-black uppercase tracking-[0.2em] text-xs rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:shadow-[0_0_30px_rgba(52,211,153,0.5)] transition-all duration-500 flex items-center justify-center gap-2 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden"
                   >
+                    {/* Subtle shine effect */}
+                    <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 group-hover:animate-shine" />
+                    
                     {loading ? (
                       <>
-                        <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
-                        <span>Authenticating...</span>
+                        <div className="w-4 h-4 border-2 border-[#030910]/20 border-t-[#030910] rounded-full animate-spin relative z-10" />
+                        <span className="relative z-10">Authenticating...</span>
                       </>
                     ) : (
                       <>
-                        <span>{authMode === "login" ? "SIGN IN" : authMode === "signup" ? "CREATE ACCOUNT" : "SEND RESET LINK"}</span>
-                        <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                        <span className="relative z-10">{authMode === "login" ? "SIGN IN" : authMode === "signup" ? "CREATE ACCOUNT" : "SEND RESET LINK"}</span>
+                        <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform relative z-10" />
                       </>
                     )}
                   </button>
                 </div>
+                
+                {/* Footer Shield text */}
+                <div className="mt-8 pt-6 border-t border-[#142A38] flex items-center justify-center gap-2 text-slate-500">
+                  <ShieldCheck size={14} />
+                  <span className="text-[10px] font-medium tracking-wide">Your data is secure with Weblozy</span>
+                </div>
               </form>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
         </div>
       </div>
     </AuthLayout>
