@@ -9,7 +9,7 @@ export default function QuickCalculator() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [moduleCount, setModuleCount] = useState<number | "">("");
-  const [modulePrice, setModulePrice] = useState<number | "">(10000);
+  const [modulePrice, setModulePrice] = useState<number | "">(24000);
   const [discountPct, setDiscountPct] = useState<number | "">(15);
 
   if (isHidden) return null;
@@ -69,7 +69,7 @@ export default function QuickCalculator() {
                   type="number"
                   value={modulePrice}
                   onChange={(e) => setModulePrice(e.target.value ? Number(e.target.value) : "")}
-                  placeholder="e.g. 10000"
+                  placeholder="e.g. 24000"
                   className="w-full bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg px-3 py-2 text-sm font-semibold text-slate-900 dark:text-white outline-none focus:border-primary transition-colors"
                 />
               </div>
