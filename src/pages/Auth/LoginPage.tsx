@@ -331,7 +331,7 @@ export default function LoginPage() {
             className="w-full max-w-[440px] mt-12 lg:mt-0 relative z-10"
           >
             {/* The Floating Card with fixed exact height so it never resizes */}
-            <div className="w-full h-[750px] sm:h-[700px] bg-[#07131C] border border-[#142A38] rounded-3xl p-8 sm:p-10 shadow-[0_0_60px_rgba(0,0,0,0.5),_0_0_20px_rgba(52,211,153,0.03)] relative overflow-hidden flex flex-col">
+            <div className="w-full h-[760px] sm:h-[730px] bg-[#07131C] border border-[#142A38] rounded-3xl p-6 sm:p-8 shadow-[0_0_60px_rgba(0,0,0,0.5),_0_0_20px_rgba(52,211,153,0.03)] relative overflow-hidden flex flex-col">
               {/* Subtle top-left green glow inside card */}
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#34D399]/40 to-transparent" />
               
