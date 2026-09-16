@@ -391,201 +391,205 @@ export default function LoginPage() {
               </AnimatePresence>
 
               {/* Form */}
-              <form onSubmit={handleSubmit} className="w-full flex-1 flex flex-col space-y-3 overflow-y-auto pr-1">
-                {/* Signup Fields */}
-                <AnimatePresence mode="wait">
-                  {authMode === "signup" && (
-                    <motion.div 
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="grid grid-cols-2 gap-3 overflow-hidden"
-                    >
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Full Name</label>
-                        <div className="relative group">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
-                            <User size={14} />
-                          </span>
-                          <input
-                            type="text"
-                            placeholder="Ankit Nag"
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
-                            className="w-full h-11 pl-9 pr-3 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
-                          />
+              <form onSubmit={handleSubmit} className="w-full flex-1 flex flex-col h-full">
+                <div className="flex-1 space-y-4">
+                  {/* Signup Fields */}
+                  <AnimatePresence mode="wait">
+                    {authMode === "signup" && (
+                      <motion.div 
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="grid grid-cols-2 gap-4 overflow-hidden shrink-0"
+                      >
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Full Name</label>
+                          <div className="relative group">
+                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
+                              <User size={16} />
+                            </span>
+                            <input
+                              type="text"
+                              placeholder="Ankit Nag"
+                              value={fullName}
+                              onChange={(e) => setFullName(e.target.value)}
+                              className="w-full h-[52px] pl-11 pr-4 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
+                            />
+                          </div>
                         </div>
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Employee ID</label>
-                        <div className="relative group">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
-                            <Building2 size={14} />
-                          </span>
-                          <input
-                            type="text"
-                            placeholder="WL-0099"
-                            value={employeeId}
-                            onChange={(e) => setEmployeeId(e.target.value)}
-                            className="w-full h-11 pl-9 pr-3 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
-                          />
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Employee ID</label>
+                          <div className="relative group">
+                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
+                              <Building2 size={16} />
+                            </span>
+                            <input
+                              type="text"
+                              placeholder="WL-0099"
+                              value={employeeId}
+                              onChange={(e) => setEmployeeId(e.target.value)}
+                              className="w-full h-[52px] pl-11 pr-4 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
+                            />
+                          </div>
                         </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
-                {/* Email Field */}
-                <div className="space-y-1.5">
-                  <label className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Corporate Email</label>
-                  <div className="relative group">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
-                      <Mail size={14} />
-                    </span>
-                    <input
-                      type="email"
-                      placeholder="name@weblozy.in"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full h-11 pl-9 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
-                    />
-                    {isEmailValid(email) ? (
-                      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
-                        <CheckCircle2 size={14} className="text-[#34D399]" />
-                      </div>
-                    ) : null}
-                  </div>
-                </div>
-
-                {/* Password Field */}
-                {(authMode === "login" || authMode === "signup") && (
-                  <div className="space-y-1.5">
-                    <div className="flex justify-between items-center">
-                      <label className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Access Key</label>
-                      {authMode === "login" && (
-                        <button 
-                          type="button" 
-                          onClick={() => setAuthMode("forgot-password")} 
-                          className="text-[10px] font-bold text-[#34D399] hover:text-[#6EE7B7] transition-colors uppercase tracking-wider"
-                        >
-                          Forgot Key?
-                        </button>
-                      )}
-                    </div>
+                  {/* Email Field */}
+                  <div className="space-y-2 shrink-0">
+                    <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Corporate Email</label>
                     <div className="relative group">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
-                        <KeyRound size={14} />
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
+                        <Mail size={16} />
                       </span>
                       <input
-                        type={showPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full h-11 pl-9 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
+                        type="email"
+                        placeholder="name@weblozy.in"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full h-[52px] pl-11 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
                       />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
-                      >
-                        {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
-                      </button>
+                      {isEmailValid(email) ? (
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center">
+                          <CheckCircle2 size={16} className="text-[#34D399]" />
+                        </div>
+                      ) : null}
                     </div>
                   </div>
-                )}
 
-                {/* Confirm Password Field */}
-                <AnimatePresence mode="wait">
-                  {authMode === "signup" && (
-                    <motion.div 
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="space-y-1.5 overflow-hidden"
-                    >
-                      <label className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Confirm Access Key</label>
+                  {/* Password Field */}
+                  {(authMode === "login" || authMode === "signup") && (
+                    <div className="space-y-2 shrink-0">
+                      <div className="flex justify-between items-center">
+                        <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Access Key</label>
+                        {authMode === "login" && (
+                          <button 
+                            type="button" 
+                            onClick={() => setAuthMode("forgot-password")} 
+                            className="text-[10px] font-black text-[#34D399] hover:underline uppercase tracking-widest"
+                          >
+                            Forgot Key?
+                          </button>
+                        )}
+                      </div>
                       <div className="relative group">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
-                          <KeyRound size={14} />
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
+                          <KeyRound size={16} />
                         </span>
                         <input
-                          type={showConfirmPassword ? "text" : "password"}
+                          type={showPassword ? "text" : "password"}
                           placeholder="••••••••"
-                          value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
-                          className="w-full h-11 pl-9 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="w-full h-[52px] pl-11 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
                         />
                         <button
                           type="button"
-                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
                         >
-                          {showConfirmPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                         </button>
                       </div>
-                    </motion.div>
+                    </div>
                   )}
-                </AnimatePresence>
 
-                {/* Options check & help */}
-                <div className="flex justify-between items-center pt-2 pb-2">
-                  {authMode === 'login' ? (
-                    <label className="flex items-center gap-3 cursor-pointer group select-none">
-                      <div className="relative flex items-center justify-center w-5 h-5 rounded-[6px] border border-[#34D399] bg-[#0A261C] transition-colors">
-                        <CheckCircle2 size={12} className="text-[#34D399]" />
-                        <input type="checkbox" className="absolute opacity-0 w-full h-full cursor-pointer" defaultChecked />
-                      </div>
-                      <span className="text-[10px] text-white font-black uppercase tracking-widest">Remember me</span>
-                    </label>
-                  ) : authMode === 'signup' ? (
-                    <label className="flex items-center gap-3 cursor-pointer group select-none">
-                      <div className="relative flex items-center justify-center w-5 h-5 rounded-[6px] border border-[#34D399] bg-[#0A261C] transition-colors">
-                        <CheckCircle2 size={12} className="text-[#34D399]" />
-                        <input type="checkbox" className="absolute opacity-0 w-full h-full cursor-pointer" defaultChecked />
-                      </div>
-                      <span className="text-[10px] text-white font-black uppercase tracking-widest">
-                        I agree to the <span className="text-[#34D399] hover:underline">Terms</span>
-                      </span>
-                    </label>
-                  ) : (
-                    <button 
-                      type="button" 
-                      onClick={() => setAuthMode("login")} 
-                      className="text-[10px] font-black text-[#34D399] hover:underline uppercase tracking-widest"
-                    >
-                      Return to Login
-                    </button>
-                  )}
-                </div>
-
-                {/* Submit Button */}
-                <div className="mt-auto pt-4">
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full h-14 bg-gradient-to-r from-[#6EE7B7] via-[#34D399] to-[#38BDF8] text-[#030910] font-black uppercase tracking-[0.2em] text-xs rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:shadow-[0_0_30px_rgba(52,211,153,0.5)] transition-all duration-500 flex items-center justify-center gap-2 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden"
-                  >
-                    {/* Subtle shine effect */}
-                    <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 group-hover:animate-shine" />
-                    
-                    {loading ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-[#030910]/20 border-t-[#030910] rounded-full animate-spin relative z-10" />
-                        <span className="relative z-10">Authenticating...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span className="relative z-10">{authMode === "login" ? "SIGN IN" : authMode === "signup" ? "CREATE ACCOUNT" : "SEND RESET LINK"}</span>
-                        <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform relative z-10" />
-                      </>
+                  {/* Confirm Password Field */}
+                  <AnimatePresence mode="wait">
+                    {authMode === "signup" && (
+                      <motion.div 
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="space-y-2 overflow-hidden shrink-0"
+                      >
+                        <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Confirm Access Key</label>
+                        <div className="relative group">
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-white transition-colors">
+                            <KeyRound size={16} />
+                          </span>
+                          <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            placeholder="••••••••"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="w-full h-[52px] pl-11 pr-10 text-xs font-semibold rounded-xl border border-[#142A38] bg-[#030910] text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] focus:ring-1 focus:ring-[#34D399] transition-all shadow-inner"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+                          >
+                            {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                          </button>
+                        </div>
+                      </motion.div>
                     )}
-                  </button>
+                  </AnimatePresence>
+
+                  {/* Options check & help */}
+                  <div className="flex justify-between items-center pt-2 pb-2 shrink-0">
+                    {authMode === 'login' ? (
+                      <label className="flex items-center gap-3 cursor-pointer group select-none">
+                        <div className="relative flex items-center justify-center w-5 h-5 rounded-[6px] border border-[#34D399] bg-[#0A261C] transition-colors">
+                          <CheckCircle2 size={12} className="text-[#34D399]" />
+                          <input type="checkbox" className="absolute opacity-0 w-full h-full cursor-pointer" defaultChecked />
+                        </div>
+                        <span className="text-[10px] text-white font-black uppercase tracking-widest">Remember me</span>
+                      </label>
+                    ) : authMode === 'signup' ? (
+                      <label className="flex items-center gap-3 cursor-pointer group select-none">
+                        <div className="relative flex items-center justify-center w-5 h-5 rounded-[6px] border border-[#34D399] bg-[#0A261C] transition-colors">
+                          <CheckCircle2 size={12} className="text-[#34D399]" />
+                          <input type="checkbox" className="absolute opacity-0 w-full h-full cursor-pointer" defaultChecked />
+                        </div>
+                        <span className="text-[10px] text-white font-black uppercase tracking-widest">
+                          I agree to the <span className="text-[#34D399] hover:underline">Terms</span>
+                        </span>
+                      </label>
+                    ) : (
+                      <button 
+                        type="button" 
+                        onClick={() => setAuthMode("login")} 
+                        className="text-[10px] font-black text-[#34D399] hover:underline uppercase tracking-widest"
+                      >
+                        Return to Login
+                      </button>
+                    )}
+                  </div>
                 </div>
-                
-                {/* Footer Shield text */}
-                <div className="pt-4 border-t border-[#142A38] flex items-center justify-center gap-2 text-slate-500">
-                  <ShieldCheck size={14} />
-                  <span className="text-[10px] font-medium tracking-wide">Your data is secure with Weblozy</span>
+
+                {/* Submit Button & Footer attached to bottom */}
+                <div className="shrink-0 mt-auto">
+                  <div className="pt-2">
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full h-14 bg-gradient-to-r from-[#6EE7B7] via-[#34D399] to-[#38BDF8] text-[#030910] font-black uppercase tracking-[0.2em] text-xs rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:shadow-[0_0_30px_rgba(52,211,153,0.5)] transition-all duration-500 flex items-center justify-center gap-2 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden"
+                    >
+                      {/* Subtle shine effect */}
+                      <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 group-hover:animate-shine" />
+                      
+                      {loading ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-[#030910]/20 border-t-[#030910] rounded-full animate-spin relative z-10" />
+                          <span className="relative z-10">Authenticating...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="relative z-10">{authMode === "login" ? "SIGN IN" : authMode === "signup" ? "CREATE ACCOUNT" : "SEND RESET LINK"}</span>
+                          <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform relative z-10" />
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  
+                  {/* Footer Shield text */}
+                  <div className="pt-4 mt-4 border-t border-[#142A38] flex items-center justify-center gap-2 text-slate-500">
+                    <ShieldCheck size={14} />
+                    <span className="text-[10px] font-medium tracking-wide">Your data is secure with Weblozy</span>
+                  </div>
                 </div>
               </form>
             </div>
