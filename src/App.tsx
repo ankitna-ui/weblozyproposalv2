@@ -4,6 +4,7 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import GlobalHomeButton from '@/components/Navigation/GlobalHomeButton';
 import LoadingScreen from '@/components/ui/LoadingScreen';
+import QuickCalculator from '@/components/ui/QuickCalculator';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -83,6 +84,7 @@ function App() {
   return (
     <Router>
       <GlobalHomeButton />
+      <QuickCalculator />
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage />} />
