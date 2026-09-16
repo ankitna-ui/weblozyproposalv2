@@ -251,18 +251,45 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: LOGIN FORM (45%) */}
-        <div className="w-full lg:w-[45%] flex items-center justify-center p-6 sm:p-12 relative bg-[#030910] overflow-y-auto">
+          {/* RIGHT COLUMN: FORM (45%) */}
+        <div className="w-full lg:w-[45%] flex items-center justify-center p-6 sm:p-12 relative bg-[#030910] overflow-hidden">
+          
+          {/* Ambient Background Effects for Right Side */}
+          <div className="absolute inset-0 pointer-events-none z-0">
+            {/* Subtle grid pattern */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#142A38_1px,transparent_1px),linear-gradient(to_bottom,#142A38_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20" />
+            
+            {/* Glowing Orbs */}
+            <motion.div 
+              className="absolute top-[20%] right-[-10%] w-[400px] h-[400px] bg-[#34D399]/10 blur-[120px] rounded-full mix-blend-screen"
+              animate={{ 
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.6, 0.3],
+                x: [0, -30, 0]
+              }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div 
+              className="absolute bottom-[10%] left-[-10%] w-[350px] h-[350px] bg-[#38BDF8]/10 blur-[100px] rounded-full mix-blend-screen"
+              animate={{ 
+                scale: [1, 1.3, 1],
+                opacity: [0.2, 0.5, 0.2],
+                y: [0, -40, 0]
+              }}
+              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            />
+          </div>
+
           {/* Mobile Logo */}
-          <div className="absolute top-8 left-8 lg:hidden">
+          <div className="absolute top-8 left-8 lg:hidden z-20">
             <img src={banner2Logo} alt="Weblozy Logo" className="h-6 object-contain" />
           </div>
 
           <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="w-full max-w-[440px] mt-12 lg:mt-0"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="w-full max-w-[440px] mt-12 lg:mt-0 relative z-10"
           >
             {/* The Floating Card */}
             <div className="w-full bg-[#07131C] border border-[#142A38] rounded-3xl p-8 sm:p-10 shadow-[0_0_60px_rgba(0,0,0,0.5),_0_0_20px_rgba(52,211,153,0.03)] relative overflow-hidden">
