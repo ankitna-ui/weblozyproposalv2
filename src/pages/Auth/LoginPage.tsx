@@ -18,6 +18,7 @@ import { AnimatedBackground } from "@/components/ui/AnimatedBackground";
 import AuthLayout from "@/pages/Auth/AuthLayout";
 import { toast } from "react-toastify";
 import logo from "@/assets/weblozy-logo.png";
+import roiIllustration from "@/assets/roi_3d_illustration.png";
 
 type AuthMode = "login" | "signup" | "forgot-password" | "loading";
 
@@ -140,12 +141,30 @@ export default function LoginPage() {
       
       <div className="w-full flex h-[100dvh] overflow-hidden">
         {/* LEFT COLUMN: BRANDING (Hidden on Mobile) */}
-        <div className="hidden lg:flex w-[45%] relative bg-[#0B0E14] flex-col justify-between p-12 overflow-hidden border-r border-white/5">
+        <div className="hidden lg:flex w-[45%] relative bg-[#04060A] flex-col justify-between p-12 overflow-hidden border-r border-white/5">
           {/* Abstract glowing background effect */}
           <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-            <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#99CB48]/20 blur-[120px] rounded-full mix-blend-screen" />
+            <div className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-[#99CB48]/15 blur-[120px] rounded-full mix-blend-screen" />
             <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#82b339]/10 blur-[100px] rounded-full mix-blend-screen" />
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-30 mix-blend-overlay"></div>
+          </div>
+
+          {/* Floating 3D Illustration in center of left panel */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+            <motion.img 
+              src={roiIllustration} 
+              alt="Strategic Workstation" 
+              className="w-[120%] max-w-none opacity-40 drop-shadow-[0_0_50px_rgba(153,203,72,0.2)]"
+              animate={{ 
+                y: [-20, 20, -20],
+                rotate: [-2, 2, -2]
+              }}
+              transition={{ 
+                duration: 8, 
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
           </div>
 
           <div className="relative z-10">
@@ -164,12 +183,12 @@ export default function LoginPage() {
                 <span className="text-[10px] font-black tracking-[0.2em] text-[#99CB48] uppercase">System Online</span>
               </div>
               
-              <h1 className="text-4xl xl:text-5xl font-black tracking-tight leading-[1.1] text-white mb-6">
+              <h1 className="text-4xl xl:text-5xl font-black tracking-tight leading-[1.05] text-white mb-6 drop-shadow-md">
                 Strategic<br />
-                <span className="text-[#99CB48]">Workstation.</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#99CB48] to-[#A9DF50]">Workstation.</span>
               </h1>
               
-              <p className="text-slate-400 text-sm leading-relaxed max-w-sm mb-12">
+              <p className="text-slate-300 text-sm leading-relaxed max-w-sm mb-12 drop-shadow">
                 Secure corporate environment for generating, analyzing, and deploying strategic business proposals.
               </p>
             </motion.div>
@@ -178,33 +197,24 @@ export default function LoginPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="space-y-5 max-w-sm"
+              className="space-y-4 max-w-sm"
             >
-              <div className="flex items-start gap-4">
-                <div className="mt-1 w-8 h-8 rounded-lg bg-[#99CB48]/10 border border-[#99CB48]/20 flex items-center justify-center shrink-0">
-                  <ShieldCheck size={16} className="text-[#99CB48]" />
+              <div className="flex items-center gap-4 p-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 transition-colors">
+                <div className="w-10 h-10 rounded-xl bg-[#99CB48]/10 border border-[#99CB48]/20 flex items-center justify-center shrink-0">
+                  <ShieldCheck size={18} className="text-[#99CB48]" />
                 </div>
                 <div>
-                  <h3 className="text-white text-xs font-black uppercase tracking-wider mb-1">Secure</h3>
-                  <p className="text-[11px] font-medium text-slate-400 leading-snug">Enterprise-grade security and data protection.</p>
+                  <h3 className="text-white text-xs font-black uppercase tracking-wider mb-0.5">Secure Core</h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Enterprise-grade protection.</p>
                 </div>
               </div>
-              <div className="flex items-start gap-4">
-                <div className="mt-1 w-8 h-8 rounded-lg bg-[#99CB48]/10 border border-[#99CB48]/20 flex items-center justify-center shrink-0">
-                  <Zap size={16} className="text-[#99CB48]" />
+              <div className="flex items-center gap-4 p-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 transition-colors">
+                <div className="w-10 h-10 rounded-xl bg-[#99CB48]/10 border border-[#99CB48]/20 flex items-center justify-center shrink-0">
+                  <Zap size={18} className="text-[#99CB48]" />
                 </div>
                 <div>
-                  <h3 className="text-white text-xs font-black uppercase tracking-wider mb-1">Automated</h3>
-                  <p className="text-[11px] font-medium text-slate-400 leading-snug">Intelligent automation for maximum efficiency.</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="mt-1 w-8 h-8 rounded-lg bg-[#99CB48]/10 border border-[#99CB48]/20 flex items-center justify-center shrink-0">
-                  <BarChart2 size={16} className="text-[#99CB48]" />
-                </div>
-                <div>
-                  <h3 className="text-white text-xs font-black uppercase tracking-wider mb-1">Strategic</h3>
-                  <p className="text-[11px] font-medium text-slate-400 leading-snug">Data-driven insights for smarter decisions.</p>
+                  <h3 className="text-white text-xs font-black uppercase tracking-wider mb-0.5">Automated</h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Intelligent deployment.</p>
                 </div>
               </div>
             </motion.div>
@@ -247,14 +257,14 @@ export default function LoginPage() {
             
             {/* Segmented Control */}
             {(authMode === "login" || authMode === "signup") && (
-              <div className="w-full flex bg-slate-100 dark:bg-white/5 rounded-xl mb-8 p-1">
+              <div className="w-full flex bg-slate-50 dark:bg-white/5 p-1.5 rounded-2xl mb-8 shadow-inner border border-slate-100 dark:border-white/5 relative">
                 <button
                   type="button"
                   onClick={() => { setAuthMode("login"); setError(null); }}
-                  className={`flex-1 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all duration-300 relative z-10 ${
+                  className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all duration-300 relative z-10 ${
                     authMode === 'login' 
-                      ? "text-[#82b339] dark:text-[#99CB48] bg-white dark:bg-[#161B23] shadow-sm" 
-                      : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                      ? "text-[#82b339] dark:text-[#99CB48] bg-white dark:bg-[#1A1F26] shadow-sm ring-1 ring-slate-200 dark:ring-white/10" 
+                      : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
                   }`}
                 >
                   Sign In
@@ -262,10 +272,10 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => { setAuthMode("signup"); setError(null); }}
-                  className={`flex-1 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all duration-300 relative z-10 ${
+                  className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all duration-300 relative z-10 ${
                     authMode === 'signup' 
-                      ? "text-[#82b339] dark:text-[#99CB48] bg-white dark:bg-[#161B23] shadow-sm" 
-                      : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                      ? "text-[#82b339] dark:text-[#99CB48] bg-white dark:bg-[#1A1F26] shadow-sm ring-1 ring-slate-200 dark:ring-white/10" 
+                      : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
                   }`}
                 >
                   Sign Up
@@ -312,7 +322,7 @@ export default function LoginPage() {
                           placeholder="Ankit Nag"
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
-                          className="w-full h-12 pl-11 pr-4 text-xs font-bold rounded-xl border border-slate-200 dark:border-white/10 bg-transparent text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#99CB48] focus:ring-1 focus:ring-[#99CB48] transition-all"
+                          className="w-full h-12 pl-11 pr-4 text-xs font-bold rounded-xl border border-slate-200/60 dark:border-white/5 bg-slate-50/50 dark:bg-white/5 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#99CB48] focus:ring-1 focus:ring-[#99CB48] focus:bg-white dark:focus:bg-[#0B0E14] transition-all shadow-sm"
                         />
                       </div>
                     </div>
@@ -327,7 +337,7 @@ export default function LoginPage() {
                           placeholder="WL-0099"
                           value={employeeId}
                           onChange={(e) => setEmployeeId(e.target.value)}
-                          className="w-full h-12 pl-11 pr-4 text-xs font-bold rounded-xl border border-slate-200 dark:border-white/10 bg-transparent text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#99CB48] focus:ring-1 focus:ring-[#99CB48] transition-all"
+                          className="w-full h-12 pl-11 pr-4 text-xs font-bold rounded-xl border border-slate-200/60 dark:border-white/5 bg-slate-50/50 dark:bg-white/5 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#99CB48] focus:ring-1 focus:ring-[#99CB48] focus:bg-white dark:focus:bg-[#0B0E14] transition-all shadow-sm"
                         />
                       </div>
                     </div>
@@ -347,7 +357,7 @@ export default function LoginPage() {
                     placeholder="name@weblozy.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full h-12 pl-11 pr-10 text-xs font-bold rounded-xl border border-slate-200 dark:border-white/10 bg-transparent text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#99CB48] focus:ring-1 focus:ring-[#99CB48] transition-all"
+                    className="w-full h-12 pl-11 pr-10 text-xs font-bold rounded-xl border border-slate-200/60 dark:border-white/5 bg-slate-50/50 dark:bg-white/5 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#99CB48] focus:ring-1 focus:ring-[#99CB48] focus:bg-white dark:focus:bg-[#0B0E14] transition-all shadow-sm"
                   />
                   {isEmailValid(email) && (
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center text-[#99CB48]">
@@ -381,7 +391,7 @@ export default function LoginPage() {
                       placeholder="••••••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full h-12 pl-11 pr-10 text-xs font-bold rounded-xl border border-slate-200 dark:border-white/10 bg-transparent text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#99CB48] focus:ring-1 focus:ring-[#99CB48] transition-all"
+                      className="w-full h-12 pl-11 pr-10 text-xs font-bold rounded-xl border border-slate-200/60 dark:border-white/5 bg-slate-50/50 dark:bg-white/5 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#99CB48] focus:ring-1 focus:ring-[#99CB48] focus:bg-white dark:focus:bg-[#0B0E14] transition-all shadow-sm"
                     />
                     <button
                       type="button"
@@ -413,7 +423,7 @@ export default function LoginPage() {
                         placeholder="••••••••••••"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full h-12 pl-11 pr-10 text-xs font-bold rounded-xl border border-slate-200 dark:border-white/10 bg-transparent text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#99CB48] focus:ring-1 focus:ring-[#99CB48] transition-all"
+                        className="w-full h-12 pl-11 pr-10 text-xs font-bold rounded-xl border border-slate-200/60 dark:border-white/5 bg-slate-50/50 dark:bg-white/5 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#99CB48] focus:ring-1 focus:ring-[#99CB48] focus:bg-white dark:focus:bg-[#0B0E14] transition-all shadow-sm"
                       />
                       <button
                         type="button"
@@ -465,7 +475,7 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full h-14 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-slate-200 font-black uppercase tracking-[0.2em] text-xs rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full h-14 bg-slate-900 dark:bg-white text-white dark:text-black font-black uppercase tracking-[0.2em] text-xs rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.3)] hover:shadow-[0_10px_40px_-10px_rgba(153,203,72,0.4)] dark:hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.4)] transition-all duration-500 flex items-center justify-center gap-2 hover:-translate-y-1 hover:bg-slate-800 dark:hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed group"
                 >
                   {loading ? (
                     <>
@@ -475,7 +485,7 @@ export default function LoginPage() {
                   ) : (
                     <>
                       <span>{authMode === "login" ? "SIGN IN" : authMode === "signup" ? "CREATE ACCOUNT" : "SEND RESET LINK"}</span>
-                      <ChevronRight size={16} />
+                      <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
                     </>
                   )}
                 </button>
